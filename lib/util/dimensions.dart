@@ -6,4 +6,9 @@ class Dimen {
 
   static get regularParentPadding => const EdgeInsets.all(parentMargin);
   static get regularPadding => const EdgeInsets.all(regularMargin);
+  static get regularPaddingLR => const EdgeInsets.symmetric(horizontal: regularMargin);
+  static get regularParentPaddingLR => const EdgeInsets.symmetric(horizontal: parentMargin);
+  static get regularPaddingTB => const EdgeInsets.symmetric(vertical: regularMargin);
+  static get regularParentPaddingTB => const EdgeInsets.symmetric(vertical: parentMargin);
+
 }
