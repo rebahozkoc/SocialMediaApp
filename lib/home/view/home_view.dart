@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:sabanci_talks/home/view/post_view.dart';
+import 'package:sabanci_talks/widgets/post_widget.dart';
 
 
 class HomeView extends StatefulWidget {
@@ -36,7 +36,7 @@ class _HomeViewState extends State<HomeView> {
         width: double.infinity,
         child: ListView.separated(
             shrinkWrap: true,
-            itemBuilder: (context, index) => const Post(),
+            itemBuilder: (context, index) => const PostWidget(),
             separatorBuilder: (context, index) => const SizedBox(height: 12,),
             itemCount: 5),
       );
