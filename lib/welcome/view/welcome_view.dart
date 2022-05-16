@@ -2,11 +2,13 @@ import 'package:flutter/material.dart';
 //import 'package:week_5/routes/login.dart';
 //import 'package:week_5/routes/signup.dart';
 //import 'package:week_5/util/colors.dart';
-//import 'package:week_5/util/dimensions.dart';
+import 'package:sabanci_talks/util/colors.dart';
 //import 'package:week_5/util/styles.dart';
 import 'package:sabanci_talks/sign_up/view/sign_up_view.dart';
-import 'package:sabanci_talks/home/view/home_view.dart';
+import 'package:sabanci_talks/sign_in/view/sign_in_view.dart';
+//import 'package:sabanci_talks/home/view/home_view.dart';
 import 'package:sabanci_talks/util/styles.dart';
+import "package:sabanci_talks/util/dimensions.dart";
 
 class Welcome extends StatelessWidget {
   const Welcome({Key? key}) : super(key: key);
@@ -52,38 +54,62 @@ class Welcome extends StatelessWidget {
                 ),
               ),
             ),
-           
             const Spacer(),
-            
             Padding(
-              padding: const EdgeInsets.symmetric(horizontal: 20.0, vertical: 16.0),
+              padding:
+                  const EdgeInsets.symmetric(horizontal: 20.0, vertical: 16.0),
               child: Row(
                 children: <Widget>[
                   Expanded(
                     flex: 1,
-                    child: OutlinedButton(
+                    child: ElevatedButton(
                       onPressed: () {
-                        Navigator.push(context, MaterialPageRoute(builder: (context) => SignUp()));
+                        Navigator.push(context,
+                            MaterialPageRoute(builder: (context) => SignIn()));
                       },
                       child: const Padding(
-                        padding: EdgeInsets.symmetric(vertical: 12.0),
+                        padding: EdgeInsets.symmetric(vertical: 15.0),
                         child: Text(
-                          'Signup',
-                          //style: kButtonLightTextStyle,
+                          'Sign In',
+                          style: TextStyle(
+                              color: Colors.white,
+                              fontSize: 20.0,
+                              fontWeight: FontWeight.w600),
                         ),
                       ),
                       style: OutlinedButton.styleFrom(
-                        //backgroundColor: AppColors.secondary,
+                        backgroundColor: AppColors.primary,
                       ),
                     ),
                   ),
-
-                  const SizedBox(width: 8.0,),
-
                 ],
               ),
             ),
+            const SizedBox(
+              width: 8.0,
+            ),
+            TextButton(
+              onPressed: () {
+                Navigator.push(
+                    context, MaterialPageRoute(builder: (context) => SignUp()));
+              },
+              child: const Padding(
+                padding: EdgeInsets.symmetric(vertical: 15.0),
+                child: Text(
+                  'Create Account',
+                  style: TextStyle(
+                      color: AppColors.primary,
+                      fontSize: 12.0,
+                      fontWeight: FontWeight.w600),
+                ),
+              ),
+              style: TextButton.styleFrom(),
+            ),
             const Spacer(),
+            Padding(
+              padding: Dimen.regularPadding,
+              child:Text("@ 2022 Void", style:smallTextStyle)
+            )
           ],
         ),
       ),

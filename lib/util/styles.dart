@@ -2,7 +2,6 @@ import 'package:flutter/material.dart';
 import 'package:sabanci_talks/util/colors.dart';
 import 'package:google_fonts/google_fonts.dart';
 
-
 TextStyle? kHeadingTextStyle = GoogleFonts.poppins(
   color: AppColors.headingColor,
   fontWeight: FontWeight.w900,
@@ -17,7 +16,6 @@ TextStyle? kPageTitleTextStyle = GoogleFonts.poppins(
   letterSpacing: -0.7,
 );
 
-
 TextStyle? kHeader1TextStyle = GoogleFonts.poppins(
   color: Colors.black,
   fontWeight: FontWeight.w600,
@@ -29,7 +27,6 @@ TextStyle? kHeader2TextStyle = GoogleFonts.poppins(
   fontWeight: FontWeight.w600,
   fontSize: 25.0,
 );
-
 
 TextStyle? kHeader3TextStyle = GoogleFonts.poppins(
   color: Colors.black,
@@ -67,7 +64,27 @@ TextStyle? voidStyle = GoogleFonts.poppins(
   fontSize: 60.0,
 );
 
+TextStyle? LittleTitle = GoogleFonts.poppins(
+  color: AppColors.primary,
+  fontWeight: FontWeight.w600,
+  fontSize: 20.0,
+);
+
+ TextStyle? whiteTextStyle = GoogleFonts.poppins(
+    color: Colors.white,
+    fontSize: 20.0, 
+    fontWeight: FontWeight.w500
+);
+
+
 final kButtonLightTextStyle = GoogleFonts.poppins(
+  color: AppColors.textColor,
+  fontSize: 20.0,
+  letterSpacing: -0.7,
+);
+
+
+final kButtonDaTextStyle = GoogleFonts.poppins(
   color: AppColors.textColor,
   fontSize: 20.0,
   letterSpacing: -0.7,
@@ -96,4 +113,3 @@ final kLabelStyle = GoogleFonts.poppins(
   fontSize: 14.0,
   color: AppColors.textColor,
 );
-
