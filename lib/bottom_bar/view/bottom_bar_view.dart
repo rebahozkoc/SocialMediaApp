@@ -24,7 +24,7 @@ class BottomBarView extends StatelessWidget {
       const ExploreView(),
       const NewPostView(),
       const NotificationView(),
-      const ProfileView(),
+      const Welcome(),
     ];
   }
 

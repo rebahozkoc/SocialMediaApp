@@ -49,7 +49,23 @@ TextStyle? kbody1TextStyle = GoogleFonts.poppins(
   fontSize: 16.0,
 );
 
+TextStyle? smallTextStyle = GoogleFonts.poppins(
+  color: AppColors.darkGrey,
+  fontWeight: FontWeight.normal,
+  fontSize: 10.0,
+);
 
+TextStyle? welcomeStyle = GoogleFonts.poppins(
+  color: AppColors.primary,
+  fontWeight: FontWeight.w600,
+  fontSize: 40.0,
+);
+
+TextStyle? voidStyle = GoogleFonts.poppins(
+  color: AppColors.primary,
+  fontWeight: FontWeight.w600,
+  fontSize: 60.0,
+);
 
 final kButtonLightTextStyle = GoogleFonts.poppins(
   color: AppColors.textColor,
