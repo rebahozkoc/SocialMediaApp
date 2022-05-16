@@ -1,31 +1,54 @@
 import 'package:flutter/material.dart';
+import 'dart:convert';
+import 'dart:io' show Platform;
 import "package:sabanci_talks/util/styles.dart";
 import "package:sabanci_talks/util/colors.dart";
 import "package:sabanci_talks/util/dimensions.dart";
 import "package:sabanci_talks/util/screen_sizes.dart";
 import 'package:flutter/cupertino.dart';
 import 'package:email_validator/email_validator.dart';
-class SignUp extends StatefulWidget {
-  const SignUp({Key? key}) : super(key: key);
+class SignIn extends StatefulWidget {
+  const SignIn({Key? key}) : super(key: key);
 
   @override
-  State<SignUp> createState() => _SignUpState();
+  State<SignIn> createState() => _SignInState();
 
   static const String routeName = '/signup';
 }
 
-class _SignUpState extends State<SignUp> {
+class _SignInState extends State<SignIn> {
   final _formKey = GlobalKey<FormState>();
   String email = '';
   String pass = '';
   late String s;
+  int loginCounter = 0;
 
    Future<void> _showDialog(String title, String message) async {
-    
+    bool isAndroid = Platform.isAndroid;
     return showDialog(
       context: context,
       barrierDismissible: false,
       builder: (BuildContext context) {
+        if(isAndroid) {
+          return AlertDialog(
+            title: Text(title),
+            content: SingleChildScrollView(
+              child: ListBody(
+                children: [
+                  Text(message),
+                ],
+              ),
+            ),
+            actions: [
+              TextButton(
+                child: Text('OK'),
+                onPressed: () {
+                  Navigator.of(context).pop();
+                },
+              )
+            ],
+          );
+        } else {
           return CupertinoAlertDialog(
             title: Text(title, style: kBoldLabelStyle),
             content: SingleChildScrollView(
@@ -45,31 +68,39 @@ class _SignUpState extends State<SignUp> {
             ],
           );
         }
-      );
+
+      });
   }
+
 
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text(
-          'LOGIN',
-          style: kAppBarTitleTextStyle,
-        ),
-        backgroundColor: AppColors.primary,
-        centerTitle: true,
-        elevation: 0.0,
+        title:Text(
+          'Sign In',
+          style: LittleTitle,),
+        backgroundColor:Colors.white10,
+        elevation:0,
+        centerTitle:true,
       ),
       body: Padding(
         padding: Dimen.regularPadding,
-        child: Form(
+        child: Column(
+        children:[ 
+        const Spacer(flex:1),
+        Padding(padding: Dimen.regularParentPadding, child: Text(
+          'Type in your Email and Password that you chose for Void and click go to Feed',
+          style: smallTextStyle,),),
+        const Spacer(flex:1),
+        Form(
           key: _formKey,
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.stretch,
             children: [
               Container(
-                padding: EdgeInsets.all(8),
+                padding: const EdgeInsets.all(16),
                 width: screenWidth(context, dividedBy: 1.1),
                 child: TextFormField(
                   keyboardType: TextInputType.emailAddress,
@@ -78,20 +109,23 @@ class _SignUpState extends State<SignUp> {
                       width: 100,
                       child: Row(
                         children: [
-                          const Icon(Icons.email),
-                          const SizedBox(width: 4),
-                          const Text('Email'),
+                          Icon(Icons.email),
+                          SizedBox(width: 4),
+                          Text('Email'),
                         ],
                       ),
                     ),
                     fillColor: AppColors.textFieldFillColor,
-                    filled: true,
+                    filled: false,
                     labelStyle: kBoldLabelStyle,
                     border: OutlineInputBorder(
+                      
                       borderSide: BorderSide(
+                        width: 1,
                         color: AppColors.primary,
                       ),
-                      borderRadius: BorderRadius.circular(30),
+                      borderRadius: BorderRadius.circular(10),
+                      
                     ),
                   ),
                   validator: (value) {
@@ -109,8 +143,9 @@ class _SignUpState extends State<SignUp> {
                   },
                 ),
               ),
+              
               Container(
-                padding: EdgeInsets.all(8),
+                padding: const EdgeInsets.all(16),
                 width: screenWidth(context, dividedBy: 1.1),
                 child: TextFormField(
                   keyboardType: TextInputType.text,
@@ -135,7 +170,7 @@ class _SignUpState extends State<SignUp> {
                       borderSide: BorderSide(
                         color: AppColors.primary,
                       ),
-                      borderRadius: BorderRadius.circular(30),
+                      borderRadius: BorderRadius.circular(10),
                     ),
                   ),
                   validator: (value) {
@@ -153,10 +188,38 @@ class _SignUpState extends State<SignUp> {
                   },
                 ),
               ),
+              
+              OutlinedButton(
+                onPressed: () {
+                  if(_formKey.currentState!.validate()) {
+                    print('Email: $email');
+                    _formKey.currentState!.save();
+                    print('Email: $email');
+                    setState(() {
+                      loginCounter++;
+                    });
 
+                  } else {
+                    _showDialog('Form Error', 'Your form is invalid');
+                  }
+                },
+                child: Padding(
+                  padding: const EdgeInsets.symmetric(vertical: 12.0),
+                  child: Text(
+                    'Login Attempt: $loginCounter',
+                    style: kButtonDarkTextStyle,
+                  ),
+                ),
+                style: OutlinedButton.styleFrom(
+                  backgroundColor: AppColors.primary,
+                ),
+              ),
             ],
           ),
         ),
+        const Spacer(flex:2),
+        ]
+        )
       ),
     );
   }
