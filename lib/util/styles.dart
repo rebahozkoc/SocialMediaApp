@@ -40,7 +40,7 @@ TextStyle? kHeader3TextStyle = GoogleFonts.poppins(
 TextStyle? kHeader4TextStyle = GoogleFonts.poppins(
   color: Colors.black,
   fontWeight: FontWeight.w500,
-  fontSize: 15.0,
+  fontSize: 16.0,
 );
 
 TextStyle? kbody1TextStyle = GoogleFonts.poppins(
@@ -49,6 +49,12 @@ TextStyle? kbody1TextStyle = GoogleFonts.poppins(
   fontSize: 16.0,
 );
 
+
+TextStyle? kbody2TextStyle = GoogleFonts.poppins(
+  color: AppColors.darkGrey,
+  fontWeight: FontWeight.normal,
+  fontSize: 12.0,
+);
 
 
 final kButtonLightTextStyle = GoogleFonts.poppins(
