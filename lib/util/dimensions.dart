@@ -10,5 +10,10 @@ class Dimen {
   static get regularParentPaddingLR => const EdgeInsets.symmetric(horizontal: parentMargin);
   static get regularPaddingTB => const EdgeInsets.symmetric(vertical: regularMargin);
   static get regularParentPaddingTB => const EdgeInsets.symmetric(vertical: parentMargin);
+  static get regularDoubleParentPadding => const EdgeInsets.all(parentMargin*2);
+  static get regularDoubleParentPaddingLR => const EdgeInsets.symmetric(horizontal: parentMargin*2);
+  static get regularDoubleParentPaddingTB => const EdgeInsets.symmetric(vertical: parentMargin*2);
+
+
 
 }
