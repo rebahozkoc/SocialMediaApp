@@ -39,7 +39,7 @@ TextStyle? kHeader3TextStyle = GoogleFonts.poppins(
 
 TextStyle? kHeader4TextStyle = GoogleFonts.poppins(
   color: Colors.black,
-  fontWeight: FontWeight.normal,
+  fontWeight: FontWeight.w500,
   fontSize: 15.0,
 );
 
