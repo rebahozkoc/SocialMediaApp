@@ -1,18 +1,19 @@
 import 'package:flutter/material.dart';
 import 'package:persistent_bottom_nav_bar/persistent-tab-view.dart';
-import 'package:sabanci_talks/home/likes_view.dart';
+import 'package:sabanci_talks/home/view/comment_view.dart';
+import 'package:sabanci_talks/home/view/likes_view.dart';
 import 'package:sabanci_talks/util/colors.dart';
 import 'package:sabanci_talks/util/screen_sizes.dart';
 import 'package:sabanci_talks/util/styles.dart';
 
-class Post extends StatefulWidget {
-  const Post({Key? key}) : super(key: key);
+class PostWidget extends StatefulWidget {
+  const PostWidget({Key? key}) : super(key: key);
 
   @override
-  State<Post> createState() => _PostState();
+  State<PostWidget> createState() => _PostState();
 }
 
-class _PostState extends State<Post> with TickerProviderStateMixin {
+class _PostState extends State<PostWidget> with TickerProviderStateMixin {
   late TabController controller;
   int index = 0;
   bool isLiked = false;
@@ -118,7 +119,14 @@ class _PostState extends State<Post> with TickerProviderStateMixin {
                     )),
                 const SizedBox(width: 8),
                 IconButton(
-                    onPressed: () {},
+                    onPressed: () => pushNewScreenWithRouteSettings(
+                          context,
+                          screen: const Comments(),
+                          settings: const RouteSettings(name: Likes.routeName),
+                          withNavBar: true,
+                          pageTransitionAnimation:
+                              PageTransitionAnimation.cupertino,
+                        ),
                     icon: const Icon(
                       Icons.chat_bubble_outline_rounded,
                       size: 30,
