@@ -103,6 +103,13 @@ final kButtonDarkTextStyle = GoogleFonts.poppins(
   letterSpacing: -0.7,
 );
 
+final kButtonLittleDarkTextStyle = GoogleFonts.poppins(
+  color: AppColors.darkButtonTextColor,
+  fontSize: 16.0,
+  letterSpacing: -0.7,
+);
+
+
 final kAppBarTitleTextStyle = GoogleFonts.poppins(
   color: AppColors.appBarTitleTextColor,
   fontSize: 24.0,

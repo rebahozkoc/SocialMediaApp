@@ -6,23 +6,23 @@ import "package:sabanci_talks/util/colors.dart";
 import "package:sabanci_talks/util/dimensions.dart";
 import "package:sabanci_talks/util/screen_sizes.dart";
 import 'package:flutter/cupertino.dart';
-import 'package:email_validator/email_validator.dart';
-import "package:sabanci_talks/sign_up/view/sign_up_view.dart";
-import "package:sabanci_talks/sign_in/view/forget_password_view.dart";
+import 'package:sabanci_talks/home/view/home_view.dart';
+import "package:sabanci_talks/welcome/view/goodby_view.dart";
 
-class SignIn extends StatefulWidget {
-  const SignIn({Key? key}) : super(key: key);
+class ResetPass extends StatefulWidget {
+  const ResetPass({Key? key}) : super(key: key);
 
   @override
-  State<SignIn> createState() => _SignInState();
+  State<ResetPass> createState() => _ResetPassState();
 
   static const String routeName = '/signup';
 }
 
-class _SignInState extends State<SignIn> {
+class _ResetPassState extends State<ResetPass> {
   final _formKey = GlobalKey<FormState>();
-  String email = '';
+  String code = '';
   String pass = '';
+  String confirmPass = '';
   late String s;
 
   Future<void> _showDialog(String title, String message) async {
@@ -78,7 +78,7 @@ class _SignInState extends State<SignIn> {
     return Scaffold(
       appBar: AppBar(
         title: Text(
-          'Sign In',
+          'New Password',
           style: LittleTitle,
         ),
         backgroundColor: Colors.white10,
@@ -87,12 +87,13 @@ class _SignInState extends State<SignIn> {
       ),
       body: Padding(
           padding: Dimen.regularPadding,
-          child: Column(children: [
+          child:
+              Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
             const Spacer(flex: 1),
             Padding(
-              padding: Dimen.regularParentPadding,
+              padding: Dimen.moreHorizontal,
               child: Text(
-                'Type in your Email and Password that you chose for Void and click go to Feed',
+                'Fill in the required details and click Reset Password.',
                 style: smallTextStyle,
               ),
             ),
@@ -106,15 +107,15 @@ class _SignInState extends State<SignIn> {
                     padding: const EdgeInsets.all(16),
                     width: screenWidth(context, dividedBy: 1.1),
                     child: TextFormField(
-                      keyboardType: TextInputType.emailAddress,
+                      keyboardType: TextInputType.text,
                       decoration: InputDecoration(
                         label: Container(
                           width: 100,
                           child: Row(
                             children: [
-                              Icon(Icons.email),
+                              Icon(Icons.code),
                               SizedBox(width: 4),
-                              Text('Email', style: inputTextStyle),
+                              Text('Verification', style: inputTextStyle),
                             ],
                           ),
                         ),
@@ -134,13 +135,10 @@ class _SignInState extends State<SignIn> {
                           if (value.isEmpty) {
                             return 'Cannot leave e-mail empty';
                           }
-                          if (!EmailValidator.validate(value)) {
-                            return 'Please enter a valid e-mail address';
-                          }
                         }
                       },
                       onSaved: (value) {
-                        email = value ?? '';
+                        code = value ?? '';
                       },
                     ),
                   ),
@@ -159,7 +157,7 @@ class _SignInState extends State<SignIn> {
                             children: [
                               const Icon(Icons.password),
                               const SizedBox(width: 4),
-                              Text('Password', style: inputTextStyle),
+                              Text('New Password', style: inputTextStyle),
                             ],
                           ),
                         ),
@@ -188,21 +186,73 @@ class _SignInState extends State<SignIn> {
                       },
                     ),
                   ),
+                  Container(
+                    padding: const EdgeInsets.all(16),
+                    width: screenWidth(context, dividedBy: 1.1),
+                    child: TextFormField(
+                      keyboardType: TextInputType.text,
+                      obscureText: true,
+                      enableSuggestions: false,
+                      autocorrect: false,
+                      decoration: InputDecoration(
+                        label: Container(
+                          width: 150,
+                          child: Row(
+                            children: [
+                              const Icon(Icons.password),
+                              const SizedBox(width: 4),
+                              Text('Confirm Password', style: inputTextStyle),
+                            ],
+                          ),
+                        ),
+                        //fillColor: AppColors.textFieldFillColor,
+                        //filled: true,
+                        labelStyle: kBoldLabelStyle,
+                        border: OutlineInputBorder(
+                          borderSide: BorderSide(
+                            color: AppColors.primary,
+                          ),
+                          borderRadius: BorderRadius.circular(10),
+                        ),
+                      ),
+                      validator: (value) {
+                        if (value != null) {
+                          if (value.isEmpty) {
+                            return 'Cannot leave password empty';
+                          }
+                          if (value.length < 6) {
+                            return 'Password too short';
+                          }
+                        }
+                      },
+                      onSaved: (value) {
+                        confirmPass = value ?? '';
+                      },
+                    ),
+                  ),
                   Padding(
                     padding: const EdgeInsets.all(16.0),
                     child: OutlinedButton(
                       onPressed: () {
                         if (_formKey.currentState!.validate()) {
                           _formKey.currentState!.save();
-                          print('Email: $email');
+                          print('Email: $code');
                         } else {
                           _showDialog('Form Error', 'Your form is invalid');
                         }
+
+                        Navigator.pushAndRemoveUntil<void>(
+                          context,
+                          MaterialPageRoute<void>(
+                              builder: (BuildContext context) =>
+                                  const DeleteAccount()),
+                          ModalRoute.withName('/'),
+                        );
                       },
                       child: Padding(
                         padding: const EdgeInsets.symmetric(vertical: 12.0),
                         child: Text(
-                          'Sign In',
+                          'Reset Password',
                           style: kButtonDarkTextStyle,
                         ),
                       ),
@@ -216,25 +266,7 @@ class _SignInState extends State<SignIn> {
                 ],
               ),
             ),
-            const Spacer(flex: 1),
-            TextButton(
-              onPressed: () {
-                Navigator.push(context,
-                    MaterialPageRoute(builder: (context) => const ForgetPass()));
-              },
-              child: const Padding(
-                padding: EdgeInsets.symmetric(vertical: 15.0),
-                child: Text(
-                  'Can’t Sign In? Reset Password',
-                  style: TextStyle(
-                      color: AppColors.primary,
-                      fontSize: 14.0,
-                      fontWeight: FontWeight.w600),
-                ),
-              ),
-              style: TextButton.styleFrom(),
-            ),
-            const Spacer(flex: 1),
+            const Spacer(flex: 3),
           ])),
     );
   }
