@@ -28,8 +28,14 @@ TextStyle? kHeader2TextStyle = GoogleFonts.poppins(
   fontSize: 25.0,
 );
 
+TextStyle? inputTextStyle = GoogleFonts.poppins(
+  color: AppColors.primary,
+  fontWeight: FontWeight.w400,
+  fontSize: 12,
+);
+
 TextStyle? kHeader3TextStyle = GoogleFonts.poppins(
-  color: Colors.black,
+  color: AppColors.primary,
   fontWeight: FontWeight.w500,
   fontSize: 20.0,
 );
@@ -70,11 +76,8 @@ TextStyle? LittleTitle = GoogleFonts.poppins(
   fontSize: 20.0,
 );
 
- TextStyle? whiteTextStyle = GoogleFonts.poppins(
-    color: Colors.white,
-    fontSize: 20.0, 
-    fontWeight: FontWeight.w500
-);
+TextStyle? whiteTextStyle = GoogleFonts.poppins(
+    color: Colors.white, fontSize: 20.0, fontWeight: FontWeight.w500);
 
 TextStyle? kbody2TextStyle = GoogleFonts.poppins(
   color: AppColors.darkGrey,
@@ -82,13 +85,11 @@ TextStyle? kbody2TextStyle = GoogleFonts.poppins(
   fontSize: 12.0,
 );
 
-
 final kButtonLightTextStyle = GoogleFonts.poppins(
   color: AppColors.textColor,
   fontSize: 20.0,
   letterSpacing: -0.7,
 );
-
 
 final kButtonDaTextStyle = GoogleFonts.poppins(
   color: AppColors.textColor,

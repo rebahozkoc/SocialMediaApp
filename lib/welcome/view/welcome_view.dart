@@ -79,6 +79,8 @@ class Welcome extends StatelessWidget {
                       ),
                       style: OutlinedButton.styleFrom(
                         backgroundColor: AppColors.primary,
+                        shape: RoundedRectangleBorder(
+                            borderRadius: BorderRadius.circular(10.0)),
                       ),
                     ),
                   ),
