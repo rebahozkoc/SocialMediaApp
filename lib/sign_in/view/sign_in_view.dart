@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:sabanci_talks/bottom_bar/view/bottom_bar_view.dart';
 import 'dart:convert';
 import 'dart:io' show Platform;
 import "package:sabanci_talks/util/styles.dart";
@@ -198,6 +199,11 @@ class _SignInState extends State<SignIn> {
                         } else {
                           _showDialog('Form Error', 'Your form is invalid');
                         }
+                        Navigator.pushAndRemoveUntil<void>(
+                          context,
+                          MaterialPageRoute<void>(builder: (BuildContext context) => BottomBarView()),
+                          ModalRoute.withName('/'),
+                        );
                       },
                       child: Padding(
                         padding: const EdgeInsets.symmetric(vertical: 12.0),

@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:sabanci_talks/notification/view/notification_widget_view.dart';
 
 class NotificationView extends StatefulWidget {
   const NotificationView({Key? key}) : super(key: key);
@@ -8,10 +9,24 @@ class NotificationView extends StatefulWidget {
 }
 
 class _NotificationViewState extends State<NotificationView> {
+  SizedBox _body() => SizedBox(
+        width: double.infinity,
+        child: ListView.separated(
+            shrinkWrap: true,
+            itemBuilder: (context, index) => const NotificationWidget(),
+            separatorBuilder: (context, index) => const SizedBox(
+                  height: 12,
+                ),
+            itemCount: 5),
+      );
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      body: SafeArea(child: Text("Notification")),
+      appBar: AppBar(
+        title: const Text("Notifications"),
+        centerTitle: false,
+      ),
+      body: SafeArea(child: _body()),
     );
   }
 }

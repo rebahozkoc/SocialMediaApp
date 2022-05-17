@@ -85,6 +85,36 @@ TextStyle? kbody2TextStyle = GoogleFonts.poppins(
   fontSize: 12.0,
 );
 
+TextStyle? notificationBegin = GoogleFonts.poppins(
+  color: Colors.black,
+  fontWeight: FontWeight.normal,
+  fontSize: 13.0,
+);
+
+TextStyle? notificationEnd = GoogleFonts.poppins(
+  color: AppColors.darkGrey,
+  fontWeight: FontWeight.normal,
+  fontSize: 13.0,
+);
+
+TextStyle? commentBegin = GoogleFonts.poppins(
+  color: Colors.black,
+  fontWeight: FontWeight.normal,
+  fontSize: 12.0,
+);
+
+TextStyle? commentEnd = GoogleFonts.poppins(
+  color: AppColors.darkGrey,
+  fontWeight: FontWeight.normal,
+  fontSize: 12.0,
+);
+
+
+TextStyle? followbutton = GoogleFonts.poppins(
+  color: Colors.black,
+  fontWeight: FontWeight.normal,
+  fontSize: 12.0,
+);
 final kButtonLightTextStyle = GoogleFonts.poppins(
   color: AppColors.textColor,
   fontSize: 20.0,

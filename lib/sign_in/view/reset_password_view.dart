@@ -241,12 +241,9 @@ class _ResetPassState extends State<ResetPass> {
                           _showDialog('Form Error', 'Your form is invalid');
                         }
 
-                        Navigator.pushAndRemoveUntil<void>(
-                          context,
-                          MaterialPageRoute<void>(
-                              builder: (BuildContext context) =>
+                        Navigator.push(context,
+                          MaterialPageRoute(builder: (context) => 
                                   const DeleteAccount()),
-                          ModalRoute.withName('/'),
                         );
                       },
                       child: Padding(

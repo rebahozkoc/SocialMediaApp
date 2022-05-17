@@ -16,6 +16,11 @@ class DeleteAccount extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      appBar: AppBar(
+        title:const Text(""),
+        backgroundColor: Colors.white10,
+        elevation: 0,
+      ),
       body: SafeArea(
         maintainBottomViewPadding: false,
         child: Column(

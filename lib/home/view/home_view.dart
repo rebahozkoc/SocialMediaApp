@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:sabanci_talks/widgets/post_widget.dart';
-
+import 'package:sabanci_talks/util/colors.dart';
 
 class HomeView extends StatefulWidget {
   const HomeView({Key? key}) : super(key: key);
@@ -26,7 +26,7 @@ class _HomeViewState extends State<HomeView> {
         centerTitle: false,
         actions: <Widget>[
           IconButton(
-            icon: const Icon(Icons.chat),
+            icon: const Icon(Icons.chat, color: AppColors.secondary),
             onPressed: () {},
           ),
         ],
@@ -37,7 +37,9 @@ class _HomeViewState extends State<HomeView> {
         child: ListView.separated(
             shrinkWrap: true,
             itemBuilder: (context, index) => const PostWidget(),
-            separatorBuilder: (context, index) => const SizedBox(height: 12,),
+            separatorBuilder: (context, index) => const SizedBox(
+                  height: 12,
+                ),
             itemCount: 5),
       );
 }
