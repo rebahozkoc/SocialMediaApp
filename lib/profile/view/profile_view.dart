@@ -4,6 +4,7 @@ import 'dart:math';
 import 'package:persistent_bottom_nav_bar/persistent-tab-view.dart';
 import 'package:sabanci_talks/profile/view/followers_view.dart';
 import 'package:sabanci_talks/profile/view/following_view.dart';
+import 'package:sabanci_talks/settings/view/settings_view.dart';
 import 'package:sabanci_talks/util/styles.dart';
 import 'package:sabanci_talks/util/dimensions.dart';
 import 'package:sabanci_talks/widgets/mini_post.dart';
@@ -27,14 +28,27 @@ class _ProfileViewState extends State<ProfileView> {
         title: const Text("Your Profile"),
         centerTitle: true,
         actions: <Widget>[
-    IconButton(
-          icon: const Icon(Icons.settings),
-          tooltip: 'Edit Profile',
-          onPressed: () {
-            debugPrint("Settings");
-          },
-        ),
-  ],
+          IconButton(
+            icon: const Icon(Icons.edit),
+            tooltip: 'Edit Profile',
+            onPressed: () {
+              debugPrint("Edit Profile");
+            },
+          ),
+          IconButton(
+            icon: const Icon(Icons.settings),
+            tooltip: 'Settings',
+            onPressed: () {
+              pushNewScreenWithRouteSettings(
+                context,
+                screen: const Settings(),
+                settings: const RouteSettings(name: Settings.routeName),
+                withNavBar: true,
+                pageTransitionAnimation: PageTransitionAnimation.cupertino,
+              );
+            },
+          ),
+        ],
       ),
       body: SafeArea(
         child: SingleChildScrollView(
