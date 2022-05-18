@@ -12,6 +12,7 @@ import 'package:sabanci_talks/profile/view/profile_view.dart';
 //import 'package:nearbies/view/profile/view/profile_view.dart';
 import 'package:persistent_bottom_nav_bar/persistent-tab-view.dart';
 import 'package:sabanci_talks/util/colors.dart';
+import 'package:sabanci_talks/walkthrough/view/walkthrough_view.dart';
 import 'package:sabanci_talks/welcome/view/welcome_view.dart';
 
 class BottomBarView extends StatelessWidget {
@@ -23,7 +24,7 @@ class BottomBarView extends StatelessWidget {
       const HomeView(),
       const ExploreView(),
       const NewPostView(),
-      const NotificationView(),
+      const IntroScreen(),
       const ProfileView(),
     ];
   }
