@@ -17,8 +17,6 @@ class _IntroScreenState extends State<IntroScreen> {
   @override
   Widget build(BuildContext context) {
     return IntroductionScreen(globalBackgroundColor: Colors.white, pages: [
-      
-
       PageViewModel(
         bodyWidget: introScreen(
           context,
