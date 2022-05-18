@@ -9,13 +9,18 @@ import 'package:sabanci_talks/sign_in/view/sign_in_view.dart';
 //import 'package:sabanci_talks/home/view/home_view.dart';
 import 'package:sabanci_talks/util/styles.dart';
 import "package:sabanci_talks/util/dimensions.dart";
-
-class Welcome extends StatelessWidget {
-  const Welcome({Key? key}) : super(key: key);
+import "package:sabanci_talks/util/dimensions.dart";
+class DeleteAccount extends StatelessWidget {
+  const DeleteAccount({Key? key}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      appBar: AppBar(
+        title:const Text(""),
+        backgroundColor: Colors.white10,
+        elevation: 0,
+      ),
       body: SafeArea(
         maintainBottomViewPadding: false,
         child: Column(
@@ -38,7 +43,7 @@ class Welcome extends StatelessWidget {
                 //padding: Dimen.regularPadding,
                 padding: const EdgeInsets.symmetric(horizontal: 4, vertical: 3),
                 child: Text(
-                  'Welcome',
+                  'Goodby!',
                   style: welcomeStyle,
                 ),
               ),
@@ -47,9 +52,9 @@ class Welcome extends StatelessWidget {
             Center(
               child: Padding(
                 //padding: Dimen.regularPadding,
-                padding: const EdgeInsets.symmetric(horizontal: 4, vertical: 3),
+                padding: Dimen.regularDoubleParentPadding,
                 child: Text(
-                  'Welcome to Void, find and contact with your friends. Enjoy Life!',
+                  'Account once deleted cannot be restored later. We delete all your data from our servers.',
                   style: smallTextStyle,
                 ),
               ),
@@ -70,7 +75,7 @@ class Welcome extends StatelessWidget {
                       child: const Padding(
                         padding: EdgeInsets.symmetric(vertical: 15.0),
                         child: Text(
-                          'Sign In',
+                          'Delete My Account',
                           style: TextStyle(
                               color: Colors.white,
                               fontSize: 20.0,
@@ -88,25 +93,19 @@ class Welcome extends StatelessWidget {
               ),
             ),
             const SizedBox(
-              width: 8.0,
+              height: 20.0,
             ),
-            TextButton(
-              onPressed: () {
-                Navigator.push(
-                    context, MaterialPageRoute(builder: (context) => SignUp()));
-              },
-              child: const Padding(
+            const Padding(
                 padding: EdgeInsets.symmetric(vertical: 15.0),
                 child: Text(
-                  'Create Account',
+                  'Hope we will meet again!',
                   style: TextStyle(
                       color: AppColors.primary,
                       fontSize: 12.0,
                       fontWeight: FontWeight.w600),
                 ),
-              ),
-              style: TextButton.styleFrom(),
             ),
+            
             const Spacer(),
             Padding(
               padding: Dimen.regularPadding,

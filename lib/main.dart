@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:sabanci_talks/bottom_bar/view/bottom_bar_view.dart';
-import 'package:sabanci_talks/home/likes_view.dart';
+import 'package:sabanci_talks/home/view/likes_view.dart';
 import 'package:sabanci_talks/sign_up/view/sign_up_view.dart';
 import 'package:sabanci_talks/util/colors.dart';
 import 'package:sabanci_talks/welcome/view/welcome_view.dart';
@@ -18,8 +18,9 @@ class MyApp extends StatelessWidget {
   Widget build(BuildContext context) {
     return MaterialApp(
         title: 'Flutter Demo',
+        debugShowCheckedModeBanner: false,
         theme: ThemeData(
-          primarySwatch: Colors.yellow,
+          primarySwatch: Colors.red,
           primaryColor: AppColors.primary,
           secondaryHeaderColor: AppColors.secondary,
           

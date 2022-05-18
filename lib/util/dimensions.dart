@@ -13,7 +13,7 @@ class Dimen {
   static get regularDoubleParentPadding => const EdgeInsets.all(parentMargin*2);
   static get regularDoubleParentPaddingLR => const EdgeInsets.symmetric(horizontal: parentMargin*2);
   static get regularDoubleParentPaddingTB => const EdgeInsets.symmetric(vertical: parentMargin*2);
-
+  static get moreHorizontal=>const EdgeInsets.fromLTRB(18, parentMargin, 18, parentMargin);
 
 
 }

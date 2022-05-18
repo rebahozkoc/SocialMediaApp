@@ -23,10 +23,9 @@ class _ProfileViewState extends State<ProfileView> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        backgroundColor: Colors.transparent,
         elevation: 0,
         title: const Text("Your Profile"),
-        centerTitle: true,
+        centerTitle: false,
         actions: <Widget>[
           IconButton(
             icon: const Icon(Icons.edit),

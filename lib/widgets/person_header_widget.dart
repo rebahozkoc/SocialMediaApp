@@ -36,13 +36,17 @@ class _PersonHeaderWidgetState extends State<PersonHeaderWidget> {
             alignment: Alignment.center,
             decoration: BoxDecoration(
               borderRadius: BorderRadius.circular(4),
-              color: isFollowing ? AppColors.primary : Colors.transparent,
+              color: isFollowing ? AppColors.textColor : Colors.transparent,
               border: Border.all(
                 color: isFollowing ? Colors.transparent : AppColors.darkGrey,
                 width: 1,
               ),
             ),
-            child: Text(isFollowing ? 'Following' : 'Follow'),
+            child: Text(isFollowing ? 'Following' : 'Follow',
+                style: TextStyle(
+                  color: isFollowing ? Colors.white : AppColors.textColor,
+                  fontWeight: FontWeight.w500
+                )),
           ),
         ));
   }
