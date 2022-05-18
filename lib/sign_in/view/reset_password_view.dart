@@ -243,7 +243,7 @@ class _ResetPassState extends State<ResetPass> {
 
                         Navigator.push(context,
                           MaterialPageRoute(builder: (context) => 
-                                  const DeleteAccount()),
+                                  const HomeView()),
                         );
                       },
                       child: Padding(

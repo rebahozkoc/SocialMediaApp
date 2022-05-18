@@ -22,7 +22,7 @@ class BottomBarView extends StatelessWidget {
       const HomeView(),
       const ExploreView(),
       const NewPostView(),
-      const IntroScreen(),
+      const NotificationView(),
       const ProfileView(),
     ];
   }
