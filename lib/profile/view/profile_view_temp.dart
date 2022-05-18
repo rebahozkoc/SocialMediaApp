@@ -5,7 +5,6 @@ import 'package:sabanci_talks/profile/view/followers_view.dart';
 import 'package:sabanci_talks/profile/view/following_view.dart';
 import 'package:sabanci_talks/settings/view/settings_view.dart';
 import 'package:sabanci_talks/util/colors.dart';
-import 'package:sabanci_talks/util/screen_sizes.dart';
 import 'package:sabanci_talks/util/styles.dart';
 import 'package:sabanci_talks/util/dimensions.dart';
 import 'package:sabanci_talks/widgets/mini_post.dart';
@@ -21,15 +20,7 @@ class _ProfileViewState extends State<ProfileView>
     with SingleTickerProviderStateMixin {
   final dataKey = GlobalKey();
   late TabController _controller;
-  final List<String> miniPostList = ["https://picsum.photos/600", 
-                "https://picsum.photos/500",
-                "https://picsum.photos/600", "https://picsum.photos/500",
-                "https://picsum.photos/600", "https://picsum.photos/400",
-                "https://picsum.photos/600", "https://picsum.photos/700",
-                "https://picsum.photos/600", "https://picsum.photos/800",
-                "https://picsum.photos/600", "https://picsum.photos/520",
-                "https://picsum.photos/600", "https://picsum.photos/560",
-                "https://picsum.photos/600", "https://picsum.photos/300",];
+  late List miniPostList;
   
   @override
   void initState() {
@@ -124,7 +115,7 @@ class _ProfileViewState extends State<ProfileView>
                 ],
               ),
               SizedBox(
-                height: (miniPostList.length / 3).ceil() * ((screenWidth(context)/3).ceil() + 3),
+                height: 800.0,
                 child: TabBarView(
                   controller: _controller,
                   children: <Widget>[
@@ -197,9 +188,9 @@ class _ProfileViewState extends State<ProfileView>
         crossAxisSpacing: 3.0,
         mainAxisSpacing: 3.0,
       ),
-      itemCount: miniPostList.length,
+      itemCount: 100,
       itemBuilder: (context, index) {
-        return MiniPost( miniPostList[index]);
+        return const MiniPost("https://picsum.photos/400");
       },
     );
   }

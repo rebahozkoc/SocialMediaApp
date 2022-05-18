@@ -1,6 +1,8 @@
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:sabanci_talks/home/view/comment_view.dart';
+import 'package:sabanci_talks/home/view/likes_view.dart';
 import 'package:sabanci_talks/post/functions/post_functions.dart';
 import 'package:sabanci_talks/post/model/post_model.dart';
 import 'package:sabanci_talks/util/colors.dart';
@@ -134,7 +136,13 @@ class _PostViewState extends State<PostView> {
               iconSize: 18,
               onPressed: () => changeLike(),
             ),
-            _integrationCount(convertCount(widget.postModel.likeCount!))
+            InkWell(
+                onTap: () => Navigator.push(context,
+                    CupertinoPageRoute(builder: (context) => const Likes())),
+                child: Container(
+                  child: _integrationCount(
+                      convertCount(widget.postModel.likeCount!)),
+                ))
           ],
         ),
         Row(
@@ -145,7 +153,8 @@ class _PostViewState extends State<PostView> {
               icon: const Icon(CupertinoIcons.bubble_left),
               color: AppColors.darkGrey,
               iconSize: 18,
-              onPressed: () {},
+              onPressed: () => Navigator.push(context,
+                  CupertinoPageRoute(builder: (context) => const Comments())),
             ),
             _integrationCount(convertCount(widget.postModel.commentCount!))
           ],
