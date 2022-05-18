@@ -20,7 +20,7 @@ class BottomBarView extends StatelessWidget {
   List<Widget> _buildScreens() {
     return [
       const HomeView(),
-      const ExploreView(),
+      ExploreView(),
       const NewPostView(),
       const NotificationView(),
       const ProfileView(),
