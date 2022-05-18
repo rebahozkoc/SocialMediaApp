@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 
 import 'package:persistent_bottom_nav_bar/persistent-tab-view.dart';
+import 'package:sabanci_talks/profile/view/edit_profile.dart';
 import 'package:sabanci_talks/profile/view/followers_view.dart';
 import 'package:sabanci_talks/profile/view/following_view.dart';
 import 'package:sabanci_talks/settings/view/settings_view.dart';
@@ -56,7 +57,13 @@ class _ProfileViewState extends State<ProfileView>
             icon: const Icon(Icons.edit),
             tooltip: 'Edit Profile',
             onPressed: () {
-              debugPrint("Edit Profile");
+              pushNewScreenWithRouteSettings(
+                context,
+                screen: const EditProfileView(),
+                settings: const RouteSettings(name: EditProfileView.routeName),
+                withNavBar: true,
+                pageTransitionAnimation: PageTransitionAnimation.cupertino,
+              );
             },
           ),
           IconButton(
