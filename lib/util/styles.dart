@@ -109,12 +109,12 @@ TextStyle? commentEnd = GoogleFonts.poppins(
   fontSize: 12.0,
 );
 
-
 TextStyle? followbutton = GoogleFonts.poppins(
   color: Colors.black,
   fontWeight: FontWeight.normal,
   fontSize: 12.0,
 );
+
 final kButtonLightTextStyle = GoogleFonts.poppins(
   color: AppColors.textColor,
   fontSize: 20.0,
@@ -138,7 +138,6 @@ final kButtonLittleDarkTextStyle = GoogleFonts.poppins(
   fontSize: 16.0,
   letterSpacing: -0.7,
 );
-
 
 final kAppBarTitleTextStyle = GoogleFonts.poppins(
   color: AppColors.appBarTitleTextColor,

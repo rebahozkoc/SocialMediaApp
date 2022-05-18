@@ -10,6 +10,7 @@ import 'package:sabanci_talks/sign_in/view/sign_in_view.dart';
 import 'package:sabanci_talks/util/styles.dart';
 import "package:sabanci_talks/util/dimensions.dart";
 import "package:sabanci_talks/util/dimensions.dart";
+
 class DeleteAccount extends StatelessWidget {
   const DeleteAccount({Key? key}) : super(key: key);
 
@@ -17,8 +18,9 @@ class DeleteAccount extends StatelessWidget {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title:const Text(""),
+        title: const Text(""),
         backgroundColor: Colors.white10,
+        leading: BackButton(color: AppColors.primary),
         elevation: 0,
       ),
       body: SafeArea(
@@ -96,21 +98,19 @@ class DeleteAccount extends StatelessWidget {
               height: 20.0,
             ),
             const Padding(
-                padding: EdgeInsets.symmetric(vertical: 15.0),
-                child: Text(
-                  'Hope we will meet again!',
-                  style: TextStyle(
-                      color: AppColors.primary,
-                      fontSize: 12.0,
-                      fontWeight: FontWeight.w600),
-                ),
+              padding: EdgeInsets.symmetric(vertical: 15.0),
+              child: Text(
+                'Hope we will meet again!',
+                style: TextStyle(
+                    color: AppColors.primary,
+                    fontSize: 12.0,
+                    fontWeight: FontWeight.w600),
+              ),
             ),
-            
             const Spacer(),
             Padding(
-              padding: Dimen.regularPadding,
-              child:Text("@ 2022 Void", style:smallTextStyle)
-            )
+                padding: Dimen.regularPadding,
+                child: Text("@ 2022 Void", style: smallTextStyle))
           ],
         ),
       ),

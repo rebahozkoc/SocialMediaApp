@@ -22,7 +22,7 @@ class _HomeViewState extends State<HomeView> {
   }
 
   AppBar _appBar() => AppBar(
-        title: const Text("Sabancı Talks"),
+        title: const Text("Sabanci Talks"),
         centerTitle: false,
         actions: <Widget>[
           IconButton(
