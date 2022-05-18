@@ -1,9 +1,8 @@
-
 import 'package:flutter/material.dart';
 import 'package:sabanci_talks/explore/view/explore_view.dart';
 import 'package:sabanci_talks/home/view/home_view.dart';
-import 'package:sabanci_talks/new_post/view/new_post_view.dart';
 import 'package:sabanci_talks/notification/view/notification_view.dart';
+import 'package:sabanci_talks/new_post/view/new_post_view.dart';
 import 'package:sabanci_talks/profile/view/profile_view.dart';
 //import 'package:nearbies/core/init/icon/font_awesome5.dart';
 //import 'package:nearbies/view/discover/view/discover_view.dart';
@@ -17,7 +16,6 @@ import 'package:sabanci_talks/welcome/view/welcome_view.dart';
 
 class BottomBarView extends StatelessWidget {
   const BottomBarView({Key? key}) : super(key: key);
-
 
   List<Widget> _buildScreens() {
     return [
@@ -35,34 +33,28 @@ class BottomBarView extends StatelessWidget {
       return [
         PersistentBottomNavBarItem(
             icon: const Icon(Icons.home),
-            iconSize: 24,
+            iconSize: 28,
             activeColorPrimary: AppColors.primary,
             inactiveColorPrimary: AppColors.grey),
         PersistentBottomNavBarItem(
             icon: const Icon(Icons.search),
-            iconSize: 24,
+            iconSize: 28,
             activeColorPrimary: AppColors.primary,
             inactiveColorPrimary: AppColors.grey),
         PersistentBottomNavBarItem(
-            icon: const Icon(Icons.add_circle),
-            iconSize: 42,
-            activeColorPrimary: AppColors.secondary,
-            inactiveColorPrimary: AppColors.secondary,
-            onPressed: (_) => showModalBottomSheet(
-              isScrollControlled:true,
-                context: context,
-                shape: RoundedRectangleBorder(
-                  borderRadius: BorderRadius.circular(10.0),
-                ),
-                builder: (BuildContext context) => const NewPostView())),
+          icon: const Icon(Icons.add_circle),
+          iconSize: 42,
+          activeColorPrimary: AppColors.secondary,
+          inactiveColorPrimary: AppColors.secondary,
+        ),
         PersistentBottomNavBarItem(
             icon: const Icon(Icons.notifications),
-            iconSize: 24,
+            iconSize: 28,
             activeColorPrimary: AppColors.primary,
             inactiveColorPrimary: AppColors.grey),
         PersistentBottomNavBarItem(
             icon: const Icon(Icons.person),
-            iconSize: 24,
+            iconSize: 28,
             activeColorPrimary: AppColors.primary,
             inactiveColorPrimary: AppColors.grey),
       ];

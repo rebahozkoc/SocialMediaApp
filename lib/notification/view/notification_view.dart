@@ -11,13 +11,17 @@ class NotificationView extends StatefulWidget {
 class _NotificationViewState extends State<NotificationView> {
   SizedBox _body() => SizedBox(
         width: double.infinity,
-        child: ListView.separated(
-            shrinkWrap: true,
-            itemBuilder: (context, index) => const NotificationWidget(),
-            separatorBuilder: (context, index) => const SizedBox(
-                  height: 12,
-                ),
-            itemCount: 5),
+        child: SingleChildScrollView(
+          child: ListView.separated(
+              shrinkWrap: true,
+              physics: const NeverScrollableScrollPhysics(),
+              padding: const EdgeInsets.symmetric(vertical: 12),
+              itemBuilder: (context, index) => const NotificationWidget(),
+              separatorBuilder: (context, index) => const SizedBox(
+                    height: 12,
+                  ),
+              itemCount: 5),
+        ),
       );
   @override
   Widget build(BuildContext context) {

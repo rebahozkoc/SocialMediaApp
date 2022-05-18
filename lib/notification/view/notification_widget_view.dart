@@ -1,7 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:persistent_bottom_nav_bar/persistent-tab-view.dart';
-import 'package:sabanci_talks/home/view/comment_view.dart';
-import 'package:sabanci_talks/home/view/likes_view.dart';
 import 'package:sabanci_talks/util/colors.dart';
 import 'package:sabanci_talks/util/screen_sizes.dart';
 import 'package:sabanci_talks/util/styles.dart';
@@ -55,7 +52,7 @@ class _NotificationState extends State<NotificationWidget>
       crossAxisAlignment: CrossAxisAlignment.start,
       mainAxisSize: MainAxisSize.max,
       children: [
-        _like("Charles_Leclers", "comment"),
+        _like("@Charles_Leclers", "comment"),
         //_comment("Charles_Leclers"),
         //_wannafollow("Gorkem Yar")
       ],
@@ -79,6 +76,7 @@ class _NotificationState extends State<NotificationWidget>
         children: [
           Row(children: [
             const CircleAvatar(
+              radius: 24,
               foregroundImage: NetworkImage(
                   'https://pbs.twimg.com/profile_images/1276567411240681472/8KdXHFdK_400x400.jpg'),
             ),
