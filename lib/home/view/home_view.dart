@@ -26,7 +26,7 @@ class _HomeViewState extends State<HomeView> {
         centerTitle: false,
         actions: <Widget>[
           IconButton(
-            icon: const Icon(Icons.chat, color: AppColors.secondary),
+            icon: const Icon(Icons.chat, color: Colors.white),
             onPressed: () {},
           ),
         ],

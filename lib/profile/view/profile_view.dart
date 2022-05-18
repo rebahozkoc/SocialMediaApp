@@ -4,6 +4,7 @@ import 'dart:math';
 import 'package:persistent_bottom_nav_bar/persistent-tab-view.dart';
 import 'package:sabanci_talks/profile/view/followers_view.dart';
 import 'package:sabanci_talks/profile/view/following_view.dart';
+import 'package:sabanci_talks/util/colors.dart';
 import 'package:sabanci_talks/util/styles.dart';
 import 'package:sabanci_talks/util/dimensions.dart';
 import 'package:sabanci_talks/widgets/mini_post.dart';
@@ -22,13 +23,12 @@ class _ProfileViewState extends State<ProfileView> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        backgroundColor: Colors.transparent,
         elevation: 0,
         title: const Text("Your Profile"),
-        centerTitle: true,
+        centerTitle: false,
         actions: <Widget>[
     IconButton(
-          icon: const Icon(Icons.settings),
+          icon: const Icon(Icons.settings,color: Colors.white,),
           tooltip: 'Edit Profile',
           onPressed: () {
             debugPrint("Settings");

@@ -34,12 +34,12 @@ class BottomBarView extends StatelessWidget {
       return [
         PersistentBottomNavBarItem(
             icon: const Icon(Icons.home),
-            iconSize: 24,
+            iconSize: 28,
             activeColorPrimary: AppColors.primary,
             inactiveColorPrimary: AppColors.grey),
         PersistentBottomNavBarItem(
             icon: const Icon(Icons.search),
-            iconSize: 24,
+            iconSize: 28,
             activeColorPrimary: AppColors.primary,
             inactiveColorPrimary: AppColors.grey),
         PersistentBottomNavBarItem(
@@ -56,12 +56,12 @@ class BottomBarView extends StatelessWidget {
                 builder: (BuildContext context) => const NewPostView())),
         PersistentBottomNavBarItem(
             icon: const Icon(Icons.notifications),
-            iconSize: 24,
+            iconSize: 28,
             activeColorPrimary: AppColors.primary,
             inactiveColorPrimary: AppColors.grey),
         PersistentBottomNavBarItem(
             icon: const Icon(Icons.person),
-            iconSize: 24,
+            iconSize: 28,
             activeColorPrimary: AppColors.primary,
             inactiveColorPrimary: AppColors.grey),
       ];
