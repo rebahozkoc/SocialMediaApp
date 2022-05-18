@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 
 import 'package:persistent_bottom_nav_bar/persistent-tab-view.dart';
+import 'package:sabanci_talks/profile/view/edit_profile.dart';
 import 'package:sabanci_talks/profile/view/followers_view.dart';
 import 'package:sabanci_talks/profile/view/following_view.dart';
 import 'package:sabanci_talks/settings/view/settings_view.dart';
@@ -61,7 +62,13 @@ class _ProfileViewState extends State<ProfileView>
             icon: const Icon(Icons.edit),
             tooltip: 'Edit Profile',
             onPressed: () {
-              debugPrint("Edit Profile");
+              pushNewScreenWithRouteSettings(
+                context,
+                screen: const EditProfileView(),
+                settings: const RouteSettings(name: EditProfileView.routeName),
+                withNavBar: true,
+                pageTransitionAnimation: PageTransitionAnimation.cupertino,
+              );
             },
           ),
           IconButton(
@@ -88,7 +95,7 @@ class _ProfileViewState extends State<ProfileView>
                 children: [
                   const CircleAvatar(
                     radius: 42,
-                    foregroundImage: NetworkImage("https://picsum.photos/400"),
+                    foregroundImage: NetworkImage("https://media-exp1.licdn.com/dms/image/C4D03AQEHt0PHBly75g/profile-displayphoto-shrink_800_800/0/1577740655027?e=1658361600&v=beta&t=KaSKjXDM6aldHaLR1-otcpGBTV64J6oZstv3yTD6mRM"),
                   ),
                   const Spacer(),
                   Padding(

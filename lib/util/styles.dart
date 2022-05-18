@@ -58,6 +58,10 @@ TextStyle? smallTextStyle = GoogleFonts.poppins(
   fontSize: 10.0,
 );
 
+TextStyle? kWhiteTextStyle = GoogleFonts.poppins(
+    color: AppColors.darkButtonTextColor,
+);
+
 TextStyle? welcomeStyle = GoogleFonts.poppins(
   color: AppColors.primary,
   fontWeight: FontWeight.w600,
@@ -157,3 +161,5 @@ final kLabelStyle = GoogleFonts.poppins(
   fontSize: 14.0,
   color: AppColors.textColor,
 );
+
+
