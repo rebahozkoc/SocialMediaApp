@@ -27,27 +27,27 @@ class _ProfileViewState extends State<ProfileView>
   late TabController _controller;
   final List<String> miniPostList = [
     "https://picsum.photos/600",
-    "https://picsum.photos/500",
-    "https://picsum.photos/600",
-    "https://picsum.photos/500",
-    "https://picsum.photos/600",
-    "https://picsum.photos/400",
-    "https://picsum.photos/600",
-    "https://picsum.photos/700",
-    "https://picsum.photos/600",
-    "https://picsum.photos/800",
-    "https://picsum.photos/600",
+    "https://picsum.photos/501",
+    "https://picsum.photos/601",
+    "https://picsum.photos/502",
+    "https://picsum.photos/603",
+    "https://picsum.photos/404",
+    "https://picsum.photos/605",
+    "https://picsum.photos/706",
+    "https://picsum.photos/607",
+    "https://picsum.photos/808",
+    "https://picsum.photos/609",
     "https://picsum.photos/520",
-    "https://picsum.photos/600",
-    "https://picsum.photos/560",
-    "https://picsum.photos/600",
-    "https://picsum.photos/300",
+    "https://picsum.photos/612",
+    "https://picsum.photos/523",
+    "https://picsum.photos/646",
+    "https://picsum.photos/343",
   ];
 
   @override
   void initState() {
     super.initState();
-    _controller = TabController(length: 2, vsync: this);
+    _controller = TabController(length: 3, vsync: this);
   }
 
   Row _settingsRow() => Row(
@@ -89,6 +89,7 @@ class _ProfileViewState extends State<ProfileView>
       Padding(
         padding: Dimen.regularParentPadding,
         child: Row(
+          mainAxisAlignment: MainAxisAlignment.center,
           children: [
             const CircleAvatar(
               radius: 42,
@@ -111,6 +112,7 @@ class _ProfileViewState extends State<ProfileView>
                 ],
               ),
             ),
+            const Spacer(),
           ],
         ),
       ),
@@ -135,7 +137,7 @@ class _ProfileViewState extends State<ProfileView>
         toolbarHeight: 0,
       ),
       body: DefaultTabController(
-        length: 2,
+        length: 3,
         child: NestedScrollView(
           headerSliverBuilder: ((context, innerBoxIsScrolled) => [
                 SliverList(
@@ -147,10 +149,10 @@ class _ProfileViewState extends State<ProfileView>
               TabBar(
                 controller: _controller,
                 tabs: const [
-                  // Tab(
-                  //     icon: Icon(Icons.photo_library_rounded,
-                  //         color: AppColors.primary)),
-                  Tab(icon: Icon(Icons.telegram, color: AppColors.primary)),
+                   Tab(
+                       icon: Icon(Icons.photo_library_rounded,
+                           color: AppColors.primary)),
+                  Tab(icon: Icon(Icons.text_snippet, color: AppColors.primary)),
                   Tab(icon: Icon(Icons.bookmark, color: AppColors.primary)),
                 ],
               ),
@@ -158,7 +160,20 @@ class _ProfileViewState extends State<ProfileView>
                 child: TabBarView(
                   controller: _controller,
                   children: <Widget>[
-                    //mediaPostGrid(),
+                    GridView.builder(
+      key: dataKey,
+      physics: const NeverScrollableScrollPhysics(),
+      shrinkWrap: true,
+      gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
+        crossAxisCount: 3,
+        crossAxisSpacing: 3.0,
+        mainAxisSpacing: 3.0,
+      ),
+      itemCount: miniPostList.length,
+      itemBuilder: (context, index) {
+        return MiniPost(miniPostList[index]);
+      },
+    ),
                     ListView(
                       shrinkWrap: true,
                       physics: const NeverScrollableScrollPhysics(),
@@ -357,8 +372,8 @@ class _ProfileViewState extends State<ProfileView>
       children: [
         Expanded(
           child: TextButton(
-              onPressed: () =>
-                  Scrollable.ensureVisible(dataKey.currentContext!),
+              onPressed: () =>{},
+                  
               child: const ProfileCount("Moments", 11)),
         ),
         Expanded(
@@ -389,22 +404,7 @@ class _ProfileViewState extends State<ProfileView>
     );
   }
 
-  GridView mediaPostGrid() {
-    return GridView.builder(
-      key: dataKey,
-      physics: const NeverScrollableScrollPhysics(),
-      shrinkWrap: true,
-      gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
-        crossAxisCount: 3,
-        crossAxisSpacing: 3.0,
-        mainAxisSpacing: 3.0,
-      ),
-      itemCount: miniPostList.length,
-      itemBuilder: (context, index) {
-        return MiniPost(miniPostList[index]);
-      },
-    );
-  }
+  
 }
 
 class ProfileCount extends StatelessWidget {
@@ -438,7 +438,6 @@ class ProfileCount extends StatelessWidget {
     );
   }
 }
-
 
 
 /*

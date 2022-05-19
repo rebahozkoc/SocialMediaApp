@@ -1,4 +1,7 @@
 import 'package:flutter/material.dart';
+import 'package:sabanci_talks/new_post/view/add_image_view.dart';
+import 'package:sabanci_talks/util/dimensions.dart';
+import 'new_post_form_view.dart';
 
 class NewPostView extends StatefulWidget {
   const NewPostView({Key? key}) : super(key: key);
@@ -12,7 +15,17 @@ class _NewPostViewState extends State<NewPostView> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: _appBar(),
-      body: _body(),
+      body: SingleChildScrollView(
+        child: Padding(
+          padding: Dimen.regularParentPadding,
+          child: Column(
+            children: [
+              MyCustomForm(),
+              SingleChildScrollView(scrollDirection: Axis.horizontal, child: Row(children: [AddImageView() ,AddImageView(),AddImageView(),AddImageView(), AddImageView()]))
+              ],
+          ),
+        ),
+      ),
     );
   }
 
@@ -25,7 +38,7 @@ class _NewPostViewState extends State<NewPostView> {
           onPressed: () {
             debugPrint("Next");
           },
-          child: const Text("Next",
+          child: const Text("Share",
               style: TextStyle(
                 color: Colors.white,
                 fontSize: 15,
@@ -35,10 +48,4 @@ class _NewPostViewState extends State<NewPostView> {
       ],
     );
   }
-
-  Column _body() => Column(
-    mainAxisAlignment: MainAxisAlignment.start,
-    crossAxisAlignment: CrossAxisAlignment.start,
-    mainAxisSize: MainAxisSize.max,
-  );
 }
