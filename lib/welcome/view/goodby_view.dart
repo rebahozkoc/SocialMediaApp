@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:persistent_bottom_nav_bar/persistent-tab-view.dart';
 //import 'package:week_5/routes/login.dart';
 //import 'package:week_5/routes/signup.dart';
 //import 'package:week_5/util/colors.dart';
@@ -10,6 +11,7 @@ import 'package:sabanci_talks/sign_in/view/sign_in_view.dart';
 import 'package:sabanci_talks/util/styles.dart';
 import "package:sabanci_talks/util/dimensions.dart";
 import "package:sabanci_talks/util/dimensions.dart";
+import 'package:sabanci_talks/welcome/view/welcome_view.dart';
 
 class DeleteAccount extends StatelessWidget {
   const DeleteAccount({Key? key}) : super(key: key);
@@ -71,8 +73,10 @@ class DeleteAccount extends StatelessWidget {
                     flex: 1,
                     child: ElevatedButton(
                       onPressed: () {
-                        Navigator.push(context,
-                            MaterialPageRoute(builder: (context) => SignIn()));
+                        pushNewScreenWithRouteSettings(context,
+                            screen: const Welcome(),
+                            settings: const RouteSettings(),
+                            withNavBar: false);
                       },
                       child: const Padding(
                         padding: EdgeInsets.symmetric(vertical: 15.0),

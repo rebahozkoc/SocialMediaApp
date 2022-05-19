@@ -1,7 +1,10 @@
 import 'package:flutter/material.dart';
+import 'package:persistent_bottom_nav_bar/persistent-tab-view.dart';
+import 'package:sabanci_talks/sign_in/view/sign_in_view.dart';
 import 'package:sabanci_talks/util/colors.dart';
 import 'package:sabanci_talks/util/styles.dart';
 import 'package:sabanci_talks/welcome/view/goodby_view.dart';
+import 'package:sabanci_talks/welcome/view/welcome_view.dart';
 import 'package:sabanci_talks/widgets/person_header_widget.dart';
 import 'package:flutter_switch/flutter_switch.dart';
 
@@ -27,6 +30,7 @@ class Settings extends StatelessWidget {
             ListItemWithSwitch(
                 "Allow Saving", "People can save your posts to their profile"),
             _ArrowItemState("Block List"),
+            _ArrowItemState("Sign Out"),
             _ArrowItemState("Delete Account"),
           ],
         ),
@@ -104,6 +108,11 @@ class _ArrowItemState extends StatelessWidget {
     );
   }
 
+  void signOut(BuildContext context) {
+    pushNewScreenWithRouteSettings(context,
+        screen: const Welcome(), settings: RouteSettings(), withNavBar: false);
+  }
+
   void deleteAccount(BuildContext context) {
     Navigator.push(
       context,
@@ -119,10 +128,16 @@ class _ArrowItemState extends StatelessWidget {
       child: Row(mainAxisAlignment: MainAxisAlignment.spaceBetween, children: [
         Text(te1, style: kHeader4TextStyle),
         IconButton(
-          icon: Icon(Icons.chevron_right),
+          icon: te1 == "Sign Out"
+              ? Icon(Icons.logout_outlined)
+              : Icon(Icons.chevron_right),
           iconSize: 30,
           onPressed: () {
-            te1 == "Block List" ? blockList(context) : deleteAccount(context);
+            te1 == "Block List"
+                ? blockList(context)
+                : te1 == "Sign Out"
+                    ? signOut(context)
+                    : deleteAccount(context);
           },
         ),
       ]),
