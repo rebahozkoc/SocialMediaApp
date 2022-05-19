@@ -29,11 +29,9 @@ class MyCustomFormState extends State<MyCustomForm> {
             keyboardType: TextInputType.multiline,
             maxLines: null,
             decoration: const InputDecoration(
-    border: InputBorder.none,
-    hintText: 'What is going on?',
-  ),
-
-            
+              border: InputBorder.none,
+              hintText: 'What is going on?',
+            ),
             validator: (value) {
               if (value == null || value.isEmpty) {
                 return 'Please enter some text';
@@ -42,9 +40,8 @@ class MyCustomFormState extends State<MyCustomForm> {
             },
           ),
           Padding(
-            padding: const EdgeInsets.symmetric(vertical: 16.0),
-            child: Container()
-          ),
+              padding: const EdgeInsets.symmetric(vertical: 16.0),
+              child: Container()),
         ],
       ),
     );
