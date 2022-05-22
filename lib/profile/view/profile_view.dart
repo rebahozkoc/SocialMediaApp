@@ -149,9 +149,9 @@ class _ProfileViewState extends State<ProfileView>
               TabBar(
                 controller: _controller,
                 tabs: const [
-                   Tab(
-                       icon: Icon(Icons.photo_library_rounded,
-                           color: AppColors.primary)),
+                  Tab(
+                      icon: Icon(Icons.photo_library_rounded,
+                          color: AppColors.primary)),
                   Tab(icon: Icon(Icons.text_snippet, color: AppColors.primary)),
                   Tab(icon: Icon(Icons.bookmark, color: AppColors.primary)),
                 ],
@@ -161,19 +161,20 @@ class _ProfileViewState extends State<ProfileView>
                   controller: _controller,
                   children: <Widget>[
                     GridView.builder(
-      key: dataKey,
-      physics: const NeverScrollableScrollPhysics(),
-      shrinkWrap: true,
-      gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
-        crossAxisCount: 3,
-        crossAxisSpacing: 3.0,
-        mainAxisSpacing: 3.0,
-      ),
-      itemCount: miniPostList.length,
-      itemBuilder: (context, index) {
-        return MiniPost(miniPostList[index]);
-      },
-    ),
+                      key: dataKey,
+                      physics: const NeverScrollableScrollPhysics(),
+                      shrinkWrap: true,
+                      gridDelegate:
+                          const SliverGridDelegateWithFixedCrossAxisCount(
+                        crossAxisCount: 3,
+                        crossAxisSpacing: 3.0,
+                        mainAxisSpacing: 3.0,
+                      ),
+                      itemCount: miniPostList.length,
+                      itemBuilder: (context, index) {
+                        return MiniPost(miniPostList[index]);
+                      },
+                    ),
                     ListView(
                       shrinkWrap: true,
                       physics: const NeverScrollableScrollPhysics(),
@@ -372,9 +373,7 @@ class _ProfileViewState extends State<ProfileView>
       children: [
         Expanded(
           child: TextButton(
-              onPressed: () =>{},
-                  
-              child: const ProfileCount("Moments", 11)),
+              onPressed: () => {}, child: const ProfileCount("Moments", 11)),
         ),
         Expanded(
             child: TextButton(
@@ -403,8 +402,6 @@ class _ProfileViewState extends State<ProfileView>
       ],
     );
   }
-
-  
 }
 
 class ProfileCount extends StatelessWidget {
