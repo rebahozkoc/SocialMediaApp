@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:sabanci_talks/post/view/single_post.dart';
 
 class PhotoItem {
   final String image;
@@ -85,22 +86,28 @@ class ExploreView extends StatelessWidget {
       )),
       body: GridView.builder(
         gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
-          crossAxisSpacing: 0,
-          mainAxisSpacing: 0,
+          crossAxisSpacing: 3,
+          mainAxisSpacing: 3,
           crossAxisCount: 3,
         ),
         itemCount: _items.length,
         itemBuilder: (context, index) {
-          return new GestureDetector(
-            child: Container(
-              decoration: BoxDecoration(
-                image: DecorationImage(
-                  fit: BoxFit.cover,
-                  image: NetworkImage(_items[index].image),
+          return InkWell(
+              child: Container(
+                decoration: BoxDecoration(
+                  image: DecorationImage(
+                    fit: BoxFit.cover,
+                    image: NetworkImage(_items[index].image),
+                  ),
                 ),
               ),
-            ),
-          );
+              onTap: () => {
+                    Navigator.push(
+                        context,
+                        MaterialPageRoute(
+                          builder: (context) => const SinglePost(),
+                        ))
+                  });
         },
       ),
     );

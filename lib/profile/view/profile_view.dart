@@ -1,12 +1,13 @@
 import 'package:flutter/material.dart';
 
 import 'package:persistent_bottom_nav_bar/persistent-tab-view.dart';
+import 'package:sabanci_talks/post/view/single_post.dart';
+
 import 'package:sabanci_talks/profile/view/edit_profile.dart';
 import 'package:sabanci_talks/profile/view/followers_view.dart';
 import 'package:sabanci_talks/profile/view/following_view.dart';
 import 'package:sabanci_talks/settings/view/settings_view.dart';
 import 'package:sabanci_talks/util/colors.dart';
-import 'package:sabanci_talks/util/screen_sizes.dart';
 import 'package:sabanci_talks/util/styles.dart';
 import 'package:sabanci_talks/util/dimensions.dart';
 import 'package:sabanci_talks/widgets/mini_post.dart';
@@ -149,9 +150,9 @@ class _ProfileViewState extends State<ProfileView>
               TabBar(
                 controller: _controller,
                 tabs: const [
-                   Tab(
-                       icon: Icon(Icons.photo_library_rounded,
-                           color: AppColors.primary)),
+                  Tab(
+                      icon: Icon(Icons.photo_library_rounded,
+                          color: AppColors.primary)),
                   Tab(icon: Icon(Icons.text_snippet, color: AppColors.primary)),
                   Tab(icon: Icon(Icons.bookmark, color: AppColors.primary)),
                 ],
@@ -161,19 +162,29 @@ class _ProfileViewState extends State<ProfileView>
                   controller: _controller,
                   children: <Widget>[
                     GridView.builder(
-      key: dataKey,
-      physics: const NeverScrollableScrollPhysics(),
-      shrinkWrap: true,
-      gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
-        crossAxisCount: 3,
-        crossAxisSpacing: 3.0,
-        mainAxisSpacing: 3.0,
-      ),
-      itemCount: miniPostList.length,
-      itemBuilder: (context, index) {
-        return MiniPost(miniPostList[index]);
-      },
-    ),
+                      key: dataKey,
+                      physics: const NeverScrollableScrollPhysics(),
+                      shrinkWrap: true,
+                      gridDelegate:
+                          const SliverGridDelegateWithFixedCrossAxisCount(
+                        crossAxisCount: 3,
+                        crossAxisSpacing: 3.0,
+                        mainAxisSpacing: 3.0,
+                      ),
+                      itemCount: miniPostList.length,
+                      itemBuilder: (context, index) {
+                        return InkWell(
+                            child: MiniPost(miniPostList[index]),
+                            onTap: () => {
+                                  Navigator.push(
+                                      context,
+                                      MaterialPageRoute(
+                                        builder: (context) =>
+                                            const SinglePost(),
+                                      ))
+                                });
+                      },
+                    ),
                     ListView(
                       shrinkWrap: true,
                       physics: const NeverScrollableScrollPhysics(),
@@ -372,9 +383,7 @@ class _ProfileViewState extends State<ProfileView>
       children: [
         Expanded(
           child: TextButton(
-              onPressed: () =>{},
-                  
-              child: const ProfileCount("Moments", 11)),
+              onPressed: () => {}, child: const ProfileCount("Moments", 11)),
         ),
         Expanded(
             child: TextButton(
@@ -403,8 +412,6 @@ class _ProfileViewState extends State<ProfileView>
       ],
     );
   }
-
-  
 }
 
 class ProfileCount extends StatelessWidget {
