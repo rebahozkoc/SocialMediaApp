@@ -84,6 +84,7 @@ class _SignUpState extends State<SignUp> {
         backgroundColor: Colors.white10,
         elevation: 0,
         centerTitle: true,
+        leading: const BackButton(color: AppColors.primary),
       ),
       body: Padding(
           padding: Dimen.regularPadding,
@@ -247,12 +248,13 @@ class _SignUpState extends State<SignUp> {
                           print('Email: $email');
                         } else {
                           _showDialog('Form Error', 'Your form is invalid');
-                          
                         }
-                        
+
                         Navigator.pushAndRemoveUntil<void>(
                           context,
-                          MaterialPageRoute<void>(builder: (BuildContext context) => const HomeView()),
+                          MaterialPageRoute<void>(
+                              builder: (BuildContext context) =>
+                                  const HomeView()),
                           ModalRoute.withName('/'),
                         );
                       },

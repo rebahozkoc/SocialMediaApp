@@ -84,6 +84,7 @@ class _ResetPassState extends State<ResetPass> {
         backgroundColor: Colors.white10,
         elevation: 0,
         centerTitle: true,
+        leading: const BackButton(color: AppColors.primary),
       ),
       body: Padding(
           padding: Dimen.regularPadding,
@@ -241,9 +242,10 @@ class _ResetPassState extends State<ResetPass> {
                           _showDialog('Form Error', 'Your form is invalid');
                         }
 
-                        Navigator.push(context,
-                          MaterialPageRoute(builder: (context) => 
-                                  const HomeView()),
+                        Navigator.push(
+                          context,
+                          MaterialPageRoute(
+                              builder: (context) => const HomeView()),
                         );
                       },
                       child: Padding(

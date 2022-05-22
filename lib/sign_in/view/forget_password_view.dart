@@ -84,6 +84,7 @@ class _ForgetPassState extends State<ForgetPass> {
         backgroundColor: Colors.white10,
         elevation: 0,
         centerTitle: true,
+        leading: const BackButton(color: AppColors.primary),
       ),
       body: Padding(
           padding: Dimen.regularPadding,
@@ -144,7 +145,6 @@ class _ForgetPassState extends State<ForgetPass> {
                       },
                     ),
                   ),
-                  
                   Padding(
                     padding: const EdgeInsets.all(16.0),
                     child: OutlinedButton(
@@ -155,8 +155,10 @@ class _ForgetPassState extends State<ForgetPass> {
                         } else {
                           _showDialog('Form Error', 'Your form is invalid');
                         }
-                        Navigator.push(context,
-                          MaterialPageRoute(builder: (context) => const ResetPass()));
+                        Navigator.push(
+                            context,
+                            MaterialPageRoute(
+                                builder: (context) => const ResetPass()));
                       },
                       child: Padding(
                         padding: const EdgeInsets.symmetric(vertical: 12.0),

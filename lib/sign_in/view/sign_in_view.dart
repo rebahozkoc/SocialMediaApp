@@ -85,6 +85,7 @@ class _SignInState extends State<SignIn> {
         backgroundColor: Colors.white10,
         elevation: 0,
         centerTitle: true,
+        leading: const BackButton(color: AppColors.primary),
       ),
       body: Padding(
           padding: Dimen.regularPadding,
@@ -201,7 +202,9 @@ class _SignInState extends State<SignIn> {
                         }
                         Navigator.pushAndRemoveUntil<void>(
                           context,
-                          MaterialPageRoute<void>(builder: (BuildContext context) => BottomBarView()),
+                          MaterialPageRoute<void>(
+                              builder: (BuildContext context) =>
+                                  BottomBarView()),
                           ModalRoute.withName('/'),
                         );
                       },
@@ -225,8 +228,10 @@ class _SignInState extends State<SignIn> {
             const Spacer(flex: 1),
             TextButton(
               onPressed: () {
-                Navigator.push(context,
-                    MaterialPageRoute(builder: (context) => const ForgetPass()));
+                Navigator.push(
+                    context,
+                    MaterialPageRoute(
+                        builder: (context) => const ForgetPass()));
               },
               child: const Padding(
                 padding: EdgeInsets.symmetric(vertical: 15.0),
