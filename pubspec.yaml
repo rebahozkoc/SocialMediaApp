@@ -41,9 +41,8 @@ dependencies:
   intl: ^0.17.0
   shared_preferences: ^2.0.13
   dotted_border: ^2.0.0
-  camera:
-  path_provider:
-  path:
+  image_picker: ^0.8.5
+
 
 
 dev_dependencies:

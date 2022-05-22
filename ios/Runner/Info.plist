@@ -45,8 +45,12 @@
 	<false/>
 	<key>CADisableMinimumFrameDurationOnPhone</key>
 	<true/>
+	<key>NSPhotoLibraryUsageDescription</key>
+  	<string>Upload images for screen background</string>
 	<key>NSCameraUsageDescription</key>
-	<string>Explanation on why the camera access is needed.</string>
-
+  	<string>Upload image from camera for screen background</string>
+  	<key>NSMicrophoneUsageDescription</key>
+  	<string>Post videos to profile</string>
+	  
 </dict>
 </plist>

@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:sabanci_talks/new_post/view/add_image_view.dart';
 import 'package:sabanci_talks/util/dimensions.dart';
 import 'new_post_form_view.dart';
+import 'package:image_picker/image_picker.dart';
 
 class NewPostView extends StatefulWidget {
   const NewPostView({Key? key}) : super(key: key);
@@ -11,6 +12,8 @@ class NewPostView extends StatefulWidget {
 }
 
 class _NewPostViewState extends State<NewPostView> {
+  final ImagePicker _picker = ImagePicker();
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -21,13 +24,25 @@ class _NewPostViewState extends State<NewPostView> {
           child: Column(
             children: [
               MyCustomForm(),
-              SingleChildScrollView(scrollDirection: Axis.horizontal, child: Row(children: [AddImageView() ,AddImageView(),AddImageView(),AddImageView(), AddImageView()]))
-              ],
+              SingleChildScrollView(
+                  scrollDirection: Axis.horizontal,
+                  child: Row(children: [
+                    InkWell(
+                      onTap: () =>{},
+                      child: AddImageView()),
+                      
+                    AddImageView(),
+                    AddImageView(),
+                    AddImageView(),
+                    AddImageView()
+                  ]))
+            ],
           ),
         ),
       ),
     );
   }
+
 
   AppBar _appBar() {
     return AppBar(

@@ -9,6 +9,7 @@ import 'package:sabanci_talks/home/view/home_view.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 void main() {
+
   runApp(const MyApp());
 }
 
@@ -45,8 +46,8 @@ class _MyAppState extends State<MyApp> {
     } else if (firstLoad == 0) {
       firstLoad = 1;
       prefs!.setInt('appInitialLoad', firstLoad!);
-      return  MaterialApp(
-         title: 'Flutter Demo',
+      return MaterialApp(
+          title: 'Flutter Demo',
           debugShowCheckedModeBanner: false,
           theme: ThemeData(
             primarySwatch: Colors.red,
