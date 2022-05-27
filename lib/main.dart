@@ -21,9 +21,9 @@ void main() {
         primaryColor: AppColors.primary,
         secondaryHeaderColor: AppColors.secondary,
       ),
-      home: MyFirebaseApp(),
       initialRoute: "/",
       routes: {
+        "/": (context) => MyFirebaseApp(),
         Welcome.routeName: (context) => const Welcome(),
         SignUp.routeName: (context) => const SignUp(),
         SignIn.routeName: (context) => const SignIn(),
@@ -39,14 +39,15 @@ void main() {
       }));
 }
 
-class MyApp extends StatefulWidget {
-  const MyApp({Key? key}) : super(key: key);
+class MyFirebaseApp extends StatefulWidget {
+  MyFirebaseApp({Key? key}) : super(key: key);
 
   @override
-  State<MyApp> createState() => _MyAppState();
+  State<MyFirebaseApp> createState() => _MyFirebaseAppState();
 }
 
-class _MyAppState extends State<MyApp> {
+class _MyFirebaseAppState extends State<MyFirebaseApp> {
+  final Future<FirebaseApp> _init = Firebase.initializeApp();
   final is_logined = false;
   int? firstLoad;
   SharedPreferences? prefs;
@@ -66,24 +67,6 @@ class _MyAppState extends State<MyApp> {
 
   @override
   Widget build(BuildContext context) {
-    if (firstLoad == null) {
-      return Container();
-    } else if (firstLoad == 0) {
-      firstLoad = 1;
-      prefs!.setInt('appInitialLoad', firstLoad!);
-      return const IntroScreen();
-    } else {
-      return const Welcome();
-    }
-  }
-}
-
-class MyFirebaseApp extends StatelessWidget {
-  MyFirebaseApp({Key? key}) : super(key: key);
-
-  final Future<FirebaseApp> _init = Firebase.initializeApp();
-  @override
-  Widget build(BuildContext context) {
     return FutureBuilder(
         future: _init,
         builder: (context, snapshot) {
@@ -91,7 +74,17 @@ class MyFirebaseApp extends StatelessWidget {
             return ErrorScreen(message: snapshot.error.toString());
           }
           if (snapshot.connectionState == ConnectionState.done) {
-            return const MyApp();
+            if (firstLoad == null) {
+              return Container();
+            } else if (firstLoad == 0) {
+              firstLoad = 1;
+              prefs!.setInt('appInitialLoad', firstLoad!);
+              return const IntroScreen();
+            } else if (is_logined) {
+              return const BottomBarView();
+            } else {
+              return const Welcome();
+            }
           }
           return const Waiting();
         });
