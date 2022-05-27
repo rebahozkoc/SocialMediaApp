@@ -86,197 +86,196 @@ class _SignUpState extends State<SignUp> {
         centerTitle: true,
         leading: const BackButton(color: AppColors.primary),
       ),
-      body: Padding(
-          padding: Dimen.regularPadding,
-          child:
-              Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
-            const Spacer(flex: 1),
-            Padding(
-              padding: Dimen.moreHorizontal,
-              child: Text(
-                'Fill in the required details and click Proceed.',
-                style: smallTextStyle,
+      body: SingleChildScrollView(
+        child: Padding(
+            padding: Dimen.regularPadding,
+            child:
+                Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
+              Padding(
+                padding: Dimen.moreHorizontal,
+                child: Text(
+                  'Fill in the required details and click Proceed.',
+                  style: smallTextStyle,
+                ),
               ),
-            ),
-            const Spacer(flex: 1),
-            Form(
-              key: _formKey,
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.stretch,
-                children: [
-                  Container(
-                    padding: const EdgeInsets.all(16),
-                    width: screenWidth(context, dividedBy: 1.1),
-                    child: TextFormField(
-                      keyboardType: TextInputType.emailAddress,
-                      decoration: InputDecoration(
-                        label: Container(
-                          width: 100,
-                          child: Row(
-                            children: [
-                              Icon(Icons.email),
-                              SizedBox(width: 4),
-                              Text('Email', style: inputTextStyle),
-                            ],
+              Form(
+                key: _formKey,
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.stretch,
+                  children: [
+                    Container(
+                      padding: const EdgeInsets.all(16),
+                      width: screenWidth(context, dividedBy: 1.1),
+                      child: TextFormField(
+                        keyboardType: TextInputType.emailAddress,
+                        decoration: InputDecoration(
+                          label: Container(
+                            width: 100,
+                            child: Row(
+                              children: [
+                                Icon(Icons.email),
+                                SizedBox(width: 4),
+                                Text('Email', style: inputTextStyle),
+                              ],
+                            ),
+                          ),
+                          fillColor: AppColors.textFieldFillColor,
+                          filled: false,
+                          labelStyle: kBoldLabelStyle,
+                          border: OutlineInputBorder(
+                            borderSide: BorderSide(
+                              width: 1,
+                              color: AppColors.primary,
+                            ),
+                            borderRadius: BorderRadius.circular(10),
                           ),
                         ),
-                        fillColor: AppColors.textFieldFillColor,
-                        filled: false,
-                        labelStyle: kBoldLabelStyle,
-                        border: OutlineInputBorder(
-                          borderSide: BorderSide(
-                            width: 1,
-                            color: AppColors.primary,
-                          ),
-                          borderRadius: BorderRadius.circular(10),
-                        ),
+                        validator: (value) {
+                          if (value != null) {
+                            if (value.isEmpty) {
+                              return 'Cannot leave e-mail empty';
+                            }
+                            if (!EmailValidator.validate(value)) {
+                              return 'Please enter a valid e-mail address';
+                            }
+                          }
+                        },
+                        onSaved: (value) {
+                          email = value ?? '';
+                        },
                       ),
-                      validator: (value) {
-                        if (value != null) {
-                          if (value.isEmpty) {
-                            return 'Cannot leave e-mail empty';
-                          }
-                          if (!EmailValidator.validate(value)) {
-                            return 'Please enter a valid e-mail address';
-                          }
-                        }
-                      },
-                      onSaved: (value) {
-                        email = value ?? '';
-                      },
                     ),
-                  ),
-                  Container(
-                    padding: const EdgeInsets.all(16),
-                    width: screenWidth(context, dividedBy: 1.1),
-                    child: TextFormField(
-                      keyboardType: TextInputType.text,
-                      obscureText: true,
-                      enableSuggestions: false,
-                      autocorrect: false,
-                      decoration: InputDecoration(
-                        label: Container(
-                          width: 150,
-                          child: Row(
-                            children: [
-                              const Icon(Icons.password),
-                              const SizedBox(width: 4),
-                              Text('Password', style: inputTextStyle),
-                            ],
+                    Container(
+                      padding: const EdgeInsets.all(16),
+                      width: screenWidth(context, dividedBy: 1.1),
+                      child: TextFormField(
+                        keyboardType: TextInputType.text,
+                        obscureText: true,
+                        enableSuggestions: false,
+                        autocorrect: false,
+                        decoration: InputDecoration(
+                          label: Container(
+                            width: 150,
+                            child: Row(
+                              children: [
+                                const Icon(Icons.password),
+                                const SizedBox(width: 4),
+                                Text('Password', style: inputTextStyle),
+                              ],
+                            ),
+                          ),
+                          //fillColor: AppColors.textFieldFillColor,
+                          //filled: true,
+                          labelStyle: kBoldLabelStyle,
+                          border: OutlineInputBorder(
+                            borderSide: BorderSide(
+                              color: AppColors.primary,
+                            ),
+                            borderRadius: BorderRadius.circular(10),
                           ),
                         ),
-                        //fillColor: AppColors.textFieldFillColor,
-                        //filled: true,
-                        labelStyle: kBoldLabelStyle,
-                        border: OutlineInputBorder(
-                          borderSide: BorderSide(
-                            color: AppColors.primary,
-                          ),
-                          borderRadius: BorderRadius.circular(10),
-                        ),
+                        validator: (value) {
+                          if (value != null) {
+                            if (value.isEmpty) {
+                              return 'Cannot leave password empty';
+                            }
+                            if (value.length < 6) {
+                              return 'Password too short';
+                            }
+                          }
+                        },
+                        onSaved: (value) {
+                          pass = value ?? '';
+                        },
                       ),
-                      validator: (value) {
-                        if (value != null) {
-                          if (value.isEmpty) {
-                            return 'Cannot leave password empty';
-                          }
-                          if (value.length < 6) {
-                            return 'Password too short';
-                          }
-                        }
-                      },
-                      onSaved: (value) {
-                        pass = value ?? '';
-                      },
                     ),
-                  ),
-                  Container(
-                    padding: const EdgeInsets.all(16),
-                    width: screenWidth(context, dividedBy: 1.1),
-                    child: TextFormField(
-                      keyboardType: TextInputType.text,
-                      obscureText: true,
-                      enableSuggestions: false,
-                      autocorrect: false,
-                      decoration: InputDecoration(
-                        label: Container(
-                          width: 150,
-                          child: Row(
-                            children: [
-                              const Icon(Icons.password),
-                              const SizedBox(width: 4),
-                              Text('Confirm Password', style: inputTextStyle),
-                            ],
+                    Container(
+                      padding: const EdgeInsets.all(16),
+                      width: screenWidth(context, dividedBy: 1.1),
+                      child: TextFormField(
+                        keyboardType: TextInputType.text,
+                        obscureText: true,
+                        enableSuggestions: false,
+                        autocorrect: false,
+                        decoration: InputDecoration(
+                          label: Container(
+                            width: 150,
+                            child: Row(
+                              children: [
+                                const Icon(Icons.password),
+                                const SizedBox(width: 4),
+                                Text('Confirm Password', style: inputTextStyle),
+                              ],
+                            ),
+                          ),
+                          //fillColor: AppColors.textFieldFillColor,
+                          //filled: true,
+                          labelStyle: kBoldLabelStyle,
+                          border: OutlineInputBorder(
+                            borderSide: BorderSide(
+                              color: AppColors.primary,
+                            ),
+                            borderRadius: BorderRadius.circular(10),
                           ),
                         ),
-                        //fillColor: AppColors.textFieldFillColor,
-                        //filled: true,
-                        labelStyle: kBoldLabelStyle,
-                        border: OutlineInputBorder(
-                          borderSide: BorderSide(
-                            color: AppColors.primary,
-                          ),
-                          borderRadius: BorderRadius.circular(10),
-                        ),
+                        validator: (value) {
+                          if (value != null) {
+                            if (value.isEmpty) {
+                              return 'Cannot leave password empty';
+                            }
+                            if (value.length < 6) {
+                              return 'Password too short';
+                            }
+                          }
+                        },
+                        onSaved: (value) {
+                          confirmPass = value ?? '';
+                        },
                       ),
-                      validator: (value) {
-                        if (value != null) {
-                          if (value.isEmpty) {
-                            return 'Cannot leave password empty';
-                          }
-                          if (value.length < 6) {
-                            return 'Password too short';
-                          }
-                        }
-                      },
-                      onSaved: (value) {
-                        confirmPass = value ?? '';
-                      },
                     ),
-                  ),
-                  Padding(
-                      padding: Dimen.moreHorizontal,
-                      child: Text(
-                          "By Creating Account, you are automatically accepting all the Terms & Conditions related to Momento",
-                          style: smallTextStyle)),
-                  Padding(
-                    padding: const EdgeInsets.all(16.0),
-                    child: OutlinedButton(
-                      onPressed: () {
-                        if (_formKey.currentState!.validate()) {
-                          _formKey.currentState!.save();
-                          print('Email: $email');
-                        } else {
-                          _showDialog('Form Error', 'Your form is invalid');
-                        }
-
-                        Navigator.pushAndRemoveUntil<void>(
-                          context,
-                          MaterialPageRoute<void>(
-                              builder: (BuildContext context) =>
-                                  const HomeView()),
-                          ModalRoute.withName('/'),
-                        );
-                      },
-                      child: Padding(
-                        padding: const EdgeInsets.symmetric(vertical: 12.0),
+                    Padding(
+                        padding: Dimen.moreHorizontal,
                         child: Text(
-                          'Create Account',
-                          style: kButtonDarkTextStyle,
+                            "By Creating Account, you are automatically accepting all the Terms & Conditions related to Momento",
+                            style: smallTextStyle)),
+                    Padding(
+                      padding: const EdgeInsets.all(16.0),
+                      child: OutlinedButton(
+                        onPressed: () {
+                          if (_formKey.currentState!.validate()) {
+                            _formKey.currentState!.save();
+                            print('Email: $email');
+                          } else {
+                            _showDialog('Form Error', 'Your form is invalid');
+                          }
+      
+                          Navigator.pushAndRemoveUntil<void>(
+                            context,
+                            MaterialPageRoute<void>(
+                                builder: (BuildContext context) =>
+                                    const HomeView()),
+                            ModalRoute.withName('/'),
+                          );
+                        },
+                        child: Padding(
+                          padding: const EdgeInsets.symmetric(vertical: 12.0),
+                          child: Text(
+                            'Create Account',
+                            style: kButtonDarkTextStyle,
+                          ),
+                        ),
+                        style: OutlinedButton.styleFrom(
+                          shape: RoundedRectangleBorder(
+                              borderRadius: BorderRadius.circular(10.0)),
+                          backgroundColor: AppColors.primary,
                         ),
                       ),
-                      style: OutlinedButton.styleFrom(
-                        shape: RoundedRectangleBorder(
-                            borderRadius: BorderRadius.circular(10.0)),
-                        backgroundColor: AppColors.primary,
-                      ),
                     ),
-                  ),
-                ],
+                  ],
+                ),
               ),
-            ),
-            const Spacer(flex: 3),
-          ])),
+            ])),
+      ),
     );
   }
 }

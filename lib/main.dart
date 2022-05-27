@@ -28,7 +28,7 @@ void main() {
         SignUp.routeName: (context) => const SignUp(),
         SignIn.routeName: (context) => const SignIn(),
         HomeView.routeName: (context) => const HomeView(),
-        BottomBarView.routeName: (context) => BottomBarView(),
+        BottomBarView.routeName: (context) => const BottomBarView(),
       },
       onUnknownRoute: (RouteSettings settings) {
         return MaterialPageRoute<void>(

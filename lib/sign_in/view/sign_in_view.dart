@@ -109,162 +109,161 @@ class _SignInState extends State<SignIn> {
         centerTitle: true,
         leading: const BackButton(color: AppColors.primary),
       ),
-      body: Padding(
-          padding: Dimen.regularPadding,
-          child: Column(children: [
-            const Spacer(flex: 1),
-            Padding(
-              padding: Dimen.regularParentPadding,
-              child: Text(
-                'Type in your Email and Password that you chose for Void and click go to Feed',
-                style: smallTextStyle,
-              ),
-            ),
-            const Spacer(flex: 1),
-            Form(
-              key: _formKey,
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.stretch,
-                children: [
-                  Container(
-                    padding: const EdgeInsets.all(16),
-                    width: screenWidth(context, dividedBy: 1.1),
-                    child: TextFormField(
-                      keyboardType: TextInputType.emailAddress,
-                      decoration: InputDecoration(
-                        label: Container(
-                          width: 100,
-                          child: Row(
-                            children: [
-                              const Icon(Icons.email),
-                              const SizedBox(width: 4),
-                              Text('Email', style: inputTextStyle),
-                            ],
-                          ),
-                        ),
-                        fillColor: AppColors.textFieldFillColor,
-                        filled: false,
-                        labelStyle: kBoldLabelStyle,
-                        border: OutlineInputBorder(
-                          borderSide: const BorderSide(
-                            width: 1,
-                            color: AppColors.primary,
-                          ),
-                          borderRadius: BorderRadius.circular(10),
-                        ),
-                      ),
-                      validator: (value) {
-                        if (value != null) {
-                          if (value.isEmpty) {
-                            return 'Cannot leave e-mail empty';
-                          }
-                          if (!EmailValidator.validate(value)) {
-                            return 'Please enter a valid e-mail address';
-                          }
-                        }
-                      },
-                      onSaved: (value) {
-                        email = value ?? '';
-                      },
-                    ),
-                  ),
-                  Container(
-                    padding: const EdgeInsets.all(16),
-                    width: screenWidth(context, dividedBy: 1.1),
-                    child: TextFormField(
-                      keyboardType: TextInputType.text,
-                      obscureText: true,
-                      enableSuggestions: false,
-                      autocorrect: false,
-                      decoration: InputDecoration(
-                        label: Container(
-                          width: 150,
-                          child: Row(
-                            children: [
-                              const Icon(Icons.password),
-                              const SizedBox(width: 4),
-                              Text('Password', style: inputTextStyle),
-                            ],
-                          ),
-                        ),
-                        //fillColor: AppColors.textFieldFillColor,
-                        //filled: true,
-                        labelStyle: kBoldLabelStyle,
-                        border: OutlineInputBorder(
-                          borderSide: BorderSide(
-                            color: AppColors.primary,
-                          ),
-                          borderRadius: BorderRadius.circular(10),
-                        ),
-                      ),
-                      validator: (value) {
-                        if (value != null) {
-                          if (value.isEmpty) {
-                            return 'Cannot leave password empty';
-                          }
-                          if (value.length < 6) {
-                            return 'Password too short';
-                          }
-                        }
-                      },
-                      onSaved: (value) {
-                        pass = value ?? '';
-                      },
-                    ),
-                  ),
-                  Padding(
-                    padding: const EdgeInsets.all(16.0),
-                    child: OutlinedButton(
-                      onPressed: () async {
-                        if (_formKey.currentState!.validate()) {
-                          _formKey.currentState!.save();
-
-                          await loginUser();
-
-                          //print('Email: $email');
-                        } else {
-                          _showDialog('Form Error', 'Your form is invalid');
-                        }
-                      },
-                      child: Padding(
-                        padding: const EdgeInsets.symmetric(vertical: 12.0),
-                        child: Text(
-                          'Sign In',
-                          style: kButtonDarkTextStyle,
-                        ),
-                      ),
-                      style: OutlinedButton.styleFrom(
-                        shape: RoundedRectangleBorder(
-                            borderRadius: BorderRadius.circular(10.0)),
-                        backgroundColor: AppColors.primary,
-                      ),
-                    ),
-                  ),
-                ],
-              ),
-            ),
-            const Spacer(flex: 1),
-            TextButton(
-              onPressed: () {
-                Navigator.push(
-                    context,
-                    MaterialPageRoute(
-                        builder: (context) => const ForgetPass()));
-              },
-              child: const Padding(
-                padding: EdgeInsets.symmetric(vertical: 15.0),
+      body: SingleChildScrollView(
+        child: Padding(
+            padding: Dimen.regularPadding,
+            child: Column(children: [
+              
+              Padding(
+                padding: Dimen.regularParentPadding,
                 child: Text(
-                  'Can’t Sign In? Reset Password',
-                  style: TextStyle(
-                      color: AppColors.primary,
-                      fontSize: 14.0,
-                      fontWeight: FontWeight.w600),
+                  'Type in your Email and Password that you chose for Void and click go to Feed',
+                  style: smallTextStyle,
                 ),
               ),
-              style: TextButton.styleFrom(),
-            ),
-            const Spacer(flex: 1),
-          ])),
+              Form(
+                key: _formKey,
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.stretch,
+                  children: [
+                    Container(
+                      padding: const EdgeInsets.all(16),
+                      width: screenWidth(context, dividedBy: 1.1),
+                      child: TextFormField(
+                        keyboardType: TextInputType.emailAddress,
+                        decoration: InputDecoration(
+                          label: Container(
+                            width: 100,
+                            child: Row(
+                              children: [
+                                const Icon(Icons.email),
+                                const SizedBox(width: 4),
+                                Text('Email', style: inputTextStyle),
+                              ],
+                            ),
+                          ),
+                          fillColor: AppColors.textFieldFillColor,
+                          filled: false,
+                          labelStyle: kBoldLabelStyle,
+                          border: OutlineInputBorder(
+                            borderSide: const BorderSide(
+                              width: 1,
+                              color: AppColors.primary,
+                            ),
+                            borderRadius: BorderRadius.circular(10),
+                          ),
+                        ),
+                        validator: (value) {
+                          if (value != null) {
+                            if (value.isEmpty) {
+                              return 'Cannot leave e-mail empty';
+                            }
+                            if (!EmailValidator.validate(value)) {
+                              return 'Please enter a valid e-mail address';
+                            }
+                          }
+                        },
+                        onSaved: (value) {
+                          email = value ?? '';
+                        },
+                      ),
+                    ),
+                    Container(
+                      padding: const EdgeInsets.all(16),
+                      width: screenWidth(context, dividedBy: 1.1),
+                      child: TextFormField(
+                        keyboardType: TextInputType.text,
+                        obscureText: true,
+                        enableSuggestions: false,
+                        autocorrect: false,
+                        decoration: InputDecoration(
+                          label: Container(
+                            width: 150,
+                            child: Row(
+                              children: [
+                                const Icon(Icons.password),
+                                const SizedBox(width: 4),
+                                Text('Password', style: inputTextStyle),
+                              ],
+                            ),
+                          ),
+                          //fillColor: AppColors.textFieldFillColor,
+                          //filled: true,
+                          labelStyle: kBoldLabelStyle,
+                          border: OutlineInputBorder(
+                            borderSide: BorderSide(
+                              color: AppColors.primary,
+                            ),
+                            borderRadius: BorderRadius.circular(10),
+                          ),
+                        ),
+                        validator: (value) {
+                          if (value != null) {
+                            if (value.isEmpty) {
+                              return 'Cannot leave password empty';
+                            }
+                            if (value.length < 6) {
+                              return 'Password too short';
+                            }
+                          }
+                        },
+                        onSaved: (value) {
+                          pass = value ?? '';
+                        },
+                      ),
+                    ),
+                    Padding(
+                      padding: const EdgeInsets.all(16.0),
+                      child: OutlinedButton(
+                        onPressed: () async {
+                          if (_formKey.currentState!.validate()) {
+                            _formKey.currentState!.save();
+      
+                            await loginUser();
+      
+                            //print('Email: $email');
+                          } else {
+                            _showDialog('Form Error', 'Your form is invalid');
+                          }
+                        },
+                        child: Padding(
+                          padding: const EdgeInsets.symmetric(vertical: 12.0),
+                          child: Text(
+                            'Sign In',
+                            style: kButtonDarkTextStyle,
+                          ),
+                        ),
+                        style: OutlinedButton.styleFrom(
+                          shape: RoundedRectangleBorder(
+                              borderRadius: BorderRadius.circular(10.0)),
+                          backgroundColor: AppColors.primary,
+                        ),
+                      ),
+                    ),
+                  ],
+                ),
+              ),
+              TextButton(
+                onPressed: () {
+                  Navigator.push(
+                      context,
+                      MaterialPageRoute(
+                          builder: (context) => const ForgetPass()));
+                },
+                child: const Padding(
+                  padding: EdgeInsets.symmetric(vertical: 15.0),
+                  child: Text(
+                    'Can’t Sign In? Reset Password',
+                    style: TextStyle(
+                        color: AppColors.primary,
+                        fontSize: 14.0,
+                        fontWeight: FontWeight.w600),
+                  ),
+                ),
+                style: TextButton.styleFrom(),
+              ),
+            ])),
+      ),
     );
   }
 }
