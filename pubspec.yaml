@@ -42,9 +42,11 @@ dependencies:
   shared_preferences: ^2.0.13
   dotted_border: ^2.0.0
   image_picker: ^0.8.5
-
-
-
+  http: ^0.13.1
+  json_annotation: any
+  json_serializable: any
+  firebase_core: ^1.11.0
+  firebase_auth: 3.3.8
 dev_dependencies:
   flutter_test:
     sdk: flutter
@@ -55,7 +57,7 @@ dev_dependencies:
   # package. See that file for information about deactivating specific lint
   # rules and activating additional ones.
   flutter_lints: ^1.0.0
-
+  build_runner: 2.1.4
 # For information on the generic Dart part of this file, see the
 # following page: https://dart.dev/tools/pub/pubspec
 

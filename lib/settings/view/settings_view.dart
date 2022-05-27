@@ -1,6 +1,9 @@
+import 'package:firebase_auth/firebase_auth.dart';
+import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import 'package:persistent_bottom_nav_bar/persistent-tab-view.dart';
 import 'package:sabanci_talks/sign_in/view/sign_in_view.dart';
+import 'package:sabanci_talks/util/authentication/auth.dart';
 import 'package:sabanci_talks/util/colors.dart';
 import 'package:sabanci_talks/util/styles.dart';
 import 'package:sabanci_talks/welcome/view/goodby_view.dart';
@@ -96,6 +99,7 @@ class _ListItemWithSwitchState extends State<ListItemWithSwitch> {
 }
 
 class _ArrowItemState extends StatelessWidget {
+  final Authentication _auth = Authentication();
   bool state = true;
   String te1 = "";
   _ArrowItemState(t1) {
@@ -109,8 +113,12 @@ class _ArrowItemState extends StatelessWidget {
   }
 
   void signOut(BuildContext context) {
-    pushNewScreenWithRouteSettings(context,
-        screen: const Welcome(), settings: RouteSettings(), withNavBar: false);
+    _auth.signOut();
+    // Navigator.of(context)
+    //.pushNamedAndRemoveUntil('/welcome', (Route<dynamic> route) => false);
+    Navigator.pushNamedAndRemoveUntil(
+        context, '/welcome', ModalRoute.withName('/'));
+    //Navigator.pushNamedAndRemoveUntil(context, "/welcome", (route) => false);
   }
 
   void deleteAccount(BuildContext context) {

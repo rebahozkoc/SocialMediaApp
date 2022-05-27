@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
-import 'package:sabanci_talks/bottom_bar/view/bottom_bar_view.dart';
-import 'dart:convert';
+import 'package:sabanci_talks/util/authentication/auth.dart';
+
 import 'dart:io' show Platform;
 import "package:sabanci_talks/util/styles.dart";
 import "package:sabanci_talks/util/colors.dart";
@@ -8,8 +8,10 @@ import "package:sabanci_talks/util/dimensions.dart";
 import "package:sabanci_talks/util/screen_sizes.dart";
 import 'package:flutter/cupertino.dart';
 import 'package:email_validator/email_validator.dart';
-import "package:sabanci_talks/sign_up/view/sign_up_view.dart";
+
 import "package:sabanci_talks/sign_in/view/forget_password_view.dart";
+import "package:http/http.dart" as http;
+import "package:firebase_auth/firebase_auth.dart";
 
 class SignIn extends StatefulWidget {
   const SignIn({Key? key}) : super(key: key);
@@ -17,7 +19,7 @@ class SignIn extends StatefulWidget {
   @override
   State<SignIn> createState() => _SignInState();
 
-  static const String routeName = '/signup';
+  static const String routeName = '/signin';
 }
 
 class _SignInState extends State<SignIn> {
@@ -25,6 +27,20 @@ class _SignInState extends State<SignIn> {
   String email = '';
   String pass = '';
   late String s;
+
+  final Authentication _auth = Authentication();
+
+  Future loginUser() async {
+    dynamic element = await _auth.signInWithEmailPass(email, pass);
+    if (element is String) {
+      _showDialog("Sign In Error", element);
+    } else if (element is User) {
+      Navigator.pushNamedAndRemoveUntil(
+          context, "/bottombar", (route) => false);
+    } else {
+      _showDialog("Sign In Error", element.toString());
+    }
+  }
 
   Future<void> _showDialog(String title, String message) async {
     bool isAndroid = Platform.isAndroid;
@@ -75,6 +91,12 @@ class _SignInState extends State<SignIn> {
   }
 
   @override
+  void initState() {
+    // TODO: implement initState
+    super.initState();
+  }
+
+  @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
@@ -114,8 +136,8 @@ class _SignInState extends State<SignIn> {
                           width: 100,
                           child: Row(
                             children: [
-                              Icon(Icons.email),
-                              SizedBox(width: 4),
+                              const Icon(Icons.email),
+                              const SizedBox(width: 4),
                               Text('Email', style: inputTextStyle),
                             ],
                           ),
@@ -124,7 +146,7 @@ class _SignInState extends State<SignIn> {
                         filled: false,
                         labelStyle: kBoldLabelStyle,
                         border: OutlineInputBorder(
-                          borderSide: BorderSide(
+                          borderSide: const BorderSide(
                             width: 1,
                             color: AppColors.primary,
                           ),
@@ -193,20 +215,16 @@ class _SignInState extends State<SignIn> {
                   Padding(
                     padding: const EdgeInsets.all(16.0),
                     child: OutlinedButton(
-                      onPressed: () {
+                      onPressed: () async {
                         if (_formKey.currentState!.validate()) {
                           _formKey.currentState!.save();
-                          print('Email: $email');
+
+                          await loginUser();
+
+                          //print('Email: $email');
                         } else {
                           _showDialog('Form Error', 'Your form is invalid');
                         }
-                        Navigator.pushAndRemoveUntil<void>(
-                          context,
-                          MaterialPageRoute<void>(
-                              builder: (BuildContext context) =>
-                                  BottomBarView()),
-                          ModalRoute.withName('/'),
-                        );
                       },
                       child: Padding(
                         padding: const EdgeInsets.symmetric(vertical: 12.0),

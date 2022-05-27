@@ -12,7 +12,7 @@ import "package:sabanci_talks/util/dimensions.dart";
 
 class Welcome extends StatelessWidget {
   const Welcome({Key? key}) : super(key: key);
-
+  static const String routeName = "/welcome";
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -109,9 +109,8 @@ class Welcome extends StatelessWidget {
             ),
             const Spacer(),
             Padding(
-              padding: Dimen.regularPadding,
-              child:Text("@ 2022 Void", style:smallTextStyle)
-            )
+                padding: Dimen.regularPadding,
+                child: Text("@ 2022 Void", style: smallTextStyle))
           ],
         ),
       ),

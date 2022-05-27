@@ -17,6 +17,7 @@ import 'package:sabanci_talks/welcome/view/welcome_view.dart';
 class BottomBarView extends StatelessWidget {
   const BottomBarView({Key? key}) : super(key: key);
 
+  static String routeName = "/bottombar";
   List<Widget> _buildScreens() {
     return [
       const HomeView(),

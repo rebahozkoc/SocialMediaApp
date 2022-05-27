@@ -1,0 +1,46 @@
+{
+  "project_info": {
+    "project_number": "1066515621416",
+    "project_id": "sabancitalks-2022",
+    "storage_bucket": "sabancitalks-2022.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:1066515621416:android:c53ce24e7a972d49d7b71d",
+        "android_client_info": {
+          "package_name": "com.example.sabanci_talks.sabanci_talks"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "1066515621416-149ts0js9e6oq6p1858b2aqtdcm14ps9.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyBjczdkuiNihRg6UXV3vOz5qOnl8PqaW_k"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "1066515621416-149ts0js9e6oq6p1858b2aqtdcm14ps9.apps.googleusercontent.com",
+              "client_type": 3
+            },
+            {
+              "client_id": "1066515621416-drl1qjdcguv7nko0b23bv9hd0l7aei9n.apps.googleusercontent.com",
+              "client_type": 2,
+              "ios_info": {
+                "bundle_id": "com.example.sabancitalks.sabanciTalks"
+              }
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
