@@ -1,5 +1,7 @@
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
 import 'package:sabanci_talks/bottom_bar/view/bottom_bar_view.dart';
 import 'package:sabanci_talks/sign_in/view/sign_in_view.dart';
 import 'package:sabanci_talks/sign_up/view/sign_up_view.dart';
@@ -37,6 +39,25 @@ void main() {
               const Scaffold(body: Center(child: Text('Not Found'))),
         );
       }));
+}
+
+class AuthStatus extends StatefulWidget {
+  const AuthStatus({Key? key}) : super(key: key);
+
+  @override
+  State<AuthStatus> createState() => _AuthStatusState();
+}
+
+class _AuthStatusState extends State<AuthStatus> {
+  @override
+  Widget build(BuildContext context) {
+    final user = Provider.of<User?>(context);
+    if (user == null) {
+      return const Welcome();
+    } else {
+      return const BottomBarView();
+    }
+  }
 }
 
 class MyFirebaseApp extends StatefulWidget {
@@ -80,10 +101,12 @@ class _MyFirebaseAppState extends State<MyFirebaseApp> {
               firstLoad = 1;
               prefs!.setInt('appInitialLoad', firstLoad!);
               return const IntroScreen();
-            } else if (is_logined) {
-              return const BottomBarView();
             } else {
-              return const Welcome();
+              return StreamProvider<User?>.value(
+                value: Authentication().user,
+                initialData: null,
+                child: AuthStatus(),
+              );
             }
           }
           return const Waiting();

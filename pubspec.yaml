@@ -47,6 +47,9 @@ dependencies:
   json_serializable: any
   firebase_core: ^1.11.0
   firebase_auth: 3.3.8
+  provider: ^6.0.0
+  flutter_bloc: ^8.0.0
+  equatable: ^2.0.3
 dev_dependencies:
   flutter_test:
     sdk: flutter
@@ -57,6 +60,7 @@ dev_dependencies:
   # package. See that file for information about deactivating specific lint
   # rules and activating additional ones.
   flutter_lints: ^1.0.0
+
   build_runner: 2.1.4
 # For information on the generic Dart part of this file, see the
 # following page: https://dart.dev/tools/pub/pubspec

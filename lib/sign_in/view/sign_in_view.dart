@@ -35,8 +35,8 @@ class _SignInState extends State<SignIn> {
     if (element is String) {
       _showDialog("Sign In Error", element);
     } else if (element is User) {
-      Navigator.pushNamedAndRemoveUntil(
-          context, "/bottombar", (route) => false);
+      //Navigator.pushNamedAndRemoveUntil(
+      //context, "/bottombar", (route) => false);
     } else {
       _showDialog("Sign In Error", element.toString());
     }
@@ -113,7 +113,6 @@ class _SignInState extends State<SignIn> {
         child: Padding(
             padding: Dimen.regularPadding,
             child: Column(children: [
-              
               Padding(
                 padding: Dimen.regularParentPadding,
                 child: Text(
@@ -218,9 +217,9 @@ class _SignInState extends State<SignIn> {
                         onPressed: () async {
                           if (_formKey.currentState!.validate()) {
                             _formKey.currentState!.save();
-      
+
                             await loginUser();
-      
+
                             //print('Email: $email');
                           } else {
                             _showDialog('Form Error', 'Your form is invalid');

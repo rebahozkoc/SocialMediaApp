@@ -3,6 +3,14 @@ import 'package:firebase_auth/firebase_auth.dart';
 class Authentication {
   final FirebaseAuth _auth = FirebaseAuth.instance;
 
+  User? _userFromFirebase(User? user) {
+    return user;
+  }
+
+  Stream<User?> get user {
+    return _auth.authStateChanges().map(_userFromFirebase);
+  }
+
   Future<dynamic> signInWithEmailPass(String email, String pass) async {
     try {
       UserCredential uc =
