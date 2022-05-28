@@ -13,7 +13,8 @@ import 'package:shared_preferences/shared_preferences.dart';
 void main() {
   WidgetsFlutterBinding.ensureInitialized();
 
-  runApp(MaterialApp(
+  runApp(
+    MaterialApp(
       title: 'Flutter Demo',
       debugShowCheckedModeBanner: false,
       theme: ThemeData(
@@ -21,9 +22,9 @@ void main() {
         primaryColor: AppColors.primary,
         secondaryHeaderColor: AppColors.secondary,
       ),
-      initialRoute: "/",
+      home: const MyFirebaseApp(),
       routes: {
-        "/": (context) => MyFirebaseApp(),
+        
         Welcome.routeName: (context) => const Welcome(),
         SignUp.routeName: (context) => const SignUp(),
         SignIn.routeName: (context) => const SignIn(),
@@ -40,7 +41,7 @@ void main() {
 }
 
 class MyFirebaseApp extends StatefulWidget {
-  MyFirebaseApp({Key? key}) : super(key: key);
+  const MyFirebaseApp({Key? key}) : super(key: key);
 
   @override
   State<MyFirebaseApp> createState() => _MyFirebaseAppState();
@@ -49,13 +50,13 @@ class MyFirebaseApp extends StatefulWidget {
 class _MyFirebaseAppState extends State<MyFirebaseApp> {
   final Future<FirebaseApp> _init = Firebase.initializeApp();
   final is_logined = false;
-  int? firstLoad;
-  SharedPreferences? prefs;
+  late int firstLoad;
+  late SharedPreferences prefs;
 
   decideRoute() async {
     prefs = await SharedPreferences.getInstance();
     setState(() {
-      firstLoad = (prefs!.getInt('appInitialLoad') ?? 0);
+      firstLoad = (prefs.getInt('appInitialLoad') ?? 0);
     });
   }
 
@@ -74,11 +75,9 @@ class _MyFirebaseAppState extends State<MyFirebaseApp> {
             return ErrorScreen(message: snapshot.error.toString());
           }
           if (snapshot.connectionState == ConnectionState.done) {
-            if (firstLoad == null) {
-              return Container();
-            } else if (firstLoad == 0) {
+            if (firstLoad == 0) {
               firstLoad = 1;
-              prefs!.setInt('appInitialLoad', firstLoad!);
+              prefs.setInt('appInitialLoad', firstLoad);
               return const IntroScreen();
             } else if (is_logined) {
               return const BottomBarView();
@@ -92,8 +91,8 @@ class _MyFirebaseAppState extends State<MyFirebaseApp> {
 }
 
 class ErrorScreen extends StatelessWidget {
-  ErrorScreen({Key? key, required this.message}) : super(key: key);
-  String message = "";
+  const ErrorScreen({Key? key, required this.message}) : super(key: key);
+  final String message;
   @override
   Widget build(BuildContext context) {
     return Scaffold(

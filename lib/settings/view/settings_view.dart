@@ -117,7 +117,7 @@ class _ArrowItemState extends StatelessWidget {
     // Navigator.of(context)
     //.pushNamedAndRemoveUntil('/welcome', (Route<dynamic> route) => false);
     Navigator.pushNamedAndRemoveUntil(
-        context, '/welcome', ModalRoute.withName('/'));
+        context, '/welcome', (Route<dynamic> route) => false);
     //Navigator.pushNamedAndRemoveUntil(context, "/welcome", (route) => false);
   }
 
