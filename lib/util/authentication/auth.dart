@@ -1,7 +1,9 @@
 import 'package:firebase_auth/firebase_auth.dart';
+import "package:shared_preferences/shared_preferences.dart";
 
 class Authentication {
   final FirebaseAuth _auth = FirebaseAuth.instance;
+  late SharedPreferences prefs;
 
   User? _userFromFirebase(User? user) {
     return user;
@@ -13,8 +15,11 @@ class Authentication {
 
   Future<dynamic> signInWithEmailPass(String email, String pass) async {
     try {
+      prefs = await SharedPreferences.getInstance();
       UserCredential uc =
           await _auth.signInWithEmailAndPassword(email: email, password: pass);
+      prefs.setInt(
+          "user", (uc.credential != null) ? uc.credential!.token ?? -1 : -1);
       return uc.user;
       //print(uc.toString());
     } on FirebaseAuthException catch (e) {
