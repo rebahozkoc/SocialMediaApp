@@ -109,15 +109,13 @@ class _SignUpState extends State<SignUp> {
                       child: TextFormField(
                         keyboardType: TextInputType.emailAddress,
                         decoration: InputDecoration(
-                          label: Container(
-                            width: 100,
-                            child: Row(
-                              children: [
-                                Icon(Icons.email),
-                                SizedBox(width: 4),
-                                Text('Email', style: inputTextStyle),
-                              ],
-                            ),
+                          label: Wrap(
+                            crossAxisAlignment: WrapCrossAlignment.center,
+                            children: [
+                              Icon(Icons.email),
+                              SizedBox(width: 4),
+                              Text('Email', style: inputTextStyle),
+                            ],
                           ),
                           fillColor: AppColors.textFieldFillColor,
                           filled: false,
@@ -154,15 +152,13 @@ class _SignUpState extends State<SignUp> {
                         enableSuggestions: false,
                         autocorrect: false,
                         decoration: InputDecoration(
-                          label: Container(
-                            width: 150,
-                            child: Row(
-                              children: [
-                                const Icon(Icons.password),
-                                const SizedBox(width: 4),
-                                Text('Password', style: inputTextStyle),
-                              ],
-                            ),
+                          label: Wrap(
+                            crossAxisAlignment: WrapCrossAlignment.center,
+                            children: [
+                              const Icon(Icons.password),
+                              const SizedBox(width: 4),
+                              Text('Password', style: inputTextStyle),
+                            ],
                           ),
                           //fillColor: AppColors.textFieldFillColor,
                           //filled: true,
@@ -198,15 +194,13 @@ class _SignUpState extends State<SignUp> {
                         enableSuggestions: false,
                         autocorrect: false,
                         decoration: InputDecoration(
-                          label: Container(
-                            width: 150,
-                            child: Row(
-                              children: [
-                                const Icon(Icons.password),
-                                const SizedBox(width: 4),
-                                Text('Confirm Password', style: inputTextStyle),
-                              ],
-                            ),
+                          label: Wrap(
+                            crossAxisAlignment: WrapCrossAlignment.center,
+                            children: [
+                              const Icon(Icons.password),
+                              const SizedBox(width: 4),
+                              Text('Confirm Password', style: inputTextStyle),
+                            ],
                           ),
                           //fillColor: AppColors.textFieldFillColor,
                           //filled: true,

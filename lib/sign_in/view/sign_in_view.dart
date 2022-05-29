@@ -131,15 +131,13 @@ class _SignInState extends State<SignIn> {
                       child: TextFormField(
                         keyboardType: TextInputType.emailAddress,
                         decoration: InputDecoration(
-                          label: Container(
-                            width: 100,
-                            child: Row(
-                              children: [
-                                const Icon(Icons.email),
-                                const SizedBox(width: 4),
-                                Text('Email', style: inputTextStyle),
-                              ],
-                            ),
+                          label: Wrap(
+                            crossAxisAlignment: WrapCrossAlignment.center,
+                            children: [
+                              const Icon(Icons.email),
+                              const SizedBox(width: 4),
+                              Text('Email', style: inputTextStyle),
+                            ],
                           ),
                           fillColor: AppColors.textFieldFillColor,
                           filled: false,
@@ -176,15 +174,13 @@ class _SignInState extends State<SignIn> {
                         enableSuggestions: false,
                         autocorrect: false,
                         decoration: InputDecoration(
-                          label: Container(
-                            width: 150,
-                            child: Row(
-                              children: [
-                                const Icon(Icons.password),
-                                const SizedBox(width: 4),
-                                Text('Password', style: inputTextStyle),
-                              ],
-                            ),
+                          label: Wrap(
+                            crossAxisAlignment: WrapCrossAlignment.center,
+                            children: [
+                              const Icon(Icons.password),
+                              const SizedBox(width: 4),
+                              Text('Password', style: inputTextStyle),
+                            ],
                           ),
                           //fillColor: AppColors.textFieldFillColor,
                           //filled: true,
