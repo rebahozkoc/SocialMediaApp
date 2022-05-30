@@ -35,8 +35,7 @@ class _SignInState extends State<SignIn> {
     if (element is String) {
       _showDialog("Sign In Error", element);
     } else if (element is User) {
-      //Navigator.pushNamedAndRemoveUntil(
-      //context, "/bottombar", (route) => false);
+      Navigator.of(context).pushNamedAndRemoveUntil('/bottombar', (Route<dynamic> route) => false);
     } else {
       _showDialog("Sign In Error", element.toString());
     }

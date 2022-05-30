@@ -3,6 +3,7 @@ import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:sabanci_talks/bottom_bar/view/bottom_bar_view.dart';
+import 'package:sabanci_talks/main_bloc/home_bloc.dart';
 import 'package:sabanci_talks/sign_in/view/sign_in_view.dart';
 import 'package:sabanci_talks/sign_up/view/sign_up_view.dart';
 import 'package:sabanci_talks/util/authentication/auth.dart';
@@ -12,7 +13,6 @@ import 'package:sabanci_talks/welcome/view/welcome_view.dart';
 import 'package:sabanci_talks/home/view/home_view.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import "package:sabanci_talks/main_bloc/block_observer/block_observer.dart";
 
 class AuthStatus extends StatefulWidget {
   const AuthStatus({Key? key}) : super(key: key);
@@ -50,7 +50,6 @@ class _MyFirebaseAppState extends State<MyFirebaseApp> {
     prefs = await SharedPreferences.getInstance();
     setState(() {
       firstLoad = (prefs.getInt('appInitialLoad') ?? 0);
-      uc = (prefs.getInt("user") ?? -1);
     });
   }
 
@@ -62,27 +61,33 @@ class _MyFirebaseAppState extends State<MyFirebaseApp> {
 
   @override
   Widget build(BuildContext context) {
-    return FutureBuilder(
-        future: _init,
-        builder: (context, snapshot) {
-          if (snapshot.hasError) {
-            return ErrorScreen(message: snapshot.error.toString());
-          }
-          if (snapshot.connectionState == ConnectionState.done) {
-            if (firstLoad == 0) {
-              firstLoad = 1;
-              prefs.setInt('appInitialLoad', firstLoad);
-              return const IntroScreen();
-            } else {
-              return StreamProvider<User?>.value(
-                value: Authentication().user,
-                initialData: null,
-                child: AuthStatus(),
-              );
-            }
-          }
-          return const Waiting();
-        });
+    return BlocProvider(
+      create: (context) => HomeBloc()..add(const HomeStarting()),
+      child: BlocBuilder<HomeBloc, HomeState>(
+        builder: (context, state) {
+          return FutureBuilder(
+            future: _init,
+            builder: (context, snapshot) {
+              if (snapshot.hasError) {
+                return ErrorScreen(message: snapshot.error.toString());
+              }
+              if (snapshot.connectionState == ConnectionState.done) {
+                if (firstLoad == 0) {
+                  firstLoad = 1;
+                  prefs.setInt('appInitialLoad', firstLoad);
+                  return const IntroScreen();
+                } else {
+                  return StreamProvider<User?>.value(
+                    value: Authentication().user,
+                    initialData: null,
+                    child: AuthStatus(),
+                  );
+                }
+              }
+              return const Waiting();
+            });}
+      ),
+    );
   }
 }
 

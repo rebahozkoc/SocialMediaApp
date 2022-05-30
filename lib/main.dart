@@ -2,11 +2,11 @@ import 'package:flutter/material.dart';
 import 'package:sabanci_talks/bottom_bar/view/bottom_bar_view.dart';
 import 'package:sabanci_talks/sign_in/view/sign_in_view.dart';
 import 'package:sabanci_talks/sign_up/view/sign_up_view.dart';
+import 'package:sabanci_talks/util/bloc_observer.dart';
 import 'package:sabanci_talks/util/colors.dart';
 import 'package:sabanci_talks/welcome/view/welcome_view.dart';
 import 'package:sabanci_talks/home/view/home_view.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import "package:sabanci_talks/main_bloc/block_observer/block_observer.dart";
 import "package:sabanci_talks/main_bloc/main_page.dart";
 
 void main() {
