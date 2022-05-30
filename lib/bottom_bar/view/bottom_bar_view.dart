@@ -13,18 +13,38 @@ import 'package:persistent_bottom_nav_bar/persistent-tab-view.dart';
 import 'package:sabanci_talks/util/colors.dart';
 import 'package:sabanci_talks/walkthrough/view/walkthrough_view.dart';
 import 'package:sabanci_talks/welcome/view/welcome_view.dart';
+import 'package:firebase_analytics/firebase_analytics.dart';
+import 'package:firebase_analytics/observer.dart';
 
 class BottomBarView extends StatelessWidget {
-  const BottomBarView({Key? key}) : super(key: key);
-
+  const BottomBarView(
+      {Key? key, required this.analytics, required this.observer})
+      : super(key: key);
+  final FirebaseAnalytics analytics;
+  final FirebaseAnalyticsObserver observer;
   static String routeName = "/bottombar";
   List<Widget> _buildScreens() {
     return [
-      const HomeView(),
-      ExploreView(),
-      const NewPostView(),
-      const NotificationView(),
-      const ProfileView(),
+      HomeView(
+        analytics: analytics,
+        observer: observer,
+      ),
+      ExploreView(
+        analytics: analytics,
+        observer: observer,
+      ),
+      NewPostView(
+        analytics: analytics,
+        observer: observer,
+      ),
+      NotificationView(
+        analytics: analytics,
+        observer: observer,
+      ),
+      ProfileView(
+        analytics: analytics,
+        observer: observer,
+      ),
     ];
   }
 

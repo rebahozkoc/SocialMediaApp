@@ -1,4 +1,6 @@
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
+import 'package:sabanci_talks/util/authentication/auth.dart';
 import 'dart:convert';
 import 'dart:io' show Platform;
 import "package:sabanci_talks/util/styles.dart";
@@ -24,6 +26,19 @@ class _SignUpState extends State<SignUp> {
   String pass = '';
   String confirmPass = '';
   late String s;
+
+  final Authentication _auth = Authentication();
+  Future signupUser() async {
+    dynamic element = await _auth.registerWithEmailPass(email, pass);
+    if (element is String) {
+      _showDialog("Sign Up Error", element);
+    } else if (element is User) {
+      //Navigator.pushNamedAndRemoveUntil(
+      //context, "/bottombar", (route) => false);
+    } else {
+      _showDialog("Sign Up Error", element.toString());
+    }
+  }
 
   Future<void> _showDialog(String title, String message) async {
     bool isAndroid = Platform.isAndroid;
@@ -235,21 +250,14 @@ class _SignUpState extends State<SignUp> {
                     Padding(
                       padding: const EdgeInsets.all(16.0),
                       child: OutlinedButton(
-                        onPressed: () {
+                        onPressed: () async {
                           if (_formKey.currentState!.validate()) {
                             _formKey.currentState!.save();
+                            await signupUser();
                             print('Email: $email');
                           } else {
                             _showDialog('Form Error', 'Your form is invalid');
                           }
-      
-                          Navigator.pushAndRemoveUntil<void>(
-                            context,
-                            MaterialPageRoute<void>(
-                                builder: (BuildContext context) =>
-                                    const HomeView()),
-                            ModalRoute.withName('/'),
-                          );
                         },
                         child: Padding(
                           padding: const EdgeInsets.symmetric(vertical: 12.0),

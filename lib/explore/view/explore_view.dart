@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:sabanci_talks/post/view/single_post.dart';
+import 'package:firebase_analytics/firebase_analytics.dart';
+import 'package:firebase_analytics/observer.dart';
 
 class PhotoItem {
   final String image;
@@ -8,8 +10,22 @@ class PhotoItem {
 }
 
 // Search Page
-class ExploreView extends StatelessWidget {
-  ExploreView({Key? key}) : super(key: key);
+class ExploreView extends StatefulWidget {
+  ExploreView({Key? key, required this.analytics, required this.observer})
+      : super(key: key);
+  final FirebaseAnalytics analytics;
+  final FirebaseAnalyticsObserver observer;
+  @override
+  State<ExploreView> createState() => _ExploreViewState();
+}
+
+class _ExploreViewState extends State<ExploreView> {
+  Future<void> _setCurrentScreen() async {
+    await widget.analytics.setCurrentScreen(
+      screenName: 'Explore Screen',
+      screenClassOverride: 'explorescreen',
+    );
+  }
 
   final List<PhotoItem> _items = [
     PhotoItem(

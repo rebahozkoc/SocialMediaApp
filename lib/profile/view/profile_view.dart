@@ -11,13 +11,16 @@ import 'package:sabanci_talks/util/colors.dart';
 import 'package:sabanci_talks/util/styles.dart';
 import 'package:sabanci_talks/util/dimensions.dart';
 import 'package:sabanci_talks/widgets/mini_post.dart';
-
+import 'package:firebase_analytics/firebase_analytics.dart';
+import 'package:firebase_analytics/observer.dart';
 import '../../post/model/post_model.dart';
 import '../../post/view/post_view.dart';
 
 class ProfileView extends StatefulWidget {
-  const ProfileView({Key? key}) : super(key: key);
-
+  const ProfileView({Key? key, required this.analytics, required this.observer})
+      : super(key: key);
+  final FirebaseAnalytics analytics;
+  final FirebaseAnalyticsObserver observer;
   @override
   State<ProfileView> createState() => _ProfileViewState();
 }
@@ -49,6 +52,13 @@ class _ProfileViewState extends State<ProfileView>
   void initState() {
     super.initState();
     _controller = TabController(length: 3, vsync: this);
+  }
+
+  Future<void> _setCurrentScreen() async {
+    await widget.analytics.setCurrentScreen(
+      screenName: 'Profile Page',
+      screenClassOverride: 'profilePage',
+    );
   }
 
   Row _settingsRow() => Row(
@@ -85,6 +95,7 @@ class _ProfileViewState extends State<ProfileView>
 
   @override
   Widget build(BuildContext context) {
+    _setCurrentScreen();
     var infos = [
       _settingsRow(),
       Padding(

@@ -2,10 +2,15 @@ import 'package:flutter/material.dart';
 import 'package:sabanci_talks/post/model/post_model.dart';
 import 'package:sabanci_talks/post/view/post_view.dart';
 import 'package:sabanci_talks/util/colors.dart';
+import 'package:firebase_analytics/firebase_analytics.dart';
+import 'package:firebase_analytics/observer.dart';
 
 class HomeView extends StatefulWidget {
-  const HomeView({Key? key}) : super(key: key);
+  const HomeView({Key? key, required this.analytics, required this.observer})
+      : super(key: key);
 
+  final FirebaseAnalytics analytics;
+  final FirebaseAnalyticsObserver observer;
   @override
   State<HomeView> createState() => _HomeViewState();
 
@@ -15,9 +20,17 @@ class HomeView extends StatefulWidget {
 class _HomeViewState extends State<HomeView> {
   @override
   Widget build(BuildContext context) {
+    _setCurrentScreen();
     return Scaffold(
       appBar: _appBar(),
       body: _body(),
+    );
+  }
+
+  Future<void> _setCurrentScreen() async {
+    await widget.analytics.setCurrentScreen(
+      screenName: 'Home Page',
+      screenClassOverride: 'homePage',
     );
   }
 

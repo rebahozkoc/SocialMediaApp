@@ -14,10 +14,14 @@ import 'package:shared_preferences/shared_preferences.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import "package:sabanci_talks/main_bloc/block_observer/block_observer.dart";
 import "package:image_picker/image_picker.dart";
+import 'package:firebase_analytics/firebase_analytics.dart';
+import 'package:firebase_analytics/observer.dart';
 
 class AuthStatus extends StatefulWidget {
-  const AuthStatus({Key? key}) : super(key: key);
-
+  const AuthStatus({Key? key, required this.analytics, required this.observer})
+      : super(key: key);
+  final FirebaseAnalytics analytics;
+  final FirebaseAnalyticsObserver observer;
   @override
   State<AuthStatus> createState() => _AuthStatusState();
 }
@@ -29,14 +33,21 @@ class _AuthStatusState extends State<AuthStatus> {
     if (user == null) {
       return const Welcome();
     } else {
-      return const BottomBarView();
+      return BottomBarView(
+        analytics: widget.analytics,
+        observer: widget.observer,
+      );
     }
   }
 }
 
 class MyFirebaseApp extends StatefulWidget {
-  const MyFirebaseApp({Key? key}) : super(key: key);
+  const MyFirebaseApp(
+      {Key? key, required this.analytics, required this.observer})
+      : super(key: key);
 
+  final FirebaseAnalytics analytics;
+  final FirebaseAnalyticsObserver observer;
   @override
   State<MyFirebaseApp> createState() => _MyFirebaseAppState();
 }
@@ -46,15 +57,6 @@ class _MyFirebaseAppState extends State<MyFirebaseApp> {
   late dynamic uc;
   late int firstLoad;
   late SharedPreferences prefs;
-
-  final ImagePicker _picker = ImagePicker();
-  XFile? _image;
-  Future pickImage() async {
-    final pickedFile = await _picker.pickImage(source: ImageSource.gallery);
-    setState(() {
-      _image = pickedFile;
-    });
-  }
 
   decideRoute() async {
     prefs = await SharedPreferences.getInstance();
@@ -87,7 +89,10 @@ class _MyFirebaseAppState extends State<MyFirebaseApp> {
               return StreamProvider<User?>.value(
                 value: Authentication().user,
                 initialData: null,
-                child: AuthStatus(),
+                child: AuthStatus(
+                  analytics: widget.analytics,
+                  observer: widget.observer,
+                ),
               );
             }
           }

@@ -9,9 +9,14 @@ import 'package:sabanci_talks/sign_in/view/sign_in_view.dart';
 //import 'package:sabanci_talks/home/view/home_view.dart';
 import 'package:sabanci_talks/util/styles.dart';
 import "package:sabanci_talks/util/dimensions.dart";
+import 'package:firebase_analytics/firebase_analytics.dart';
+import 'package:firebase_analytics/observer.dart';
 
 class Welcome extends StatelessWidget {
   const Welcome({Key? key}) : super(key: key);
+  static FirebaseAnalytics analytics = FirebaseAnalytics.instance;
+  static FirebaseAnalyticsObserver observer =
+      FirebaseAnalyticsObserver(analytics: analytics);
   static const String routeName = "/welcome";
   @override
   Widget build(BuildContext context) {
@@ -64,8 +69,13 @@ class Welcome extends StatelessWidget {
                     flex: 1,
                     child: ElevatedButton(
                       onPressed: () {
-                        Navigator.push(context,
-                            MaterialPageRoute(builder: (context) => SignIn()));
+                        Navigator.push(
+                            context,
+                            MaterialPageRoute(
+                                builder: (context) => SignIn(
+                                      analytics: analytics,
+                                      observer: observer,
+                                    )));
                       },
                       child: const Padding(
                         padding: EdgeInsets.symmetric(vertical: 15.0),

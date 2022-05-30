@@ -242,11 +242,11 @@ class _ResetPassState extends State<ResetPass> {
                           _showDialog('Form Error', 'Your form is invalid');
                         }
 
-                        Navigator.push(
-                          context,
-                          MaterialPageRoute(
-                              builder: (context) => const HomeView()),
-                        );
+                        // Navigator.push(
+                        //   context,
+                        //   MaterialPageRoute(
+                        //       builder: (context) => const HomeView()),
+                        // );
                       },
                       child: Padding(
                         padding: const EdgeInsets.symmetric(vertical: 12.0),

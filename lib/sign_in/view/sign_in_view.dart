@@ -8,14 +8,18 @@ import "package:sabanci_talks/util/dimensions.dart";
 import "package:sabanci_talks/util/screen_sizes.dart";
 import 'package:flutter/cupertino.dart';
 import 'package:email_validator/email_validator.dart';
-
+import 'package:firebase_analytics/firebase_analytics.dart';
+import 'package:firebase_analytics/observer.dart';
 import "package:sabanci_talks/sign_in/view/forget_password_view.dart";
-import "package:http/http.dart" as http;
+import 'package:flutter/material.dart';
 import "package:firebase_auth/firebase_auth.dart";
 
 class SignIn extends StatefulWidget {
-  const SignIn({Key? key}) : super(key: key);
+  const SignIn({Key? key, required this.analytics, required this.observer})
+      : super(key: key);
 
+  final FirebaseAnalytics analytics;
+  final FirebaseAnalyticsObserver observer;
   @override
   State<SignIn> createState() => _SignInState();
 
@@ -28,7 +32,29 @@ class _SignInState extends State<SignIn> {
   String pass = '';
   late String s;
 
+  // Future<void> _setuserId() async {
+  //   await widget.analytics.setUserId();
+  //   setMessage('setUserId succeeded');
+  // }
+
   final Authentication _auth = Authentication();
+
+  String _message = '';
+
+  void setMessage(String msg) {
+    setState(() {
+      _message = msg;
+    });
+  }
+
+  Future<void> _setLogEvent(email, pass) async {
+    await widget.analytics
+        .logEvent(name: "Sign In", parameters: <String, dynamic>{
+      'email': email,
+      'pass': pass,
+    });
+    setMessage('Custom event log succeeded');
+  }
 
   Future loginUser() async {
     dynamic element = await _auth.signInWithEmailPass(email, pass);
@@ -215,7 +241,7 @@ class _SignInState extends State<SignIn> {
                             _formKey.currentState!.save();
 
                             await loginUser();
-
+                            _setLogEvent(email, pass);
                             //print('Email: $email');
                           } else {
                             _showDialog('Form Error', 'Your form is invalid');
