@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
+import 'package:sabanci_talks/navigation/navigation_constants.dart';
+import 'package:sabanci_talks/navigation/navigation_service.dart';
 import 'package:sabanci_talks/util/authentication/auth.dart';
-
 import 'dart:io' show Platform;
 import "package:sabanci_talks/util/styles.dart";
 import "package:sabanci_talks/util/colors.dart";
@@ -61,8 +62,8 @@ class _SignInState extends State<SignIn> {
     if (element is String) {
       _showDialog("Sign In Error", element);
     } else if (element is User) {
-      //Navigator.pushNamedAndRemoveUntil(
-      //context, "/bottombar", (route) => false);
+      NavigationService.instance
+          .navigateToPageClear(path: NavigationConstants.BOTTOM_BAR);
     } else {
       _showDialog("Sign In Error", element.toString());
     }
@@ -266,10 +267,8 @@ class _SignInState extends State<SignIn> {
               ),
               TextButton(
                 onPressed: () {
-                  Navigator.push(
-                      context,
-                      MaterialPageRoute(
-                          builder: (context) => const ForgetPass()));
+                  NavigationService.instance
+                      .navigateToPage(path: NavigationConstants.FORGET_PASS);
                 },
                 child: const Padding(
                   padding: EdgeInsets.symmetric(vertical: 15.0),

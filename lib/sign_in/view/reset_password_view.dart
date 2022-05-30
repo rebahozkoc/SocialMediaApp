@@ -1,13 +1,12 @@
 import 'package:flutter/material.dart';
-import 'dart:convert';
+import 'package:sabanci_talks/navigation/navigation_constants.dart';
+import 'package:sabanci_talks/navigation/navigation_service.dart';
 import 'dart:io' show Platform;
 import "package:sabanci_talks/util/styles.dart";
 import "package:sabanci_talks/util/colors.dart";
 import "package:sabanci_talks/util/dimensions.dart";
 import "package:sabanci_talks/util/screen_sizes.dart";
 import 'package:flutter/cupertino.dart';
-import 'package:sabanci_talks/home/view/home_view.dart';
-import "package:sabanci_talks/welcome/view/goodby_view.dart";
 
 class ResetPass extends StatefulWidget {
   const ResetPass({Key? key}) : super(key: key);
@@ -242,11 +241,8 @@ class _ResetPassState extends State<ResetPass> {
                           _showDialog('Form Error', 'Your form is invalid');
                         }
 
-                        // Navigator.push(
-                        //   context,
-                        //   MaterialPageRoute(
-                        //       builder: (context) => const HomeView()),
-                        // );
+                        NavigationService.instance.navigateToPageClear(
+                            path: NavigationConstants.BOTTOM_BAR);
                       },
                       child: Padding(
                         padding: const EdgeInsets.symmetric(vertical: 12.0),

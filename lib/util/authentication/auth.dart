@@ -16,6 +16,7 @@ class Authentication {
   Future<dynamic> signInWithEmailPass(String email, String pass) async {
     try {
       prefs = await SharedPreferences.getInstance();
+      
       UserCredential uc =
           await _auth.signInWithEmailAndPassword(email: email, password: pass);
       prefs.setInt(

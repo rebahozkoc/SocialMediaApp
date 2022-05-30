@@ -1,12 +1,7 @@
 import 'package:flutter/material.dart';
-//import 'package:week_5/routes/login.dart';
-//import 'package:week_5/routes/signup.dart';
-//import 'package:week_5/util/colors.dart';
 import 'package:sabanci_talks/util/colors.dart';
-//import 'package:week_5/util/styles.dart';
 import 'package:sabanci_talks/sign_up/view/sign_up_view.dart';
 import 'package:sabanci_talks/sign_in/view/sign_in_view.dart';
-//import 'package:sabanci_talks/home/view/home_view.dart';
 import 'package:sabanci_talks/util/styles.dart';
 import "package:sabanci_talks/util/dimensions.dart";
 import 'package:firebase_analytics/firebase_analytics.dart';
