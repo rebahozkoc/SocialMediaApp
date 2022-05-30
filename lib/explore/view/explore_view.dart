@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
-import 'package:sabanci_talks/post/view/single_post.dart';
+import 'package:sabanci_talks/navigation/navigation_constants.dart';
+import 'package:sabanci_talks/navigation/navigation_service.dart';
 
 class PhotoItem {
   final String image;
@@ -101,13 +102,8 @@ class ExploreView extends StatelessWidget {
                   ),
                 ),
               ),
-              onTap: () => {
-                    Navigator.push(
-                        context,
-                        MaterialPageRoute(
-                          builder: (context) => const SinglePost(),
-                        ))
-                  });
+              onTap: () => NavigationService.instance
+                  .navigateToPage(path: NavigationConstants.SINGLE_POST));
         },
       ),
     );

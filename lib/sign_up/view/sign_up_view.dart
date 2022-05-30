@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
-import 'dart:convert';
+import 'package:sabanci_talks/navigation/navigation_constants.dart';
+import 'package:sabanci_talks/navigation/navigation_service.dart';
 import 'dart:io' show Platform;
 import "package:sabanci_talks/util/styles.dart";
 import "package:sabanci_talks/util/colors.dart";
@@ -7,7 +8,6 @@ import "package:sabanci_talks/util/dimensions.dart";
 import "package:sabanci_talks/util/screen_sizes.dart";
 import 'package:flutter/cupertino.dart';
 import 'package:email_validator/email_validator.dart';
-import 'package:sabanci_talks/home/view/home_view.dart';
 
 class SignUp extends StatefulWidget {
   const SignUp({Key? key}) : super(key: key);
@@ -242,14 +242,9 @@ class _SignUpState extends State<SignUp> {
                           } else {
                             _showDialog('Form Error', 'Your form is invalid');
                           }
-      
-                          Navigator.pushAndRemoveUntil<void>(
-                            context,
-                            MaterialPageRoute<void>(
-                                builder: (BuildContext context) =>
-                                    const HomeView()),
-                            ModalRoute.withName('/'),
-                          );
+
+                          NavigationService.instance.navigateToPageClear(
+                              path: NavigationConstants.BOTTOM_BAR);
                         },
                         child: Padding(
                           padding: const EdgeInsets.symmetric(vertical: 12.0),

@@ -4,17 +4,11 @@ import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:sabanci_talks/bottom_bar/view/bottom_bar_view.dart';
 import 'package:sabanci_talks/main_bloc/home_bloc.dart';
-import 'package:sabanci_talks/sign_in/view/sign_in_view.dart';
-import 'package:sabanci_talks/sign_up/view/sign_up_view.dart';
 import 'package:sabanci_talks/util/authentication/auth.dart';
-import 'package:sabanci_talks/util/colors.dart';
 import 'package:sabanci_talks/walkthrough/view/walkthrough_view.dart';
 import 'package:sabanci_talks/welcome/view/welcome_view.dart';
-import 'package:sabanci_talks/home/view/home_view.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import "package:image_picker/image_picker.dart";
-
 class AuthStatus extends StatefulWidget {
   const AuthStatus({Key? key}) : super(key: key);
 
@@ -47,15 +41,6 @@ class _MyFirebaseAppState extends State<MyFirebaseApp> {
   late int firstLoad;
   late SharedPreferences prefs;
 
-  final ImagePicker _picker = ImagePicker();
-  XFile? _image;
-  Future pickImage() async {
-    final pickedFile = await _picker.pickImage(source: ImageSource.gallery);
-    setState(() {
-      _image = pickedFile;
-    });
-  }
-
   decideRoute() async {
     prefs = await SharedPreferences.getInstance();
     setState(() {
@@ -73,9 +58,8 @@ class _MyFirebaseAppState extends State<MyFirebaseApp> {
   Widget build(BuildContext context) {
     return BlocProvider(
       create: (context) => HomeBloc()..add(const HomeStarting()),
-      child: BlocBuilder<HomeBloc, HomeState>(
-        builder: (context, state) {
-          return FutureBuilder(
+      child: BlocBuilder<HomeBloc, HomeState>(builder: (context, state) {
+        return FutureBuilder(
             future: _init,
             builder: (context, snapshot) {
               if (snapshot.hasError) {
@@ -90,13 +74,13 @@ class _MyFirebaseAppState extends State<MyFirebaseApp> {
                   return StreamProvider<User?>.value(
                     value: Authentication().user,
                     initialData: null,
-                    child: AuthStatus(),
+                    child: const AuthStatus()
                   );
                 }
               }
               return const Waiting();
-            });}
-      ),
+            });
+      }),
     );
   }
 }

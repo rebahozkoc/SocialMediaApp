@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:sabanci_talks/post/model/post_model.dart';
 import 'package:sabanci_talks/post/view/post_view.dart';
-import 'package:sabanci_talks/util/colors.dart';
 
 class HomeView extends StatefulWidget {
   const HomeView({Key? key}) : super(key: key);

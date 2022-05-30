@@ -1,7 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:sabanci_talks/util/dimensions.dart';
-import 'package:sabanci_talks/widgets/person_header_widget.dart';
-import 'package:flutter_switch/flutter_switch.dart';
 import 'package:cached_network_image/cached_network_image.dart';
 
 import '../../util/styles.dart';
