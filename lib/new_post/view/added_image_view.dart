@@ -17,7 +17,7 @@ class AddedImageView extends StatelessWidget {
               decoration: const BoxDecoration(color: Colors.white),
               alignment: Alignment.center,
               height: 108,
-              child: MiniPost(url)),
+              child: MiniPost(url, isNetworkImg: false)),
           const Align(
             alignment: Alignment.bottomLeft,
             child: Icon(Icons.remove_circle, color: AppColors.secondary,),

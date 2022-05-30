@@ -4,6 +4,7 @@ import 'package:sabanci_talks/new_post/view/added_image_view.dart';
 import 'package:sabanci_talks/util/dimensions.dart';
 import 'new_post_form_view.dart';
 import 'package:image_picker/image_picker.dart';
+import 'dart:io';
 
 class NewPostView extends StatefulWidget {
   const NewPostView({Key? key}) : super(key: key);
@@ -14,35 +15,34 @@ class NewPostView extends StatefulWidget {
 
 class _NewPostViewState extends State<NewPostView> {
   final ImagePicker _picker = ImagePicker();
-    final List<String> imgList = [
-    "https://picsum.photos/600",
-    "https://picsum.photos/501",
-    "https://picsum.photos/601",
-    "https://picsum.photos/502",
-    "https://picsum.photos/603",
-    "https://picsum.photos/404",
-    "https://picsum.photos/605",
-  ];
-  
-  
+
+  final List<XFile> imgList = [];
+
+  Future pickImage() async {
+    final pickedFile = await _picker.pickImage(source: ImageSource.gallery);
+    setState(() {
+      if (pickedFile == null){
+        debugPrint("No photo selected");
+      }else{
+        imgList.add(pickedFile);
+      }
+    });
+  }
 
   @override
   Widget build(BuildContext context) {
     List<Widget> imgViewList = [];
-    for(var i=0;i<imgList.length;i++){
-        imgViewList.add(InkWell(
-          onTap: () => setState((){
-            imgList.removeAt(i);
-          }),
-          child: AddedImageView(imgList[i])));
+    for (var i = 0; i < imgList.length; i++) {
+      imgViewList.add(InkWell(
+          onTap: () => setState(() {
+                imgList.removeAt(i);
+              }),
+          child: AddedImageView(imgList[i].path)));
     }
 
-    
-    imgViewList.add( InkWell(
-                      onTap: () =>{},
-                      child: 
-                      
-                      const AddImageView()),);
+    imgViewList.add(
+      InkWell(onTap: pickImage, child: const AddImageView()),
+    );
     return Scaffold(
       appBar: _appBar(),
       body: SingleChildScrollView(
@@ -50,10 +50,11 @@ class _NewPostViewState extends State<NewPostView> {
           padding: Dimen.regularParentPadding,
           child: Column(
             children: [
-              MyCustomForm(),
+              const MyCustomForm(),
               SingleChildScrollView(
                   scrollDirection: Axis.horizontal,
-                  child: Row(children:imgViewList))
+                  child: Row(children: imgViewList)),
+              
             ],
           ),
         ),
@@ -61,10 +62,9 @@ class _NewPostViewState extends State<NewPostView> {
     );
   }
 
-
   AppBar _appBar() {
     return AppBar(
-      title: Text('New Post'),
+      title: const Text('New Post'),
       centerTitle: false,
       actions: [
         TextButton(
