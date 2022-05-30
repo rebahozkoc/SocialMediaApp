@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:sabanci_talks/navigation/navigation_constants.dart';
 import 'package:sabanci_talks/navigation/navigation_service.dart';
+import 'package:sabanci_talks/util/analytics.dart';
 import 'package:sabanci_talks/util/authentication/auth.dart';
 import 'dart:io' show Platform;
 import "package:sabanci_talks/util/styles.dart";
@@ -16,11 +17,7 @@ import 'package:flutter/material.dart';
 import "package:firebase_auth/firebase_auth.dart";
 
 class SignIn extends StatefulWidget {
-  const SignIn({Key? key, required this.analytics, required this.observer})
-      : super(key: key);
-
-  final FirebaseAnalytics analytics;
-  final FirebaseAnalyticsObserver observer;
+  const SignIn({Key? key}) : super(key: key);
   @override
   State<SignIn> createState() => _SignInState();
 
@@ -39,23 +36,6 @@ class _SignInState extends State<SignIn> {
   // }
 
   final Authentication _auth = Authentication();
-
-  String _message = '';
-
-  void setMessage(String msg) {
-    setState(() {
-      _message = msg;
-    });
-  }
-
-  Future<void> _setLogEvent(email, pass) async {
-    await widget.analytics
-        .logEvent(name: "Sign In", parameters: <String, dynamic>{
-      'email': email,
-      'pass': pass,
-    });
-    setMessage('Custom event log succeeded');
-  }
 
   Future loginUser() async {
     dynamic element = await _auth.signInWithEmailPass(email, pass);
@@ -242,7 +222,7 @@ class _SignInState extends State<SignIn> {
                             _formKey.currentState!.save();
 
                             await loginUser();
-                            _setLogEvent(email, pass);
+                            MyAnalytics.setLogEvent(email, pass);
                             //print('Email: $email');
                           } else {
                             _showDialog('Form Error', 'Your form is invalid');

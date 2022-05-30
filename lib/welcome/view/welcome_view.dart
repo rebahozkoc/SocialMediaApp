@@ -9,9 +9,6 @@ import 'package:firebase_analytics/observer.dart';
 
 class Welcome extends StatelessWidget {
   const Welcome({Key? key}) : super(key: key);
-  static FirebaseAnalytics analytics = FirebaseAnalytics.instance;
-  static FirebaseAnalyticsObserver observer =
-      FirebaseAnalyticsObserver(analytics: analytics);
   static const String routeName = "/welcome";
   @override
   Widget build(BuildContext context) {
@@ -67,10 +64,7 @@ class Welcome extends StatelessWidget {
                         Navigator.push(
                             context,
                             MaterialPageRoute(
-                                builder: (context) => SignIn(
-                                      analytics: analytics,
-                                      observer: observer,
-                                    )));
+                                builder: (context) => const SignIn()));
                       },
                       child: const Padding(
                         padding: EdgeInsets.symmetric(vertical: 15.0),
@@ -97,8 +91,8 @@ class Welcome extends StatelessWidget {
             ),
             TextButton(
               onPressed: () {
-                Navigator.push(
-                    context, MaterialPageRoute(builder: (context) => SignUp()));
+                Navigator.push(context,
+                    MaterialPageRoute(builder: (context) => const SignUp()));
               },
               child: const Padding(
                 padding: EdgeInsets.symmetric(vertical: 15.0),

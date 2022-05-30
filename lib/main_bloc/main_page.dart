@@ -14,10 +14,7 @@ import 'package:firebase_analytics/firebase_analytics.dart';
 import 'package:firebase_analytics/observer.dart';
 
 class AuthStatus extends StatefulWidget {
-  const AuthStatus({Key? key, required this.analytics, required this.observer})
-      : super(key: key);
-  final FirebaseAnalytics analytics;
-  final FirebaseAnalyticsObserver observer;
+  const AuthStatus({Key? key}) : super(key: key);
   @override
   State<AuthStatus> createState() => _AuthStatusState();
 }
@@ -29,10 +26,7 @@ class _AuthStatusState extends State<AuthStatus> {
     if (user == null) {
       return const Welcome();
     } else {
-      return BottomBarView(
-        analytics: widget.analytics,
-        observer: widget.observer,
-      );
+      return const BottomBarView();
     }
   }
 }
@@ -83,10 +77,7 @@ class _MyFirebaseAppState extends State<MyFirebaseApp> {
                   return StreamProvider<User?>.value(
                       value: Authentication().user,
                       initialData: null,
-                      child: const AuthStatus(
-                        analytics: analytics,
-                        observer: observer,
-                      ));
+                      child: AuthStatus());
                 }
               }
               return const Waiting();

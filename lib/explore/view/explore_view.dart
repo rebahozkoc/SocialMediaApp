@@ -4,6 +4,7 @@ import 'package:firebase_analytics/firebase_analytics.dart';
 import 'package:firebase_analytics/observer.dart';
 import 'package:sabanci_talks/navigation/navigation_constants.dart';
 import 'package:sabanci_talks/navigation/navigation_service.dart';
+import 'package:sabanci_talks/util/analytics.dart';
 
 class PhotoItem {
   final String image;
@@ -13,22 +14,12 @@ class PhotoItem {
 
 // Search Page
 class ExploreView extends StatefulWidget {
-  ExploreView({Key? key, required this.analytics, required this.observer})
-      : super(key: key);
-  final FirebaseAnalytics analytics;
-  final FirebaseAnalyticsObserver observer;
+  ExploreView({Key? key}) : super(key: key);
   @override
   State<ExploreView> createState() => _ExploreViewState();
 }
 
 class _ExploreViewState extends State<ExploreView> {
-  Future<void> _setCurrentScreen() async {
-    await widget.analytics.setCurrentScreen(
-      screenName: 'Explore Screen',
-      screenClassOverride: 'explorescreen',
-    );
-  }
-
   final List<PhotoItem> _items = [
     PhotoItem(
         "https://images.pexels.com/photos/1772973/pexels-photo-1772973.png?auto=compress&cs=tinysrgb&dpr=2&h=750&w=1260",
@@ -79,6 +70,7 @@ class _ExploreViewState extends State<ExploreView> {
 
   @override
   Widget build(BuildContext context) {
+    MyAnalytics.setCurrentScreen("Explore Page");
     return Scaffold(
       appBar: AppBar(
           // The search area here

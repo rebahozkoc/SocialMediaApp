@@ -42,52 +42,44 @@ class ListItemWithSwitch extends StatefulWidget {
   const ListItemWithSwitch(this.text, this.text2, {Key? key}) : super(key: key);
 
   @override
-  State<ListItemWithSwitch> createState() =>
-      _ListItemWithSwitchState(text, text2);
+  State<ListItemWithSwitch> createState() => _ListItemWithSwitchState();
 }
 
 class _ListItemWithSwitchState extends State<ListItemWithSwitch> {
   bool state = true;
-  String te1 = "";
-  String te2 = "";
-  _ListItemWithSwitchState(t1, t2) {
-    te1 = t1;
-    te2 = t2;
-  }
   @override
   Widget build(BuildContext context) {
-    print(te1);
     return Padding(
       padding: const EdgeInsets.all(16.0),
       child: Row(
-    mainAxisAlignment: MainAxisAlignment.spaceBetween,
-    children: [
-      Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
+        mainAxisAlignment: MainAxisAlignment.spaceBetween,
         children: [
-          Text(te1, style: kHeader4TextStyle),
-          Text(te2, style: kbody2TextStyle),
+          Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              Text(widget.text, style: kHeader4TextStyle),
+              Text(widget.text2, style: kbody2TextStyle),
+            ],
+          ),
+          FlutterSwitch(
+              activeColor: state
+                  ? Colors.white.withOpacity(1)
+                  : Colors.white.withOpacity(0.6),
+              toggleColor: AppColors.primary,
+              width: 70.0,
+              height: 30.0,
+              valueFontSize: 25.0,
+              toggleSize: 25.0,
+              value: state,
+              borderRadius: 30.0,
+              padding: 5.0,
+              switchBorder: Border.all(color: AppColors.primary),
+              onToggle: (val) {
+                setState(() {
+                  state = !state;
+                });
+              })
         ],
-      ),
-      FlutterSwitch(
-          activeColor: state
-              ? Colors.white.withOpacity(1)
-              : Colors.white.withOpacity(0.6),
-          toggleColor: AppColors.primary,
-          width: 70.0,
-          height: 30.0,
-          valueFontSize: 25.0,
-          toggleSize: 25.0,
-          value: state,
-          borderRadius: 30.0,
-          padding: 5.0,
-          switchBorder: Border.all(color: AppColors.primary),
-          onToggle: (val) {
-            setState(() {
-              state = !state;
-            });
-          })
-    ],
       ),
     );
   }
@@ -101,8 +93,7 @@ class _ArrowItemState extends StatelessWidget {
     te1 = t1;
   }
   void blockList(BuildContext context) {
-    NavigationService.instance
-        .navigateToPage(path: NavigationConstants.DELETE);
+    NavigationService.instance.navigateToPage(path: NavigationConstants.DELETE);
     Navigator.push(
       context,
       MaterialPageRoute(builder: (context) => const DeleteAccount()),
@@ -113,7 +104,6 @@ class _ArrowItemState extends StatelessWidget {
     _auth.signOut();
     NavigationService.instance
         .navigateToPageClear(path: NavigationConstants.WELCOME);
-
   }
 
   void deleteAccount(BuildContext context) {

@@ -7,6 +7,7 @@ import 'package:sabanci_talks/profile/view/edit_profile.dart';
 import 'package:sabanci_talks/profile/view/followers_view.dart';
 import 'package:sabanci_talks/profile/view/following_view.dart';
 import 'package:sabanci_talks/settings/view/settings_view.dart';
+import 'package:sabanci_talks/util/analytics.dart';
 import 'package:sabanci_talks/util/colors.dart';
 import 'package:sabanci_talks/util/styles.dart';
 import 'package:sabanci_talks/util/dimensions.dart';
@@ -17,10 +18,8 @@ import '../../post/model/post_model.dart';
 import '../../post/view/post_view.dart';
 
 class ProfileView extends StatefulWidget {
-  const ProfileView({Key? key, required this.analytics, required this.observer})
-      : super(key: key);
-  final FirebaseAnalytics analytics;
-  final FirebaseAnalyticsObserver observer;
+  const ProfileView({Key? key}) : super(key: key);
+
   @override
   State<ProfileView> createState() => _ProfileViewState();
 }
@@ -52,13 +51,6 @@ class _ProfileViewState extends State<ProfileView>
   void initState() {
     super.initState();
     _controller = TabController(length: 3, vsync: this);
-  }
-
-  Future<void> _setCurrentScreen() async {
-    await widget.analytics.setCurrentScreen(
-      screenName: 'Profile Page',
-      screenClassOverride: 'profilePage',
-    );
   }
 
   Row _settingsRow() => Row(
@@ -95,7 +87,7 @@ class _ProfileViewState extends State<ProfileView>
 
   @override
   Widget build(BuildContext context) {
-    _setCurrentScreen();
+    MyAnalytics.setCurrentScreen("Profile View");
     var infos = [
       _settingsRow(),
       Padding(
