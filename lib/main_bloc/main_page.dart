@@ -13,6 +13,7 @@ import 'package:sabanci_talks/welcome/view/welcome_view.dart';
 import 'package:sabanci_talks/home/view/home_view.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import "package:image_picker/image_picker.dart";
 
 class AuthStatus extends StatefulWidget {
   const AuthStatus({Key? key}) : super(key: key);
@@ -45,6 +46,15 @@ class _MyFirebaseAppState extends State<MyFirebaseApp> {
   late dynamic uc;
   late int firstLoad;
   late SharedPreferences prefs;
+
+  final ImagePicker _picker = ImagePicker();
+  XFile? _image;
+  Future pickImage() async {
+    final pickedFile = await _picker.pickImage(source: ImageSource.gallery);
+    setState(() {
+      _image = pickedFile;
+    });
+  }
 
   decideRoute() async {
     prefs = await SharedPreferences.getInstance();

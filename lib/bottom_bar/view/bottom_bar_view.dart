@@ -28,39 +28,39 @@ class BottomBarView extends StatelessWidget {
     ];
   }
 
+  List<PersistentBottomNavBarItem> _navBarsItems() {
+    return [
+      PersistentBottomNavBarItem(
+          icon: const Icon(Icons.home),
+          iconSize: 28,
+          activeColorPrimary: AppColors.primary,
+          inactiveColorPrimary: AppColors.grey),
+      PersistentBottomNavBarItem(
+          icon: const Icon(Icons.search),
+          iconSize: 28,
+          activeColorPrimary: AppColors.primary,
+          inactiveColorPrimary: AppColors.grey),
+      PersistentBottomNavBarItem(
+        icon: const Icon(Icons.add_circle),
+        iconSize: 42,
+        activeColorPrimary: AppColors.secondary,
+        inactiveColorPrimary: AppColors.secondary,
+      ),
+      PersistentBottomNavBarItem(
+          icon: const Icon(Icons.notifications),
+          iconSize: 28,
+          activeColorPrimary: AppColors.primary,
+          inactiveColorPrimary: AppColors.grey),
+      PersistentBottomNavBarItem(
+          icon: const Icon(Icons.person),
+          iconSize: 28,
+          activeColorPrimary: AppColors.primary,
+          inactiveColorPrimary: AppColors.grey),
+    ];
+  }
+
   @override
   Widget build(BuildContext context) {
-    List<PersistentBottomNavBarItem> _navBarsItems() {
-      return [
-        PersistentBottomNavBarItem(
-            icon: const Icon(Icons.home),
-            iconSize: 28,
-            activeColorPrimary: AppColors.primary,
-            inactiveColorPrimary: AppColors.grey),
-        PersistentBottomNavBarItem(
-            icon: const Icon(Icons.search),
-            iconSize: 28,
-            activeColorPrimary: AppColors.primary,
-            inactiveColorPrimary: AppColors.grey),
-        PersistentBottomNavBarItem(
-          icon: const Icon(Icons.add_circle),
-          iconSize: 42,
-          activeColorPrimary: AppColors.secondary,
-          inactiveColorPrimary: AppColors.secondary,
-        ),
-        PersistentBottomNavBarItem(
-            icon: const Icon(Icons.notifications),
-            iconSize: 28,
-            activeColorPrimary: AppColors.primary,
-            inactiveColorPrimary: AppColors.grey),
-        PersistentBottomNavBarItem(
-            icon: const Icon(Icons.person),
-            iconSize: 28,
-            activeColorPrimary: AppColors.primary,
-            inactiveColorPrimary: AppColors.grey),
-      ];
-    }
-
     return PersistentTabView(
       context,
       screens: _buildScreens(),
