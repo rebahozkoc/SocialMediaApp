@@ -48,9 +48,11 @@ dependencies:
   firebase_core: ^1.11.0
   firebase_analytics: ^9.1.5
   firebase_auth: 3.3.8
+  firebase_storage: ^10.2.4
   provider: ^6.0.0
   flutter_bloc: ^8.0.0
   equatable: ^2.0.3
+
 dev_dependencies:
   flutter_test:
     sdk: flutter
