@@ -1,5 +1,6 @@
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
+import 'package:sabanci_talks/util/analytics.dart';
 import 'package:sabanci_talks/util/authentication/auth.dart';
 import 'dart:convert';
 import 'package:sabanci_talks/navigation/navigation_constants.dart';
@@ -265,6 +266,32 @@ class _SignUpState extends State<SignUp> {
                           padding: const EdgeInsets.symmetric(vertical: 12.0),
                           child: Text(
                             'Create Account',
+                            style: kButtonDarkTextStyle,
+                          ),
+                        ),
+                        style: OutlinedButton.styleFrom(
+                          shape: RoundedRectangleBorder(
+                              borderRadius: BorderRadius.circular(10.0)),
+                          backgroundColor: AppColors.primary,
+                        ),
+                      ),
+                    ),
+                    Padding(
+                      padding: const EdgeInsets.all(16.0),
+                      child: OutlinedButton(
+                        onPressed: () async {
+                          dynamic user = await _auth.signInWithGoogle();
+                          if (user != null) {
+                            NavigationService.instance.navigateToPageClear(
+                                path: NavigationConstants.BOTTOM_BAR);
+                          }
+                          MyAnalytics.setLogEvent(email, pass);
+                          //print('Email: $email');
+                        },
+                        child: Padding(
+                          padding: const EdgeInsets.symmetric(vertical: 12.0),
+                          child: Text(
+                            'Sign In With Gmail',
                             style: kButtonDarkTextStyle,
                           ),
                         ),

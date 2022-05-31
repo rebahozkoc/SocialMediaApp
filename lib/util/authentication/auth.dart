@@ -5,7 +5,7 @@ import "package:shared_preferences/shared_preferences.dart";
 class Authentication {
   final FirebaseAuth _auth = FirebaseAuth.instance;
   late SharedPreferences prefs;
-
+  final GoogleSignIn googleSignIn = new GoogleSignIn();
   User? _userFromFirebase(User? user) {
     return user;
   }
@@ -57,6 +57,7 @@ class Authentication {
   }
 
   Future<User?> signInWithGoogle() async {
+    await googleSignIn.signOut();
     final GoogleSignInAccount? googleUser = await GoogleSignIn().signIn();
 
     final GoogleSignInAuthentication? googleAuth =
@@ -66,6 +67,7 @@ class Authentication {
       accessToken: googleAuth?.accessToken,
       idToken: googleAuth?.idToken,
     );
+
     UserCredential uc = await _auth.signInWithCredential(credential);
     return uc.user;
   }
