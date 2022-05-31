@@ -255,13 +255,11 @@ class _SignUpState extends State<SignUp> {
                           if (_formKey.currentState!.validate()) {
                             _formKey.currentState!.save();
                             await signupUser();
-                            print('Email: $email');
+                            NavigationService.instance.navigateToPageClear(
+                                path: NavigationConstants.BOTTOM_BAR);
                           } else {
                             _showDialog('Form Error', 'Your form is invalid');
                           }
-
-                          NavigationService.instance.navigateToPageClear(
-                              path: NavigationConstants.BOTTOM_BAR);
                         },
                         child: Padding(
                           padding: const EdgeInsets.symmetric(vertical: 12.0),

@@ -1,4 +1,5 @@
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:google_sign_in/google_sign_in.dart';
 import "package:shared_preferences/shared_preferences.dart";
 
 class Authentication {
@@ -16,7 +17,7 @@ class Authentication {
   Future<dynamic> signInWithEmailPass(String email, String pass) async {
     try {
       prefs = await SharedPreferences.getInstance();
-      
+
       UserCredential uc =
           await _auth.signInWithEmailAndPassword(email: email, password: pass);
       prefs.setInt(
@@ -53,5 +54,19 @@ class Authentication {
 
   Future<void> signOut() async {
     await _auth.signOut();
+  }
+
+  Future<User?> signInWithGoogle() async {
+    final GoogleSignInAccount? googleUser = await GoogleSignIn().signIn();
+
+    final GoogleSignInAuthentication? googleAuth =
+        await googleUser?.authentication;
+
+    final credential = GoogleAuthProvider.credential(
+      accessToken: googleAuth?.accessToken,
+      idToken: googleAuth?.idToken,
+    );
+    UserCredential uc = await _auth.signInWithCredential(credential);
+    return uc.user;
   }
 }

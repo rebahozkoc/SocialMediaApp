@@ -14,6 +14,22 @@
       },
       "oauth_client": [
         {
+          "client_id": "1066515621416-is3tsa8f2cn2p5j4jc5d7b6mptvl7t50.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.example.sabanci_talks.sabanci_talks",
+            "certificate_hash": "e412d871165a678ca3eb7c2341eaf05584f269d2"
+          }
+        },
+        {
+          "client_id": "1066515621416-jg0oc0ccbqnaah4qeomocgnh4i074dk4.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.example.sabanci_talks.sabanci_talks",
+            "certificate_hash": "ce78049ee2c5eaff2868187af37a907ddf677ae8"
+          }
+        },
+        {
           "client_id": "1066515621416-149ts0js9e6oq6p1858b2aqtdcm14ps9.apps.googleusercontent.com",
           "client_type": 3
         }
