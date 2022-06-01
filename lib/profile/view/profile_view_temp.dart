@@ -21,7 +21,7 @@ class _ProfileViewState extends State<ProfileView>
   final dataKey = GlobalKey();
   late TabController _controller;
   late List miniPostList;
-  
+
   @override
   void initState() {
     super.initState();
@@ -49,8 +49,8 @@ class _ProfileViewState extends State<ProfileView>
             onPressed: () {
               pushNewScreenWithRouteSettings(
                 context,
-                screen: const Settings(),
-                settings: const RouteSettings(name: Settings.routeName),
+                screen: const Settings2(),
+                settings: const RouteSettings(name: Settings2.routeName),
                 withNavBar: true,
                 pageTransitionAnimation: PageTransitionAnimation.cupertino,
               );
@@ -110,7 +110,9 @@ class _ProfileViewState extends State<ProfileView>
               TabBar(
                 controller: _controller,
                 tabs: const [
-                  Tab(icon: Icon(Icons.photo_library_rounded, color: AppColors.primary)),
+                  Tab(
+                      icon: Icon(Icons.photo_library_rounded,
+                          color: AppColors.primary)),
                   Tab(icon: Icon(Icons.telegram, color: AppColors.primary)),
                 ],
               ),

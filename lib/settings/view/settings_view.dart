@@ -6,9 +6,10 @@ import 'package:sabanci_talks/util/colors.dart';
 import 'package:sabanci_talks/util/styles.dart';
 import 'package:sabanci_talks/welcome/view/goodby_view.dart';
 import 'package:flutter_switch/flutter_switch.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
-class Settings extends StatelessWidget {
-  const Settings({Key? key}) : super(key: key);
+class Settings2 extends StatelessWidget {
+  const Settings2({Key? key}) : super(key: key);
 
   static const String routeName = '/settings';
 
@@ -89,6 +90,7 @@ class _ArrowItemState extends StatelessWidget {
   final Authentication _auth = Authentication();
   bool state = true;
   String te1 = "";
+  late SharedPreferences prefs;
   _ArrowItemState(t1) {
     te1 = t1;
   }
@@ -100,8 +102,10 @@ class _ArrowItemState extends StatelessWidget {
     );
   }
 
-  void signOut(BuildContext context) {
+  void signOut(BuildContext context) async {
     _auth.signOut();
+    prefs = await SharedPreferences.getInstance();
+    prefs.remove("user");
     NavigationService.instance
         .navigateToPageClear(path: NavigationConstants.WELCOME);
   }

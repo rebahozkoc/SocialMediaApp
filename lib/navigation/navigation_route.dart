@@ -25,7 +25,7 @@ class NavigationRoute {
         return cupertinoNavigate(const HomeView(), NavigationConstants.HOME);
       case NavigationConstants.SETTINGS:
         return cupertinoNavigate(
-            const Settings(), NavigationConstants.SETTINGS);
+            const Settings2(), NavigationConstants.SETTINGS);
       case NavigationConstants.WELCOME:
         return rightToLeftNavigate(
             const Welcome(), NavigationConstants.WELCOME);

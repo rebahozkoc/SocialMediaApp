@@ -15,6 +15,7 @@ import 'package:firebase_analytics/observer.dart';
 import "package:sabanci_talks/sign_in/view/forget_password_view.dart";
 import 'package:flutter/material.dart';
 import "package:firebase_auth/firebase_auth.dart";
+import 'package:cloud_firestore/cloud_firestore.dart';
 
 class SignIn extends StatefulWidget {
   const SignIn({Key? key}) : super(key: key);
@@ -25,6 +26,8 @@ class SignIn extends StatefulWidget {
 }
 
 class _SignInState extends State<SignIn> {
+  late int firstLoad;
+
   final _formKey = GlobalKey<FormState>();
   String email = '';
   String pass = '';
@@ -39,6 +42,7 @@ class _SignInState extends State<SignIn> {
 
   Future loginUser() async {
     dynamic element = await _auth.signInWithEmailPass(email, pass);
+
     if (element is String) {
       _showDialog("Sign In Error", element);
     } else if (element is User) {

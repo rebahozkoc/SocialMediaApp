@@ -6,10 +6,8 @@ part 'home_event.dart';
 part 'home_state.dart';
 
 class HomeBloc extends Bloc<HomeEvent, HomeState> {
-
   int counter = 0;
   bool isDarkMode = false;
-
 
   HomeBloc() : super(const HomeLoad(counter: 0, isDarkMode: false)) {
     on<HomeStarting>((event, emit) async {

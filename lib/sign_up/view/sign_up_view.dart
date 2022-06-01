@@ -1,5 +1,6 @@
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
+import 'package:sabanci_talks/firestore_classes/user.dart';
 import 'package:sabanci_talks/util/analytics.dart';
 import 'package:sabanci_talks/util/authentication/auth.dart';
 import 'dart:convert';
@@ -27,6 +28,7 @@ class _SignUpState extends State<SignUp> {
   String email = '';
   String pass = '';
   String confirmPass = '';
+  String userName = "";
   late String s;
 
   final Authentication _auth = Authentication();
@@ -35,6 +37,8 @@ class _SignUpState extends State<SignUp> {
     if (element is String) {
       _showDialog("Sign Up Error", element);
     } else if (element is User) {
+      AddUser newUser = AddUser(userName, null, null, null, element.uid, 0, 0);
+      await newUser.addUser();
       //Navigator.pushNamedAndRemoveUntil(
       //context, "/bottombar", (route) => false);
     } else {
@@ -157,6 +161,45 @@ class _SignUpState extends State<SignUp> {
                         },
                         onSaved: (value) {
                           email = value ?? '';
+                        },
+                      ),
+                    ),
+                    Container(
+                      padding: const EdgeInsets.all(16),
+                      width: screenWidth(context, dividedBy: 1.1),
+                      child: TextFormField(
+                        keyboardType: TextInputType.text,
+                        obscureText: false,
+                        enableSuggestions: false,
+                        autocorrect: false,
+                        decoration: InputDecoration(
+                          label: Wrap(
+                            crossAxisAlignment: WrapCrossAlignment.center,
+                            children: [
+                              const Icon(Icons.portrait_rounded),
+                              const SizedBox(width: 4),
+                              Text('User Name', style: inputTextStyle),
+                            ],
+                          ),
+                          //fillColor: AppColors.textFieldFillColor,
+                          //filled: true,
+                          labelStyle: kBoldLabelStyle,
+                          border: OutlineInputBorder(
+                            borderSide: BorderSide(
+                              color: AppColors.primary,
+                            ),
+                            borderRadius: BorderRadius.circular(10),
+                          ),
+                        ),
+                        validator: (value) {
+                          if (value != null) {
+                            if (value.isEmpty) {
+                              return 'Cannot leave user name empty';
+                            }
+                          }
+                        },
+                        onSaved: (value) {
+                          userName = value ?? '';
                         },
                       ),
                     ),

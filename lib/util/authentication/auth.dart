@@ -20,8 +20,7 @@ class Authentication {
 
       UserCredential uc =
           await _auth.signInWithEmailAndPassword(email: email, password: pass);
-      prefs.setInt(
-          "user", (uc.credential != null) ? uc.credential!.token ?? -1 : -1);
+      prefs.setString("user", (uc.user != null) ? uc.user!.uid ?? "" : "");
       return uc.user;
       //print(uc.toString());
     } on FirebaseAuthException catch (e) {
