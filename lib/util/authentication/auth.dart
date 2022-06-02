@@ -52,11 +52,14 @@ class Authentication {
   }
 
   Future<void> signOut() async {
+    prefs = await SharedPreferences.getInstance();
+    prefs.setString("user", "");
     await _auth.signOut();
   }
 
   Future<User?> signInWithGoogle() async {
     await googleSignIn.signOut();
+    prefs = await SharedPreferences.getInstance();
     final GoogleSignInAccount? googleUser = await GoogleSignIn().signIn();
 
     final GoogleSignInAuthentication? googleAuth =
@@ -68,6 +71,7 @@ class Authentication {
     );
 
     UserCredential uc = await _auth.signInWithCredential(credential);
+    prefs.setString("user", (uc.user != null) ? uc.user!.uid : "");
     return uc.user;
   }
 }
