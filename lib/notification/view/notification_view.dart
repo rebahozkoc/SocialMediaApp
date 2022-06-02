@@ -33,6 +33,15 @@ class _NotificationViewState extends State<NotificationView> {
       appBar: AppBar(
         title: const Text("Notifications"),
         centerTitle: false,
+        actions: [
+          TextButton(
+            onPressed: () => throw Exception(),
+            child: const Text(
+              "Throw Test Exception",
+              style: TextStyle(color: Colors.white),
+            ),
+          ),
+        ],
       ),
       body: SafeArea(child: _body()),
     );

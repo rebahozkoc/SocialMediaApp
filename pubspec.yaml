@@ -53,6 +53,7 @@ dependencies:
   equatable: ^2.0.3
   google_sign_in: any
   cloud_firestore: any
+  firebase_crashlytics: ^2.8.1
 dev_dependencies:
   flutter_test:
     sdk: flutter
