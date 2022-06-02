@@ -1,6 +1,6 @@
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
-import 'package:sabanci_talks/firestore_classes/user.dart';
+import 'package:sabanci_talks/firestore_classes/user/user.dart';
 import 'package:sabanci_talks/util/analytics.dart';
 import 'package:sabanci_talks/util/authentication/auth.dart';
 import 'dart:convert';

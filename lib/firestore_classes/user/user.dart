@@ -5,7 +5,7 @@ import 'package:firebase_core/firebase_core.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 
 import 'package:json_annotation/json_annotation.dart';
-import 'package:sabanci_talks/firestore_classes/user2.dart';
+import 'package:sabanci_talks/firestore_classes/user/my_user.dart';
 
 class AddUser {
   String? fullName;

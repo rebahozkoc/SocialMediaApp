@@ -44,7 +44,6 @@ dependencies:
   image_picker: ^0.8.5
   http: ^0.13.1
   json_annotation: any
-  json_serializable: any
   firebase_core: ^1.11.0
   firebase_analytics: ^9.1.9
   firebase_auth: 3.3.8
@@ -57,6 +56,9 @@ dependencies:
 dev_dependencies:
   flutter_test:
     sdk: flutter
+  freezed: any
+  json_serializable: any
+  build_runner: 2.1.7
 
   # The "flutter_lints" package below contains a set of recommended lints to
   # encourage good coding practices. The lint set provided by the package is
@@ -64,8 +66,7 @@ dev_dependencies:
   # package. See that file for information about deactivating specific lint
   # rules and activating additional ones.
   flutter_lints: ^1.0.0
-  analyzer: ^4.1.0
-  build_runner:
+  analyzer: any
 # For information on the generic Dart part of this file, see the
 # following page: https://dart.dev/tools/pub/pubspec
 

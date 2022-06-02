@@ -3,8 +3,8 @@ import 'package:flutter/material.dart';
 
 import 'package:persistent_bottom_nav_bar/persistent-tab-view.dart';
 import 'package:provider/provider.dart';
-import 'package:sabanci_talks/firestore_classes/user.dart';
-import 'package:sabanci_talks/firestore_classes/user2.dart';
+//import 'package:sabanci_talks/firestore_classes/user/user.dart';
+import 'package:sabanci_talks/firestore_classes/user/my_user.dart';
 import 'package:sabanci_talks/post/view/single_post.dart';
 
 import 'package:sabanci_talks/profile/view/edit_profile.dart';
@@ -39,19 +39,21 @@ class _ProfileViewState extends State<ProfileView>
   dynamic show;
   Future<String?> decideUser() async {
     prefs = await SharedPreferences.getInstance();
-    return prefs != null ? prefs.getString("user") : null;
+    return  prefs.getString("user");
   }
 
   Future<void> getUser() async {
     uid = await decideUser();
-
-    myUser = FirebaseFirestore.instance
+    debugPrint("uid ${uid}");
+    myUser = await FirebaseFirestore.instance
         .collection('users')
         .where("uid", isEqualTo: uid)
         .get()
         .then((value) => value.docs.map((doc) {
               setState(() {
-                show = doc.data();
+                //show = MyUser.fromJson(doc.data());
+                show = uid;
+                debugPrint(show);
               });
               return MyUser.fromJson(doc.data());
             }).toList());
