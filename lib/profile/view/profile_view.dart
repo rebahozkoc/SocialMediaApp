@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 
 import 'package:persistent_bottom_nav_bar/persistent-tab-view.dart';
 import 'package:provider/provider.dart';
+import 'package:sabanci_talks/firestore_classes/post/my_posts.dart';
 //import 'package:sabanci_talks/firestore_classes/user/user.dart';
 import 'package:sabanci_talks/firestore_classes/user/my_user.dart';
 import 'package:sabanci_talks/post/view/single_post.dart';
@@ -37,26 +38,43 @@ class _ProfileViewState extends State<ProfileView>
   late SharedPreferences prefs;
   String? uid;
   dynamic show;
+  dynamic posts;
   Future<String?> decideUser() async {
     prefs = await SharedPreferences.getInstance();
-    return  prefs.getString("user");
+    return prefs.getString("user");
   }
 
   Future<void> getUser() async {
     uid = await decideUser();
-    debugPrint("uid ${uid}");
+    //debugPrint("uid ${uid}");
     myUser = await FirebaseFirestore.instance
         .collection('users')
         .where("uid", isEqualTo: uid)
         .get()
         .then((value) => value.docs.map((doc) {
               setState(() {
-                //show = MyUser.fromJson(doc.data());
-                show = uid;
-                debugPrint(show);
+                show = MyUser.fromJson(doc.data());
+                //show = uid;
+                //debugPrint(show);
               });
               return MyUser.fromJson(doc.data());
             }).toList());
+  }
+
+  Future<void> getPost() async {
+    uid = await decideUser();
+    //debugPrint("uid ${uid}");
+    myUser = await FirebaseFirestore.instance
+        .collection('posts')
+        .where("uid", isEqualTo: uid)
+        .get()
+        .then((value) => {
+              setState(() {
+                posts = value.docs.map((doc) {
+                  return MyPost.fromJson(doc.data());
+                }).toList();
+              })
+            });
   }
 
   late TabController _controller;
@@ -85,6 +103,7 @@ class _ProfileViewState extends State<ProfileView>
     _controller = TabController(length: 3, vsync: this);
     decideUser();
     getUser();
+    getPost();
   }
 
   Row _settingsRow() => Row(
@@ -129,9 +148,11 @@ class _ProfileViewState extends State<ProfileView>
         child: Row(
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
-            const CircleAvatar(
+            CircleAvatar(
               radius: 42,
-              foregroundImage: NetworkImage("https://picsum.photos/400"),
+              foregroundImage: NetworkImage(show != null
+                  ? show.profilePicture
+                  : "https://picsum.photos/400"),
             ),
             const Spacer(),
             Padding(
@@ -140,13 +161,9 @@ class _ProfileViewState extends State<ProfileView>
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
                   Text(
-                    "Rebah Özkoç",
+                    show != null ? show.fullName : "",
                     style: kHeader2TextStyle,
                   ),
-                  Text(
-                    "@rebahozkoc",
-                    style: kbody1TextStyle,
-                  )
                 ],
               ),
             ),
@@ -159,7 +176,7 @@ class _ProfileViewState extends State<ProfileView>
         child: Column(
           children: [
             Text("About", style: kHeader4TextStyle),
-            Text((show != null) ? show.toString() : "Empty",
+            Text((show != null) ? show.biography : "Empty",
                 style: kbody1TextStyle)
           ],
         ),
@@ -215,10 +232,12 @@ class _ProfileViewState extends State<ProfileView>
                               crossAxisSpacing: 3.0,
                               mainAxisSpacing: 3.0,
                             ),
-                            itemCount: miniPostList.length,
+                            itemCount: posts != null ? posts.length : 0,
                             itemBuilder: (context, index) {
                               return InkWell(
-                                  child: MiniPost(miniPostList[index]),
+                                  child: MiniPost(posts != null
+                                      ? posts[index].pictureUrl[0]
+                                      : "https://picsum.photos/600"),
                                   onTap: () => {
                                         Navigator.push(
                                             context,
@@ -429,7 +448,8 @@ class _ProfileViewState extends State<ProfileView>
       children: [
         Expanded(
           child: TextButton(
-              onPressed: () => {}, child: const ProfileCount("Moments", 11)),
+              onPressed: () => {},
+              child: ProfileCount("Moments", show != null ? posts.length : -1)),
         ),
         Expanded(
             child: TextButton(
@@ -442,7 +462,8 @@ class _ProfileViewState extends State<ProfileView>
                     pageTransitionAnimation: PageTransitionAnimation.cupertino,
                   );
                 },
-                child: const ProfileCount("Followers", 09))),
+                child: ProfileCount(
+                    "Followers", show != null ? show.follower : -1))),
         Expanded(
             child: TextButton(
                 onPressed: () {
@@ -454,7 +475,8 @@ class _ProfileViewState extends State<ProfileView>
                     pageTransitionAnimation: PageTransitionAnimation.cupertino,
                   );
                 },
-                child: const ProfileCount("Following", 01)))
+                child: ProfileCount(
+                    "Following", show != null ? show.following : -1)))
       ],
     );
   }
