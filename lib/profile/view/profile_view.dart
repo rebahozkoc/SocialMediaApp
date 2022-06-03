@@ -46,7 +46,7 @@ class _ProfileViewState extends State<ProfileView>
 
   Future<void> getUser() async {
     uid = await decideUser();
-    //debugPrint("uid ${uid}");
+    debugPrint("uid ${uid}");
     myUser = await FirebaseFirestore.instance
         .collection('users')
         .where("uid", isEqualTo: uid)
@@ -69,11 +69,9 @@ class _ProfileViewState extends State<ProfileView>
         .where("uid", isEqualTo: uid)
         .get()
         .then((value) => {
-              setState(() {
-                posts = value.docs.map((doc) {
-                  return MyPost.fromJson(doc.data());
-                }).toList();
-              })
+              posts = value.docs.map((doc) {
+                return MyPost.fromJson(doc.data());
+              }).toList()
             });
   }
 
@@ -186,260 +184,252 @@ class _ProfileViewState extends State<ProfileView>
         child: profileMainButtonRow(context),
       ),
     ];
-    return FutureBuilder(
-        future: getUser(),
-        builder: (context, snapshot) {
-          return Scaffold(
-            appBar: AppBar(
-              elevation: 0,
-              toolbarHeight: 0,
-            ),
-            body: DefaultTabController(
-              length: 3,
-              child: NestedScrollView(
-                headerSliverBuilder: ((context, innerBoxIsScrolled) => [
-                      SliverList(
-                        delegate: SliverChildListDelegate(infos),
+
+    return Scaffold(
+      appBar: AppBar(
+        elevation: 0,
+        toolbarHeight: 0,
+      ),
+      body: DefaultTabController(
+        length: 3,
+        child: NestedScrollView(
+          headerSliverBuilder: ((context, innerBoxIsScrolled) => [
+                SliverList(
+                  delegate: SliverChildListDelegate(infos),
+                ),
+              ]),
+          body: Column(
+            children: [
+              TabBar(
+                controller: _controller,
+                tabs: const [
+                  Tab(
+                      icon: Icon(Icons.photo_library_rounded,
+                          color: AppColors.primary)),
+                  Tab(icon: Icon(Icons.text_snippet, color: AppColors.primary)),
+                  Tab(icon: Icon(Icons.bookmark, color: AppColors.primary)),
+                ],
+              ),
+              Expanded(
+                child: TabBarView(
+                  controller: _controller,
+                  children: <Widget>[
+                    GridView.builder(
+                      key: dataKey,
+                      physics: const NeverScrollableScrollPhysics(),
+                      shrinkWrap: true,
+                      gridDelegate:
+                          const SliverGridDelegateWithFixedCrossAxisCount(
+                        crossAxisCount: 3,
+                        crossAxisSpacing: 3.0,
+                        mainAxisSpacing: 3.0,
                       ),
-                    ]),
-                body: Column(
-                  children: [
-                    TabBar(
-                      controller: _controller,
-                      tabs: const [
-                        Tab(
-                            icon: Icon(Icons.photo_library_rounded,
-                                color: AppColors.primary)),
-                        Tab(
-                            icon: Icon(Icons.text_snippet,
-                                color: AppColors.primary)),
-                        Tab(
-                            icon:
-                                Icon(Icons.bookmark, color: AppColors.primary)),
+                      itemCount: posts != null ? posts.length : 0,
+                      itemBuilder: (context, index) {
+                        return InkWell(
+                            child: MiniPost(posts != null
+                                ? posts[index].pictureUrl[0]
+                                : "https://picsum.photos/600"),
+                            onTap: () => {
+                                  Navigator.push(
+                                      context,
+                                      MaterialPageRoute(
+                                        builder: (context) =>
+                                            const SinglePost(),
+                                      ))
+                                });
+                      },
+                    ),
+                    ListView(
+                      shrinkWrap: true,
+                      physics: const NeverScrollableScrollPhysics(),
+                      children: [
+                        PostView(
+                          postModel: PostModel(
+                            name: "Charles Leclerc",
+                            date: "2022-03-21T20:18:04.000Z",
+                            profileImg:
+                                "https://pbs.twimg.com/profile_images/1276567411240681472/8KdXHFdK_400x400.jpg",
+                            likeCount: 1217,
+                            commentCount: 32,
+                            contentCount: 0,
+                            postText:
+                                "When you thought you already had all the bad luck of the world in Monaco and you lose the brakes into rascasse with one of the most iconic historical Ferrari Formula 1 car. 🙃🔫",
+                            contents: [],
+                          ),
+                        ),
+                        PostView(
+                          postModel: PostModel(
+                            name: "Charles Leclerc",
+                            date: "2022-03-21T20:18:04.000Z",
+                            profileImg:
+                                "https://pbs.twimg.com/profile_images/1276567411240681472/8KdXHFdK_400x400.jpg",
+                            likeCount: 1217,
+                            commentCount: 32,
+                            contentCount: 0,
+                            postText:
+                                "When you thought you already had all the bad luck of the world in Monaco and you lose the brakes into rascasse with one of the most iconic historical Ferrari Formula 1 car. 🙃🔫",
+                            contents: [],
+                          ),
+                        ),
+                        PostView(
+                          postModel: PostModel(
+                            name: "Charles Leclerc",
+                            date: "2022-03-21T20:18:04.000Z",
+                            profileImg:
+                                "https://pbs.twimg.com/profile_images/1276567411240681472/8KdXHFdK_400x400.jpg",
+                            likeCount: 1217,
+                            commentCount: 32,
+                            contentCount: 0,
+                            postText:
+                                "When you thought you already had all the bad luck of the world in Monaco and you lose the brakes into rascasse with one of the most iconic historical Ferrari Formula 1 car. 🙃🔫",
+                            contents: [],
+                          ),
+                        ),
+                        PostView(
+                          postModel: PostModel(
+                            name: "Charles Leclerc",
+                            date: "2022-03-21T20:18:04.000Z",
+                            profileImg:
+                                "https://pbs.twimg.com/profile_images/1276567411240681472/8KdXHFdK_400x400.jpg",
+                            likeCount: 1217,
+                            commentCount: 32,
+                            contentCount: 0,
+                            postText:
+                                "When you thought you already had all the bad luck of the world in Monaco and you lose the brakes into rascasse with one of the most iconic historical Ferrari Formula 1 car. 🙃🔫",
+                            contents: [],
+                          ),
+                        ),
+                        const SizedBox(height: 12),
                       ],
                     ),
-                    Expanded(
-                      child: TabBarView(
-                        controller: _controller,
-                        children: <Widget>[
-                          GridView.builder(
-                            key: dataKey,
-                            physics: const NeverScrollableScrollPhysics(),
-                            shrinkWrap: true,
-                            gridDelegate:
-                                const SliverGridDelegateWithFixedCrossAxisCount(
-                              crossAxisCount: 3,
-                              crossAxisSpacing: 3.0,
-                              mainAxisSpacing: 3.0,
-                            ),
-                            itemCount: posts != null ? posts.length : 0,
-                            itemBuilder: (context, index) {
-                              return InkWell(
-                                  child: MiniPost(posts != null
-                                      ? posts[index].pictureUrl[0]
-                                      : "https://picsum.photos/600"),
-                                  onTap: () => {
-                                        Navigator.push(
-                                            context,
-                                            MaterialPageRoute(
-                                              builder: (context) =>
-                                                  const SinglePost(),
-                                            ))
-                                      });
-                            },
-                          ),
-                          ListView(
-                            shrinkWrap: true,
-                            physics: const NeverScrollableScrollPhysics(),
-                            children: [
-                              PostView(
-                                postModel: PostModel(
-                                  name: "Charles Leclerc",
-                                  date: "2022-03-21T20:18:04.000Z",
-                                  profileImg:
-                                      "https://pbs.twimg.com/profile_images/1276567411240681472/8KdXHFdK_400x400.jpg",
-                                  likeCount: 1217,
-                                  commentCount: 32,
-                                  contentCount: 0,
-                                  postText:
-                                      "When you thought you already had all the bad luck of the world in Monaco and you lose the brakes into rascasse with one of the most iconic historical Ferrari Formula 1 car. 🙃🔫",
-                                  contents: [],
-                                ),
-                              ),
-                              PostView(
-                                postModel: PostModel(
-                                  name: "Charles Leclerc",
-                                  date: "2022-03-21T20:18:04.000Z",
-                                  profileImg:
-                                      "https://pbs.twimg.com/profile_images/1276567411240681472/8KdXHFdK_400x400.jpg",
-                                  likeCount: 1217,
-                                  commentCount: 32,
-                                  contentCount: 0,
-                                  postText:
-                                      "When you thought you already had all the bad luck of the world in Monaco and you lose the brakes into rascasse with one of the most iconic historical Ferrari Formula 1 car. 🙃🔫",
-                                  contents: [],
-                                ),
-                              ),
-                              PostView(
-                                postModel: PostModel(
-                                  name: "Charles Leclerc",
-                                  date: "2022-03-21T20:18:04.000Z",
-                                  profileImg:
-                                      "https://pbs.twimg.com/profile_images/1276567411240681472/8KdXHFdK_400x400.jpg",
-                                  likeCount: 1217,
-                                  commentCount: 32,
-                                  contentCount: 0,
-                                  postText:
-                                      "When you thought you already had all the bad luck of the world in Monaco and you lose the brakes into rascasse with one of the most iconic historical Ferrari Formula 1 car. 🙃🔫",
-                                  contents: [],
-                                ),
-                              ),
-                              PostView(
-                                postModel: PostModel(
-                                  name: "Charles Leclerc",
-                                  date: "2022-03-21T20:18:04.000Z",
-                                  profileImg:
-                                      "https://pbs.twimg.com/profile_images/1276567411240681472/8KdXHFdK_400x400.jpg",
-                                  likeCount: 1217,
-                                  commentCount: 32,
-                                  contentCount: 0,
-                                  postText:
-                                      "When you thought you already had all the bad luck of the world in Monaco and you lose the brakes into rascasse with one of the most iconic historical Ferrari Formula 1 car. 🙃🔫",
-                                  contents: [],
-                                ),
-                              ),
-                              const SizedBox(height: 12),
+                    ListView(
+                      shrinkWrap: true,
+                      physics: const NeverScrollableScrollPhysics(),
+                      children: [
+                        PostView(
+                          postModel: PostModel(
+                            name: "Charles Leclerc",
+                            date: "2022-03-22T20:18:04.000Z",
+                            profileImg:
+                                "https://pbs.twimg.com/profile_images/1276567411240681472/8KdXHFdK_400x400.jpg",
+                            likeCount: 58100000,
+                            commentCount: 58,
+                            contentCount: 1,
+                            postText:
+                                "Red Bull’un dünkü arızalarla ilgili ilk tahmini yakıt pompasıydı.\n\nFarklı bir sorun olabileceğini düşünüyorum. Yarınki yazımda..",
+                            contents: [
+                              Content(
+                                  type: "image",
+                                  contentId: "text",
+                                  source:
+                                      "https://pbs.twimg.com/media/FOZ58QxXEAYvEsF?format=jpg&name=medium"),
                             ],
                           ),
-                          ListView(
-                            shrinkWrap: true,
-                            physics: const NeverScrollableScrollPhysics(),
-                            children: [
-                              PostView(
-                                postModel: PostModel(
-                                  name: "Charles Leclerc",
-                                  date: "2022-03-22T20:18:04.000Z",
-                                  profileImg:
-                                      "https://pbs.twimg.com/profile_images/1276567411240681472/8KdXHFdK_400x400.jpg",
-                                  likeCount: 58100000,
-                                  commentCount: 58,
-                                  contentCount: 1,
-                                  postText:
-                                      "Red Bull’un dünkü arızalarla ilgili ilk tahmini yakıt pompasıydı.\n\nFarklı bir sorun olabileceğini düşünüyorum. Yarınki yazımda..",
-                                  contents: [
-                                    Content(
-                                        type: "image",
-                                        contentId: "text",
-                                        source:
-                                            "https://pbs.twimg.com/media/FOZ58QxXEAYvEsF?format=jpg&name=medium"),
-                                  ],
-                                ),
-                              ),
-                              PostView(
-                                postModel: PostModel(
-                                  name: "Charles Leclerc",
-                                  date: "2022-03-22T20:18:04.000Z",
-                                  profileImg:
-                                      "https://pbs.twimg.com/profile_images/1276567411240681472/8KdXHFdK_400x400.jpg",
-                                  likeCount: 58100000,
-                                  commentCount: 58,
-                                  contentCount: 4,
-                                  postText:
-                                      "Red Bull’un dünkü arızalarla ilgili ilk tahmini yakıt pompasıydı.\n\nFarklı bir sorun olabileceğini düşünüyorum. Yarınki yazımda..",
-                                  contents: [
-                                    Content(
-                                        type: "image",
-                                        contentId: "text",
-                                        source:
-                                            "https://pbs.twimg.com/media/FOZ58QxXEAYvEsF?format=jpg&name=medium"),
-                                    Content(
-                                        type: "image",
-                                        contentId: "text",
-                                        source:
-                                            "https://pbs.twimg.com/media/FOZ58QxXEAYvEsF?format=jpg&name=medium"),
-                                    Content(
-                                        type: "image",
-                                        contentId: "text",
-                                        source:
-                                            "https://pbs.twimg.com/media/FOZ58QxXEAYvEsF?format=jpg&name=medium"),
-                                    Content(
-                                        type: "image",
-                                        contentId: "text",
-                                        source:
-                                            "https://pbs.twimg.com/media/FOZ58QxXEAYvEsF?format=jpg&name=medium"),
-                                  ],
-                                ),
-                              ),
-                              PostView(
-                                postModel: PostModel(
-                                  name: "Charles Leclerc",
-                                  date: "2022-03-21T20:18:04.000Z",
-                                  profileImg:
-                                      "https://pbs.twimg.com/profile_images/1276567411240681472/8KdXHFdK_400x400.jpg",
-                                  likeCount: 1217,
-                                  commentCount: 32,
-                                  contentCount: 0,
-                                  postText:
-                                      "When you thought you already had all the bad luck of the world in Monaco and you lose the brakes into rascasse with one of the most iconic historical Ferrari Formula 1 car. 🙃🔫",
-                                  contents: [],
-                                ),
-                              ),
-                              PostView(
-                                postModel: PostModel(
-                                  name: "Charles Leclerc",
-                                  date: "2022-03-21T20:18:04.000Z",
-                                  profileImg:
-                                      "https://pbs.twimg.com/profile_images/1276567411240681472/8KdXHFdK_400x400.jpg",
-                                  likeCount: 44567,
-                                  commentCount: 11518,
-                                  contentCount: 2,
-                                  postText: "10 minutes to go.",
-                                  contents: [
-                                    Content(
-                                        type: "image",
-                                        contentId: "text",
-                                        source:
-                                            "https://pbs.twimg.com/media/FOTQrLJXMAEYEDn?format=jpg&name=large"),
-                                    Content(
-                                        type: "image",
-                                        contentId: "text",
-                                        source:
-                                            "https://pbs.twimg.com/media/FOTQrLKXIAMKbDB?format=jpg&name=large")
-                                  ],
-                                ),
-                              ),
-                              PostView(
-                                postModel: PostModel(
-                                  name: "Charles Leclerc",
-                                  date: "2021-03-20T20:18:04.000Z",
-                                  profileImg:
-                                      "https://pbs.twimg.com/profile_images/1276567411240681472/8KdXHFdK_400x400.jpg",
-                                  likeCount: 111111111,
-                                  commentCount: 583453,
-                                  contentCount: 1,
-                                  postText: "This means so much...",
-                                  contents: [
-                                    Content(
-                                        type: "image",
-                                        contentId: "text",
-                                        source:
-                                            "https://pbs.twimg.com/media/FOYNTX9XwAMy_Wu?format=jpg&name=large"),
-                                  ],
-                                ),
-                              ),
-                              const SizedBox(height: 12),
+                        ),
+                        PostView(
+                          postModel: PostModel(
+                            name: "Charles Leclerc",
+                            date: "2022-03-22T20:18:04.000Z",
+                            profileImg:
+                                "https://pbs.twimg.com/profile_images/1276567411240681472/8KdXHFdK_400x400.jpg",
+                            likeCount: 58100000,
+                            commentCount: 58,
+                            contentCount: 4,
+                            postText:
+                                "Red Bull’un dünkü arızalarla ilgili ilk tahmini yakıt pompasıydı.\n\nFarklı bir sorun olabileceğini düşünüyorum. Yarınki yazımda..",
+                            contents: [
+                              Content(
+                                  type: "image",
+                                  contentId: "text",
+                                  source:
+                                      "https://pbs.twimg.com/media/FOZ58QxXEAYvEsF?format=jpg&name=medium"),
+                              Content(
+                                  type: "image",
+                                  contentId: "text",
+                                  source:
+                                      "https://pbs.twimg.com/media/FOZ58QxXEAYvEsF?format=jpg&name=medium"),
+                              Content(
+                                  type: "image",
+                                  contentId: "text",
+                                  source:
+                                      "https://pbs.twimg.com/media/FOZ58QxXEAYvEsF?format=jpg&name=medium"),
+                              Content(
+                                  type: "image",
+                                  contentId: "text",
+                                  source:
+                                      "https://pbs.twimg.com/media/FOZ58QxXEAYvEsF?format=jpg&name=medium"),
                             ],
-                          )
-                        ],
-                      ),
-                    ),
+                          ),
+                        ),
+                        PostView(
+                          postModel: PostModel(
+                            name: "Charles Leclerc",
+                            date: "2022-03-21T20:18:04.000Z",
+                            profileImg:
+                                "https://pbs.twimg.com/profile_images/1276567411240681472/8KdXHFdK_400x400.jpg",
+                            likeCount: 1217,
+                            commentCount: 32,
+                            contentCount: 0,
+                            postText:
+                                "When you thought you already had all the bad luck of the world in Monaco and you lose the brakes into rascasse with one of the most iconic historical Ferrari Formula 1 car. 🙃🔫",
+                            contents: [],
+                          ),
+                        ),
+                        PostView(
+                          postModel: PostModel(
+                            name: "Charles Leclerc",
+                            date: "2022-03-21T20:18:04.000Z",
+                            profileImg:
+                                "https://pbs.twimg.com/profile_images/1276567411240681472/8KdXHFdK_400x400.jpg",
+                            likeCount: 44567,
+                            commentCount: 11518,
+                            contentCount: 2,
+                            postText: "10 minutes to go.",
+                            contents: [
+                              Content(
+                                  type: "image",
+                                  contentId: "text",
+                                  source:
+                                      "https://pbs.twimg.com/media/FOTQrLJXMAEYEDn?format=jpg&name=large"),
+                              Content(
+                                  type: "image",
+                                  contentId: "text",
+                                  source:
+                                      "https://pbs.twimg.com/media/FOTQrLKXIAMKbDB?format=jpg&name=large")
+                            ],
+                          ),
+                        ),
+                        PostView(
+                          postModel: PostModel(
+                            name: "Charles Leclerc",
+                            date: "2021-03-20T20:18:04.000Z",
+                            profileImg:
+                                "https://pbs.twimg.com/profile_images/1276567411240681472/8KdXHFdK_400x400.jpg",
+                            likeCount: 111111111,
+                            commentCount: 583453,
+                            contentCount: 1,
+                            postText: "This means so much...",
+                            contents: [
+                              Content(
+                                  type: "image",
+                                  contentId: "text",
+                                  source:
+                                      "https://pbs.twimg.com/media/FOYNTX9XwAMy_Wu?format=jpg&name=large"),
+                            ],
+                          ),
+                        ),
+                        const SizedBox(height: 12),
+                      ],
+                    )
                   ],
                 ),
               ),
-            ),
-          );
-        });
-    ;
+            ],
+          ),
+        ),
+      ),
+    );
   }
 
   Row profileMainButtonRow(BuildContext context) {
