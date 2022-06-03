@@ -1,3 +1,4 @@
+import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import 'package:sabanci_talks/navigation/navigation_route.dart';
 import 'package:sabanci_talks/navigation/navigation_service.dart';
@@ -8,6 +9,7 @@ import "package:sabanci_talks/main_bloc/main_page.dart";
 
 void main() {
   WidgetsFlutterBinding.ensureInitialized();
+  final Future<FirebaseApp> init = Firebase.initializeApp();
   BlocOverrides.runZoned(
       () => runApp(
             MaterialApp(
@@ -18,7 +20,7 @@ void main() {
                 primaryColor: AppColors.primary,
                 secondaryHeaderColor: AppColors.secondary,
               ),
-              home: const MyFirebaseApp(),
+              home: MyFirebaseApp(init),
               onGenerateRoute: NavigationRoute.instance.generateRoute,
               navigatorKey: NavigationService.instance.navigatorKey,
             ),

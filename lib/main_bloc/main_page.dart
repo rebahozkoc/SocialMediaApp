@@ -32,14 +32,15 @@ class _AuthStatusState extends State<AuthStatus> {
 }
 
 class MyFirebaseApp extends StatefulWidget {
-  const MyFirebaseApp({Key? key}) : super(key: key);
+
+  const MyFirebaseApp(this._init, {Key? key}) : super(key: key);
+  final Future<FirebaseApp> _init;
 
   @override
   State<MyFirebaseApp> createState() => _MyFirebaseAppState();
 }
 
 class _MyFirebaseAppState extends State<MyFirebaseApp> {
-  final Future<FirebaseApp> _init = Firebase.initializeApp();
   late dynamic uc;
   late int firstLoad;
   late SharedPreferences prefs;
@@ -63,7 +64,7 @@ class _MyFirebaseAppState extends State<MyFirebaseApp> {
       create: (context) => HomeBloc()..add(const HomeStarting()),
       child: BlocBuilder<HomeBloc, HomeState>(builder: (context, state) {
         return FutureBuilder(
-            future: _init,
+            future: widget._init,
             builder: (context, snapshot) {
               if (snapshot.hasError) {
                 return ErrorScreen(message: snapshot.error.toString());
