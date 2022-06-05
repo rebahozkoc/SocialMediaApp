@@ -3,7 +3,7 @@ import 'package:flutter/material.dart';
 
 import 'package:persistent_bottom_nav_bar/persistent-tab-view.dart';
 import 'package:provider/provider.dart';
-import 'package:sabanci_talks/firestore_classes/post/my_posts.dart';
+
 //import 'package:sabanci_talks/firestore_classes/user/user.dart';
 import 'package:sabanci_talks/firestore_classes/user/my_user.dart';
 import 'package:sabanci_talks/post/view/single_post.dart';
@@ -22,6 +22,7 @@ import 'package:firebase_analytics/observer.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import '../../post/model/post_model.dart';
 import '../../post/view/post_view.dart';
+import "package:sabanci_talks/firestore_classes/firestore_main/firestore.dart";
 
 class ProfileView extends StatefulWidget {
   const ProfileView({Key? key}) : super(key: key);
@@ -35,44 +36,16 @@ class _ProfileViewState extends State<ProfileView>
   final dataKey = GlobalKey();
   dynamic myUser;
   MyUser? myUserFromJson;
-  late SharedPreferences prefs;
   String? uid;
   dynamic show;
   dynamic posts;
-  Future<String?> decideUser() async {
-    prefs = await SharedPreferences.getInstance();
-    return prefs.getString("user");
-  }
 
+  Firestore f = Firestore();
   Future<void> getUser() async {
-    uid = await decideUser();
-    debugPrint("uid ${uid}");
-    myUser = await FirebaseFirestore.instance
-        .collection('users')
-        .where("uid", isEqualTo: uid)
-        .get()
-        .then((value) => value.docs.map((doc) {
-              setState(() {
-                show = MyUser.fromJson(doc.data());
-                //show = uid;
-                //debugPrint(show);
-              });
-              return MyUser.fromJson(doc.data());
-            }).toList());
-  }
-
-  Future<void> getPost() async {
-    uid = await decideUser();
-    //debugPrint("uid ${uid}");
-    myUser = await FirebaseFirestore.instance
-        .collection('posts')
-        .where("uid", isEqualTo: uid)
-        .get()
-        .then((value) => {
-              posts = value.docs.map((doc) {
-                return MyPost.fromJson(doc.data());
-              }).toList()
-            });
+    uid = await f.decideUser();
+    show = await f.getUser(uid);
+    posts = await f.getPost(uid);
+    debugPrint("show is ${show.toString()}");
   }
 
   late TabController _controller;
@@ -99,9 +72,7 @@ class _ProfileViewState extends State<ProfileView>
   void initState() {
     super.initState();
     _controller = TabController(length: 3, vsync: this);
-    decideUser();
     getUser();
-    getPost();
   }
 
   Row _settingsRow() => Row(
@@ -439,7 +410,8 @@ class _ProfileViewState extends State<ProfileView>
         Expanded(
           child: TextButton(
               onPressed: () => {},
-              child: ProfileCount("Moments", show != null ? posts.length : -1)),
+              child:
+                  ProfileCount("Moments", posts != null ? posts.length : -1)),
         ),
         Expanded(
             child: TextButton(

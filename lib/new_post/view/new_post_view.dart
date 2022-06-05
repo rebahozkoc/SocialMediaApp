@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:sabanci_talks/firestore_classes/firestore_main/firestore.dart';
 import 'package:sabanci_talks/new_post/view/add_image_view.dart';
 import 'package:sabanci_talks/new_post/view/added_image_view.dart';
 import 'package:sabanci_talks/util/analytics.dart';
@@ -47,10 +48,14 @@ class _NewPostViewState extends State<NewPostView> {
 
   Future uploadImageToFirebase(BuildContext context, XFile image) async {
     String fileName = basename(image.path);
+    Firestore f = Firestore();
+    String? uid = await f.decideUser();
+
     Reference firebaseStorageRef =
         FirebaseStorage.instance.ref().child('uploads/$fileName');
     try {
       await firebaseStorageRef.putFile(File(image.path));
+      await f.addPost(uid, fileName, "empty posttext");
       print("Upload complete");
     } on FirebaseException catch (e) {
       print('ERROR: ${e.code} - ${e.message}');
