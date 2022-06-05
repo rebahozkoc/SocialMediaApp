@@ -39,9 +39,9 @@ class Firestore {
     return posts2;
   }
 
-  Future<void> addPost(uid, url, posttext) async {
+  Future<void> addPost(uid, urls, posttext) async {
     myUser =
-        await posts.add({"pictureUrl": url, "postText": posttext, "uid": uid});
+        await posts.add({"pictureUrlArr": urls, "postText": posttext, "uid": uid});
     return;
   }
 }

@@ -5,12 +5,12 @@ import 'package:sabanci_talks/new_post/view/added_image_view.dart';
 import 'package:sabanci_talks/util/analytics.dart';
 import 'package:sabanci_talks/util/dimensions.dart';
 import 'package:sabanci_talks/util/screen_sizes.dart';
-import 'new_post_form_view.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:sabanci_talks/util/styles.dart';
 import 'package:firebase_storage/firebase_storage.dart';
 import 'dart:io';
 import 'package:path/path.dart';
+import 'package:sabanci_talks/widgets/show_dialog.dart';
 
 class NewPostView extends StatefulWidget {
   const NewPostView({Key? key}) : super(key: key);
@@ -23,6 +23,8 @@ class _NewPostViewState extends State<NewPostView> {
   final ImagePicker _picker = ImagePicker();
 
   final List<XFile> imgList = [];
+  final _formKey = GlobalKey<FormState>();
+  String description = "";
 
   Future pickImageCamera() async {
     final pickedFile = await _picker.pickImage(source: ImageSource.camera);
@@ -46,22 +48,45 @@ class _NewPostViewState extends State<NewPostView> {
     });
   }
 
-  Future uploadImageToFirebase(BuildContext context, XFile image) async {
-    String fileName = basename(image.path);
-    Firestore f = Firestore();
-    String? uid = await f.decideUser();
-
-    Reference firebaseStorageRef =
+  Future uploadPostToFirebase(BuildContext context, List<XFile> images) async {
+    // Check the form for errors
+    if (_formKey.currentState != null && _formKey.currentState!.validate()) {
+      //String fileName = basename(image.path);
+      _formKey.currentState!.save();
+      Firestore f = Firestore();
+      String? uid = await f.decideUser();
+      // for every image in the list, upload it to firebase
+      String fileName = "";
+      try {
+      for (var image in images) {
+        String fileName = basename(image.path);
+        Reference firebaseStorageRef =
         FirebaseStorage.instance.ref().child('uploads/$fileName');
-    try {
-      await firebaseStorageRef.putFile(File(image.path));
-      await f.addPost(uid, fileName, "empty posttext");
-      print("Upload complete");
-    } on FirebaseException catch (e) {
-      print('ERROR: ${e.code} - ${e.message}');
-    } catch (e) {
-      print(e.toString());
-    }
+      
+        await firebaseStorageRef.putFile(File(image.path));
+        
+        //storageReference.getDownloadURL().then((fileURL) {
+          //debugPrint("File uploaded");
+          //debugPrint(fileURL);
+          //f.addPost(uid, fileURL, description);
+        //});
+
+      }
+      debugPrint(description);
+      await f.addPost(uid, fileName, description);
+
+      //Reference firebaseStorageRef =
+          //FirebaseStorage.instance.ref().child('uploads/$fileName');
+      
+        //await firebaseStorageRef.putFile(File(image.path));
+        //await f.addPost(uid, fileName, description);
+        debugPrint("Upload complete");
+      } on FirebaseException catch (e) {
+        debugPrint('ERROR: ${e.code} - ${e.message}');
+      } catch (e) {
+        debugPrint(e.toString());
+      }
+    } 
   }
 
   AppBar _appBar(BuildContext context) {
@@ -72,7 +97,7 @@ class _NewPostViewState extends State<NewPostView> {
         TextButton(
           onPressed: () {
             debugPrint("Next");
-            uploadImageToFirebase(context, imgList[0]);
+            uploadPostToFirebase(context, imgList);
           },
           child: const Text("Share",
               style: TextStyle(
@@ -164,13 +189,45 @@ class _NewPostViewState extends State<NewPostView> {
           padding: Dimen.regularParentPadding,
           child: Column(
             children: [
-              const MyCustomForm(),
+              postForm(context),
               SingleChildScrollView(
                   scrollDirection: Axis.horizontal,
                   child: Row(children: imgViewList)),
             ],
           ),
         ),
+      ),
+    );
+  }
+
+  Widget postForm(BuildContext context) {
+    // Build a Form widget using the _formKey created above.
+    return Form(
+      key: _formKey,
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          TextFormField(
+            keyboardType: TextInputType.multiline,
+            maxLines: null,
+            decoration: const InputDecoration(
+              border: InputBorder.none,
+              hintText: 'What is going on?',
+            ),
+            validator: (value) {
+              if (value == null || value.isEmpty) {
+                return 'Please enter some text';
+              }
+              return null;
+            },
+            onSaved: (value) {
+              description = value ?? '';
+            },
+          ),
+          Padding(
+              padding: const EdgeInsets.symmetric(vertical: 16.0),
+              child: Container()),
+        ],
       ),
     );
   }
