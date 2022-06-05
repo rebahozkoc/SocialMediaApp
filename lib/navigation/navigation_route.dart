@@ -32,9 +32,7 @@ class NavigationRoute {
       case NavigationConstants.DELETE:
         return rightToLeftNavigate(
             const DeleteAccount(), NavigationConstants.DELETE);
-      case NavigationConstants.SINGLE_POST:
-        return cupertinoNavigate(
-            const SinglePost(), NavigationConstants.SINGLE_POST);
+
       case NavigationConstants.BOTTOM_BAR:
         return cupertinoNavigate(
             const BottomBarView(), NavigationConstants.BOTTOM_BAR);

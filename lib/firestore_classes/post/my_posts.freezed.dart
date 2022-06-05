@@ -21,8 +21,7 @@ MyPost _$MyPostFromJson(Map<String, dynamic> json) {
 /// @nodoc
 mixin _$MyPost {
   String get uid => throw _privateConstructorUsedError;
-  dynamic get commentCount => throw _privateConstructorUsedError;
-  dynamic get likeCount => throw _privateConstructorUsedError;
+  dynamic get date => throw _privateConstructorUsedError;
   dynamic get postText => throw _privateConstructorUsedError;
   dynamic get pictureUrl => throw _privateConstructorUsedError;
 
@@ -35,12 +34,7 @@ mixin _$MyPost {
 abstract class $MyPostCopyWith<$Res> {
   factory $MyPostCopyWith(MyPost value, $Res Function(MyPost) then) =
       _$MyPostCopyWithImpl<$Res>;
-  $Res call(
-      {String uid,
-      dynamic commentCount,
-      dynamic likeCount,
-      dynamic postText,
-      dynamic pictureUrl});
+  $Res call({String uid, dynamic date, dynamic postText, dynamic pictureUrl});
 }
 
 /// @nodoc
@@ -54,8 +48,7 @@ class _$MyPostCopyWithImpl<$Res> implements $MyPostCopyWith<$Res> {
   @override
   $Res call({
     Object? uid = freezed,
-    Object? commentCount = freezed,
-    Object? likeCount = freezed,
+    Object? date = freezed,
     Object? postText = freezed,
     Object? pictureUrl = freezed,
   }) {
@@ -64,13 +57,9 @@ class _$MyPostCopyWithImpl<$Res> implements $MyPostCopyWith<$Res> {
           ? _value.uid
           : uid // ignore: cast_nullable_to_non_nullable
               as String,
-      commentCount: commentCount == freezed
-          ? _value.commentCount
-          : commentCount // ignore: cast_nullable_to_non_nullable
-              as dynamic,
-      likeCount: likeCount == freezed
-          ? _value.likeCount
-          : likeCount // ignore: cast_nullable_to_non_nullable
+      date: date == freezed
+          ? _value.date
+          : date // ignore: cast_nullable_to_non_nullable
               as dynamic,
       postText: postText == freezed
           ? _value.postText
@@ -89,12 +78,7 @@ abstract class _$$_MyPostCopyWith<$Res> implements $MyPostCopyWith<$Res> {
   factory _$$_MyPostCopyWith(_$_MyPost value, $Res Function(_$_MyPost) then) =
       __$$_MyPostCopyWithImpl<$Res>;
   @override
-  $Res call(
-      {String uid,
-      dynamic commentCount,
-      dynamic likeCount,
-      dynamic postText,
-      dynamic pictureUrl});
+  $Res call({String uid, dynamic date, dynamic postText, dynamic pictureUrl});
 }
 
 /// @nodoc
@@ -109,8 +93,7 @@ class __$$_MyPostCopyWithImpl<$Res> extends _$MyPostCopyWithImpl<$Res>
   @override
   $Res call({
     Object? uid = freezed,
-    Object? commentCount = freezed,
-    Object? likeCount = freezed,
+    Object? date = freezed,
     Object? postText = freezed,
     Object? pictureUrl = freezed,
   }) {
@@ -119,9 +102,7 @@ class __$$_MyPostCopyWithImpl<$Res> extends _$MyPostCopyWithImpl<$Res>
           ? _value.uid
           : uid // ignore: cast_nullable_to_non_nullable
               as String,
-      commentCount:
-          commentCount == freezed ? _value.commentCount : commentCount,
-      likeCount: likeCount == freezed ? _value.likeCount : likeCount,
+      date: date == freezed ? _value.date : date,
       postText: postText == freezed ? _value.postText : postText,
       pictureUrl: pictureUrl == freezed ? _value.pictureUrl : pictureUrl,
     ));
@@ -133,8 +114,7 @@ class __$$_MyPostCopyWithImpl<$Res> extends _$MyPostCopyWithImpl<$Res>
 class _$_MyPost implements _MyPost {
   const _$_MyPost(
       {required this.uid,
-      this.commentCount = 0,
-      this.likeCount = 0,
+      this.date = "",
       this.postText = "empty",
       this.pictureUrl = const ["https://picsum.photos/600"]});
 
@@ -145,10 +125,7 @@ class _$_MyPost implements _MyPost {
   final String uid;
   @override
   @JsonKey()
-  final dynamic commentCount;
-  @override
-  @JsonKey()
-  final dynamic likeCount;
+  final dynamic date;
   @override
   @JsonKey()
   final dynamic postText;
@@ -158,7 +135,7 @@ class _$_MyPost implements _MyPost {
 
   @override
   String toString() {
-    return 'MyPost(uid: $uid, commentCount: $commentCount, likeCount: $likeCount, postText: $postText, pictureUrl: $pictureUrl)';
+    return 'MyPost(uid: $uid, date: $date, postText: $postText, pictureUrl: $pictureUrl)';
   }
 
   @override
@@ -167,9 +144,7 @@ class _$_MyPost implements _MyPost {
         (other.runtimeType == runtimeType &&
             other is _$_MyPost &&
             const DeepCollectionEquality().equals(other.uid, uid) &&
-            const DeepCollectionEquality()
-                .equals(other.commentCount, commentCount) &&
-            const DeepCollectionEquality().equals(other.likeCount, likeCount) &&
+            const DeepCollectionEquality().equals(other.date, date) &&
             const DeepCollectionEquality().equals(other.postText, postText) &&
             const DeepCollectionEquality()
                 .equals(other.pictureUrl, pictureUrl));
@@ -180,8 +155,7 @@ class _$_MyPost implements _MyPost {
   int get hashCode => Object.hash(
       runtimeType,
       const DeepCollectionEquality().hash(uid),
-      const DeepCollectionEquality().hash(commentCount),
-      const DeepCollectionEquality().hash(likeCount),
+      const DeepCollectionEquality().hash(date),
       const DeepCollectionEquality().hash(postText),
       const DeepCollectionEquality().hash(pictureUrl));
 
@@ -199,8 +173,7 @@ class _$_MyPost implements _MyPost {
 abstract class _MyPost implements MyPost {
   const factory _MyPost(
       {required final String uid,
-      final dynamic commentCount,
-      final dynamic likeCount,
+      final dynamic date,
       final dynamic postText,
       final dynamic pictureUrl}) = _$_MyPost;
 
@@ -209,9 +182,7 @@ abstract class _MyPost implements MyPost {
   @override
   String get uid => throw _privateConstructorUsedError;
   @override
-  dynamic get commentCount => throw _privateConstructorUsedError;
-  @override
-  dynamic get likeCount => throw _privateConstructorUsedError;
+  dynamic get date => throw _privateConstructorUsedError;
   @override
   dynamic get postText => throw _privateConstructorUsedError;
   @override
