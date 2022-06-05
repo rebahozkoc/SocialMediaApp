@@ -11,10 +11,8 @@ part 'my_posts.freezed.dart';
 class MyPost with _$MyPost {
   const factory MyPost({
     required String uid,
-    @Default(0)
-        commentCount,
-    @Default(0)
-        likeCount,
+    @Default("")
+        date,
     @Default("empty")
         postText,
     @Default([

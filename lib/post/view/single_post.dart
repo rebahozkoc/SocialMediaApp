@@ -1,11 +1,22 @@
 import 'package:flutter/material.dart';
+import 'package:sabanci_talks/firestore_classes/firestore_main/firestore.dart';
 import 'package:sabanci_talks/post/model/post_model.dart';
 import 'package:sabanci_talks/post/view/post_view.dart';
+import 'package:sabanci_talks/firestore_classes/post/my_posts.dart';
 import 'package:sabanci_talks/util/colors.dart';
 
 class SinglePost extends StatefulWidget {
-  const SinglePost({Key? key}) : super(key: key);
-
+  const SinglePost(
+      {Key? key,
+      required this.docId,
+      required this.proUrl,
+      required this.name,
+      required this.date})
+      : super(key: key);
+  final String docId;
+  final String proUrl;
+  final String name;
+  final String date;
   @override
   State<SinglePost> createState() => _SinglePostState();
 
@@ -14,11 +25,21 @@ class SinglePost extends StatefulWidget {
 
 class _SinglePostState extends State<SinglePost> {
   @override
+  MyPost? post;
+  Future<void> getMyPost() async {
+    Firestore f = Firestore();
+    post = await f.getSpecificPost(widget.docId);
+  }
+
   Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: _appBar(),
-      body: _body(),
-    );
+    return FutureBuilder(
+        future: getMyPost(),
+        builder: (context, snapshot) {
+          return Scaffold(
+            appBar: _appBar(),
+            body: _body(),
+          );
+        });
   }
 
   AppBar _appBar() => AppBar(
@@ -40,21 +61,21 @@ class _SinglePostState extends State<SinglePost> {
           children: [
             PostView(
               postModel: PostModel(
-                name: "Charles Leclerc",
-                date: "2022-03-22T20:18:04.000Z",
-                profileImg:
-                    "https://pbs.twimg.com/profile_images/1276567411240681472/8KdXHFdK_400x400.jpg",
+                name: widget.name,
+                date: widget.date,
+                profileImg: widget.proUrl,
                 likeCount: 58100000,
                 commentCount: 58,
                 contentCount: 1,
-                postText:
-                    "Red Bull’un dünkü arızalarla ilgili ilk tahmini yakıt pompasıydı.\n\nFarklı bir sorun olabileceğini düşünüyorum. Yarınki yazımda..",
+                postText: post != null ? post!.postText : "",
                 contents: [
                   Content(
-                      type: "image",
-                      contentId: "text",
-                      source:
-                          "https://pbs.twimg.com/media/FOZ58QxXEAYvEsF?format=jpg&name=medium"),
+                    type: "image",
+                    contentId: "text",
+                    source: post != null
+                        ? post!.pictureUrl[0]
+                        : "https://picsum.photos/400",
+                  ),
                 ],
               ),
             ),

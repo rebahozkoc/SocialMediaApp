@@ -28,13 +28,24 @@ class Firestore {
     return show;
   }
 
-  Future<List<MyPost?>?> getPost(uid) async {
+  Future<List<dynamic>?> getPost(uid) async {
     dynamic posts2;
     myUser = await posts.where("uid", isEqualTo: uid).get().then((value) => {
           posts2 = value.docs.map((doc) {
-            return MyPost.fromJson(doc.data() as Map<String, dynamic>);
+            return [
+              doc.id,
+              MyPost.fromJson(doc.data() as Map<String, dynamic>)
+            ];
           }).toList()
         });
+    //debugPrint("Post is ${posts2.toString()}");
+    return posts2;
+  }
+
+  Future<MyPost?> getSpecificPost(documentId) async {
+    dynamic posts2;
+    myUser = await posts.doc(documentId).get().then((value) =>
+        {posts2 = MyPost.fromJson(value.data() as Map<String, dynamic>)});
     debugPrint("Post is ${posts2.toString()}");
     return posts2;
   }

@@ -97,7 +97,7 @@ class _PostViewState extends State<PostView> {
         ),
       );
 
-  Text _subtitle() => Text(convertDate(widget.postModel.date!));
+  Text _subtitle() => Text(widget.postModel.date!);
 
   IconButton _trailing() => IconButton(
         icon: const Icon(Entypo.dot_3),
@@ -154,7 +154,7 @@ class _PostViewState extends State<PostView> {
               color: AppColors.darkGrey,
               iconSize: 18,
               onPressed: () => NavigationService.instance
-                    .navigateToPage(path: NavigationConstants.COMMENTS),
+                  .navigateToPage(path: NavigationConstants.COMMENTS),
             ),
             _integrationCount(convertCount(widget.postModel.commentCount!))
           ],
