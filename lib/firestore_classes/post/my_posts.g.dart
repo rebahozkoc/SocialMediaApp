@@ -8,14 +8,22 @@ part of 'my_posts.dart';
 
 _$_MyPost _$$_MyPostFromJson(Map<String, dynamic> json) => _$_MyPost(
       uid: json['uid'] as String,
-      date: json['date'] ?? "",
-      postText: json['postText'] ?? "empty",
-      pictureUrl: json['pictureUrl'] ?? const ["https://picsum.photos/600"],
+      createdAt: _createdAtFromJson(json['created_at'] as Timestamp),
+      postText: json['postText'] as String? ?? "empty",
+      pictureUrlArr: (json['pictureUrlArr'] as List<dynamic>?)
+              ?.map((e) => e as String)
+              .toList() ??
+          const ["https://picsum.photos/600"],
+      likeArr: (json['likeArr'] as List<dynamic>?)
+              ?.map((e) => e as String)
+              .toList() ??
+          const [""],
     );
 
 Map<String, dynamic> _$$_MyPostToJson(_$_MyPost instance) => <String, dynamic>{
       'uid': instance.uid,
-      'date': instance.date,
+      'created_at': _createdAtToJson(instance.createdAt),
       'postText': instance.postText,
-      'pictureUrl': instance.pictureUrl,
+      'pictureUrlArr': instance.pictureUrlArr,
+      'likeArr': instance.likeArr,
     };

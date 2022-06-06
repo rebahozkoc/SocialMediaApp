@@ -36,6 +36,10 @@ class Firestore {
     return show;
   }
 
+  Future addUser (String uid, String fullName, String mail, ) async{
+
+  }
+
   // Future<List<dynamic>> getUserByReference(mylist) {
   //   return mylist.map((item) async {
   //     return await item.get().then((value) {
@@ -56,14 +60,16 @@ class Firestore {
   }
 
   Future<List<dynamic>?> getPost(uid) async {
+    debugPrint("uid: ${uid}");
     dynamic posts2;
-    myUser = await posts.where("uid", isEqualTo: uid).get().then((value) => {
+    myUser = await posts.where("uid", isEqualTo: uid).get().then((value) {
+      
           posts2 = value.docs.map((doc) {
             return [
               doc.id,
               MyPost.fromJson(doc.data() as Map<String, dynamic>)
             ];
-          }).toList()
+          }).toList();
         });
     //debugPrint("Post is ${posts2.toString()}");
     return posts2;
@@ -77,9 +83,9 @@ class Firestore {
     return posts2;
   }
 
-  Future<void> addPost(uid, urls, posttext) async {
+  Future<void> addPost({required uid, required createdAt, required urlArr, required postText}) async {
     myUser = await posts
-        .add({"pictureUrlArr": urls, "postText": posttext, "uid": uid});
+        .add({"uid": uid, "createdAt": createdAt, "postText": postText, "pictureUrlArr": urlArr, "likeArr": []});
     return;
   }
 }

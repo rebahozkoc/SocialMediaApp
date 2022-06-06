@@ -72,8 +72,8 @@ class _SinglePostState extends State<SinglePost> {
                   Content(
                     type: "image",
                     contentId: "text",
-                    source: post != null
-                        ? post!.pictureUrl[0]
+                    source: post != null && post!.pictureUrlArr.isNotEmpty
+                        ? post!.pictureUrlArr[0]
                         : "https://picsum.photos/400",
                   ),
                 ],

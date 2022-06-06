@@ -21,9 +21,14 @@ MyPost _$MyPostFromJson(Map<String, dynamic> json) {
 /// @nodoc
 mixin _$MyPost {
   String get uid => throw _privateConstructorUsedError;
-  dynamic get date => throw _privateConstructorUsedError;
-  dynamic get postText => throw _privateConstructorUsedError;
-  dynamic get pictureUrl => throw _privateConstructorUsedError;
+  @JsonKey(
+      name: 'created_at',
+      fromJson: _createdAtFromJson,
+      toJson: _createdAtToJson)
+  DateTime get createdAt => throw _privateConstructorUsedError;
+  String get postText => throw _privateConstructorUsedError;
+  List<String> get pictureUrlArr => throw _privateConstructorUsedError;
+  List<String> get likeArr => throw _privateConstructorUsedError;
 
   Map<String, dynamic> toJson() => throw _privateConstructorUsedError;
   @JsonKey(ignore: true)
@@ -34,7 +39,13 @@ mixin _$MyPost {
 abstract class $MyPostCopyWith<$Res> {
   factory $MyPostCopyWith(MyPost value, $Res Function(MyPost) then) =
       _$MyPostCopyWithImpl<$Res>;
-  $Res call({String uid, dynamic date, dynamic postText, dynamic pictureUrl});
+  $Res call(
+      {String uid,
+      @JsonKey(name: 'created_at', fromJson: _createdAtFromJson, toJson: _createdAtToJson)
+          DateTime createdAt,
+      String postText,
+      List<String> pictureUrlArr,
+      List<String> likeArr});
 }
 
 /// @nodoc
@@ -48,27 +59,32 @@ class _$MyPostCopyWithImpl<$Res> implements $MyPostCopyWith<$Res> {
   @override
   $Res call({
     Object? uid = freezed,
-    Object? date = freezed,
+    Object? createdAt = freezed,
     Object? postText = freezed,
-    Object? pictureUrl = freezed,
+    Object? pictureUrlArr = freezed,
+    Object? likeArr = freezed,
   }) {
     return _then(_value.copyWith(
       uid: uid == freezed
           ? _value.uid
           : uid // ignore: cast_nullable_to_non_nullable
               as String,
-      date: date == freezed
-          ? _value.date
-          : date // ignore: cast_nullable_to_non_nullable
-              as dynamic,
+      createdAt: createdAt == freezed
+          ? _value.createdAt
+          : createdAt // ignore: cast_nullable_to_non_nullable
+              as DateTime,
       postText: postText == freezed
           ? _value.postText
           : postText // ignore: cast_nullable_to_non_nullable
-              as dynamic,
-      pictureUrl: pictureUrl == freezed
-          ? _value.pictureUrl
-          : pictureUrl // ignore: cast_nullable_to_non_nullable
-              as dynamic,
+              as String,
+      pictureUrlArr: pictureUrlArr == freezed
+          ? _value.pictureUrlArr
+          : pictureUrlArr // ignore: cast_nullable_to_non_nullable
+              as List<String>,
+      likeArr: likeArr == freezed
+          ? _value.likeArr
+          : likeArr // ignore: cast_nullable_to_non_nullable
+              as List<String>,
     ));
   }
 }
@@ -78,7 +94,13 @@ abstract class _$$_MyPostCopyWith<$Res> implements $MyPostCopyWith<$Res> {
   factory _$$_MyPostCopyWith(_$_MyPost value, $Res Function(_$_MyPost) then) =
       __$$_MyPostCopyWithImpl<$Res>;
   @override
-  $Res call({String uid, dynamic date, dynamic postText, dynamic pictureUrl});
+  $Res call(
+      {String uid,
+      @JsonKey(name: 'created_at', fromJson: _createdAtFromJson, toJson: _createdAtToJson)
+          DateTime createdAt,
+      String postText,
+      List<String> pictureUrlArr,
+      List<String> likeArr});
 }
 
 /// @nodoc
@@ -93,18 +115,32 @@ class __$$_MyPostCopyWithImpl<$Res> extends _$MyPostCopyWithImpl<$Res>
   @override
   $Res call({
     Object? uid = freezed,
-    Object? date = freezed,
+    Object? createdAt = freezed,
     Object? postText = freezed,
-    Object? pictureUrl = freezed,
+    Object? pictureUrlArr = freezed,
+    Object? likeArr = freezed,
   }) {
     return _then(_$_MyPost(
       uid: uid == freezed
           ? _value.uid
           : uid // ignore: cast_nullable_to_non_nullable
               as String,
-      date: date == freezed ? _value.date : date,
-      postText: postText == freezed ? _value.postText : postText,
-      pictureUrl: pictureUrl == freezed ? _value.pictureUrl : pictureUrl,
+      createdAt: createdAt == freezed
+          ? _value.createdAt
+          : createdAt // ignore: cast_nullable_to_non_nullable
+              as DateTime,
+      postText: postText == freezed
+          ? _value.postText
+          : postText // ignore: cast_nullable_to_non_nullable
+              as String,
+      pictureUrlArr: pictureUrlArr == freezed
+          ? _value._pictureUrlArr
+          : pictureUrlArr // ignore: cast_nullable_to_non_nullable
+              as List<String>,
+      likeArr: likeArr == freezed
+          ? _value._likeArr
+          : likeArr // ignore: cast_nullable_to_non_nullable
+              as List<String>,
     ));
   }
 }
@@ -114,9 +150,13 @@ class __$$_MyPostCopyWithImpl<$Res> extends _$MyPostCopyWithImpl<$Res>
 class _$_MyPost implements _MyPost {
   const _$_MyPost(
       {required this.uid,
-      this.date = "",
+      @JsonKey(name: 'created_at', fromJson: _createdAtFromJson, toJson: _createdAtToJson)
+          required this.createdAt,
       this.postText = "empty",
-      this.pictureUrl = const ["https://picsum.photos/600"]});
+      final List<String> pictureUrlArr = const ["https://picsum.photos/600"],
+      final List<String> likeArr = const [""]})
+      : _pictureUrlArr = pictureUrlArr,
+        _likeArr = likeArr;
 
   factory _$_MyPost.fromJson(Map<String, dynamic> json) =>
       _$$_MyPostFromJson(json);
@@ -124,18 +164,33 @@ class _$_MyPost implements _MyPost {
   @override
   final String uid;
   @override
-  @JsonKey()
-  final dynamic date;
+  @JsonKey(
+      name: 'created_at',
+      fromJson: _createdAtFromJson,
+      toJson: _createdAtToJson)
+  final DateTime createdAt;
   @override
   @JsonKey()
-  final dynamic postText;
+  final String postText;
+  final List<String> _pictureUrlArr;
   @override
   @JsonKey()
-  final dynamic pictureUrl;
+  List<String> get pictureUrlArr {
+    // ignore: implicit_dynamic_type
+    return EqualUnmodifiableListView(_pictureUrlArr);
+  }
+
+  final List<String> _likeArr;
+  @override
+  @JsonKey()
+  List<String> get likeArr {
+    // ignore: implicit_dynamic_type
+    return EqualUnmodifiableListView(_likeArr);
+  }
 
   @override
   String toString() {
-    return 'MyPost(uid: $uid, date: $date, postText: $postText, pictureUrl: $pictureUrl)';
+    return 'MyPost(uid: $uid, createdAt: $createdAt, postText: $postText, pictureUrlArr: $pictureUrlArr, likeArr: $likeArr)';
   }
 
   @override
@@ -144,10 +199,11 @@ class _$_MyPost implements _MyPost {
         (other.runtimeType == runtimeType &&
             other is _$_MyPost &&
             const DeepCollectionEquality().equals(other.uid, uid) &&
-            const DeepCollectionEquality().equals(other.date, date) &&
+            const DeepCollectionEquality().equals(other.createdAt, createdAt) &&
             const DeepCollectionEquality().equals(other.postText, postText) &&
             const DeepCollectionEquality()
-                .equals(other.pictureUrl, pictureUrl));
+                .equals(other._pictureUrlArr, _pictureUrlArr) &&
+            const DeepCollectionEquality().equals(other._likeArr, _likeArr));
   }
 
   @JsonKey(ignore: true)
@@ -155,9 +211,10 @@ class _$_MyPost implements _MyPost {
   int get hashCode => Object.hash(
       runtimeType,
       const DeepCollectionEquality().hash(uid),
-      const DeepCollectionEquality().hash(date),
+      const DeepCollectionEquality().hash(createdAt),
       const DeepCollectionEquality().hash(postText),
-      const DeepCollectionEquality().hash(pictureUrl));
+      const DeepCollectionEquality().hash(_pictureUrlArr),
+      const DeepCollectionEquality().hash(_likeArr));
 
   @JsonKey(ignore: true)
   @override
@@ -173,20 +230,28 @@ class _$_MyPost implements _MyPost {
 abstract class _MyPost implements MyPost {
   const factory _MyPost(
       {required final String uid,
-      final dynamic date,
-      final dynamic postText,
-      final dynamic pictureUrl}) = _$_MyPost;
+      @JsonKey(name: 'created_at', fromJson: _createdAtFromJson, toJson: _createdAtToJson)
+          required final DateTime createdAt,
+      final String postText,
+      final List<String> pictureUrlArr,
+      final List<String> likeArr}) = _$_MyPost;
 
   factory _MyPost.fromJson(Map<String, dynamic> json) = _$_MyPost.fromJson;
 
   @override
   String get uid => throw _privateConstructorUsedError;
   @override
-  dynamic get date => throw _privateConstructorUsedError;
+  @JsonKey(
+      name: 'created_at',
+      fromJson: _createdAtFromJson,
+      toJson: _createdAtToJson)
+  DateTime get createdAt => throw _privateConstructorUsedError;
   @override
-  dynamic get postText => throw _privateConstructorUsedError;
+  String get postText => throw _privateConstructorUsedError;
   @override
-  dynamic get pictureUrl => throw _privateConstructorUsedError;
+  List<String> get pictureUrlArr => throw _privateConstructorUsedError;
+  @override
+  List<String> get likeArr => throw _privateConstructorUsedError;
   @override
   @JsonKey(ignore: true)
   _$$_MyPostCopyWith<_$_MyPost> get copyWith =>

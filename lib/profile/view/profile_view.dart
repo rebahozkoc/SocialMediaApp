@@ -45,7 +45,7 @@ class _ProfileViewState extends State<ProfileView>
   Future<void> getUser() async {
     uid = await f.decideUser();
     show = await f.getUser(uid);
-    posts = await f.getPost(uid);
+    //posts = await f.getPost(uid);
     followers = await f.getFollowers(uid);
     //debugPrint("followers is now ${followers.toString()}");
     //debugPrint("show is ${show.toString()}");
@@ -428,7 +428,7 @@ class _ProfileViewState extends State<ProfileView>
           child: TextButton(
               onPressed: () => {},
               child:
-                  ProfileCount("Moments", posts != null ? posts.length : -1)),
+                  ProfileCount("Moments", posts != null ? posts.length : 0)),
         ),
         Expanded(
             child: TextButton(
@@ -442,7 +442,7 @@ class _ProfileViewState extends State<ProfileView>
                   );
                 },
                 child: ProfileCount("Followers",
-                    followers != null ? followers.followers.length : -1))),
+                    followers != null ? followers.followers.length : 0))),
         Expanded(
             child: TextButton(
                 onPressed: () {
@@ -455,7 +455,7 @@ class _ProfileViewState extends State<ProfileView>
                   );
                 },
                 child: ProfileCount(
-                    "Following", show != null ? show[1].following : -1)))
+                    "Following", show != null ? show[1].following : 0)))
       ],
     );
   }

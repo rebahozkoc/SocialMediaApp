@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:sabanci_talks/firestore_classes/firestore_main/firestore.dart';
+import 'package:sabanci_talks/navigation/navigation_constants.dart';
+import 'package:sabanci_talks/navigation/navigation_service.dart';
 import 'package:sabanci_talks/new_post/view/add_image_view.dart';
 import 'package:sabanci_talks/new_post/view/added_image_view.dart';
 import 'package:sabanci_talks/util/analytics.dart';
@@ -11,6 +13,7 @@ import 'package:firebase_storage/firebase_storage.dart';
 import 'dart:io';
 import 'package:path/path.dart';
 import 'package:sabanci_talks/widgets/show_dialog.dart';
+import 'package:fluttertoast/fluttertoast.dart';
 
 class NewPostView extends StatefulWidget {
   const NewPostView({Key? key}) : super(key: key);
@@ -25,7 +28,7 @@ class _NewPostViewState extends State<NewPostView> {
   final List<XFile> imgList = [];
   final _formKey = GlobalKey<FormState>();
   String description = "";
-
+  bool isButtonActive = true;
   Future pickImageCamera() async {
     final pickedFile = await _picker.pickImage(source: ImageSource.camera);
     setState(() {
@@ -50,34 +53,44 @@ class _NewPostViewState extends State<NewPostView> {
 
   Future uploadPostToFirebase(BuildContext context, List<XFile> images) async {
     // Check the form for errors
+    debugPrint("BUTTOON CLICKEEEEEDD");
+    setState(() {
+      isButtonActive = false;
+    });
+
     if (_formKey.currentState != null && _formKey.currentState!.validate()) {
       //String fileName = basename(image.path);
       _formKey.currentState!.save();
       Firestore f = Firestore();
       String? uid = await f.decideUser();
       // for every image in the list, upload it to firebase
-      String fileName = "";
+      List<String> fileNames = [];
       try {
-      for (var image in images) {
-        String fileName = basename(image.path);
-        Reference firebaseStorageRef =
-        FirebaseStorage.instance.ref().child('uploads/$fileName');
-      
-        await firebaseStorageRef.putFile(File(image.path));
-        
-        //storageReference.getDownloadURL().then((fileURL) {
-          //debugPrint("File uploaded");
-          //debugPrint(fileURL);
-          //f.addPost(uid, fileURL, description);
-        //});
+        for (var image in images) {
+          String fileName = basename(image.path);
+          Reference firebaseStorageRef =
+              FirebaseStorage.instance.ref().child('uploads/$fileName');
 
-      }
-      debugPrint(description);
-      await f.addPost(uid, fileName, description);
+          await firebaseStorageRef.putFile(File(image.path));
 
-      //Reference firebaseStorageRef =
-          //FirebaseStorage.instance.ref().child('uploads/$fileName');
-      
+          await firebaseStorageRef.getDownloadURL().then((fileURL) {
+            debugPrint("File uploaded");
+            debugPrint(fileURL);
+            fileNames.add(fileURL);
+          });
+        }
+        debugPrint(description);
+        debugPrint(fileNames.toString());
+        await f.addPost(
+            uid: uid,
+            createdAt: DateTime.now(),
+            urlArr: fileNames,
+            postText: description);
+        NavigationService.instance
+            .navigateToPageClear(path: NavigationConstants.BOTTOM_BAR);
+        //Reference firebaseStorageRef =
+        //FirebaseStorage.instance.ref().child('uploads/$fileName');
+
         //await firebaseStorageRef.putFile(File(image.path));
         //await f.addPost(uid, fileName, description);
         debugPrint("Upload complete");
@@ -85,8 +98,12 @@ class _NewPostViewState extends State<NewPostView> {
         debugPrint('ERROR: ${e.code} - ${e.message}');
       } catch (e) {
         debugPrint(e.toString());
+      } finally {
+        setState(() {
+          isButtonActive = true;
+        });
       }
-    } 
+    }
   }
 
   AppBar _appBar(BuildContext context) {
@@ -95,10 +112,21 @@ class _NewPostViewState extends State<NewPostView> {
       centerTitle: false,
       actions: [
         TextButton(
-          onPressed: () {
-            debugPrint("Next");
-            uploadPostToFirebase(context, imgList);
-          },
+          onPressed: isButtonActive
+              ? () {
+                  debugPrint("Next");
+                  uploadPostToFirebase(context, imgList);
+                }
+              : () {
+                  Fluttertoast.showToast(
+                      msg: "Please wait until the post is uploaded",
+                      toastLength: Toast.LENGTH_SHORT,
+                      gravity: ToastGravity.BOTTOM,
+                      timeInSecForIosWeb: 1,
+                      backgroundColor: Colors.red,
+                      textColor: Colors.white,
+                      fontSize: 16.0);
+                },
           child: const Text("Share",
               style: TextStyle(
                 color: Colors.white,

@@ -120,22 +120,29 @@ class _ArrowItemState extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Padding(
-      padding: const EdgeInsets.all(16.0),
-      child: Row(mainAxisAlignment: MainAxisAlignment.spaceBetween, children: [
-        Text(te1, style: kHeader4TextStyle),
-        IconButton(
-          icon: te1 == "Sign Out"
-              ? const Icon(Icons.logout_outlined)
-              : const Icon(Icons.chevron_right),
-          iconSize: 30,
-          onPressed: () {
+      padding: const EdgeInsets.all(8.0),
+      child: Row(mainAxisAlignment: MainAxisAlignment.spaceBetween,  children: [
+        TextButton( onPressed: () {
             te1 == "Block List"
                 ? blockList(context)
                 : te1 == "Sign Out"
                     ? signOut(context)
                     : deleteAccount(context);
-          },
-        ),
+          }, 
+          child: Row(
+            children: [
+              Text(te1, style: kHeader4TextStyle),
+              Icon((te1 == "Sign Out") ? Icons.logout_outlined : Icons.chevron_right)
+
+          ],))
+        
+        //IconButton(
+          //icon: te1 == "Sign Out"
+            //  ? const Icon(Icons.logout_outlined)
+        //    /7  : const Icon(Icons.chevron_right),
+          //iconSize: 30,
+          
+        //),
       ]),
     );
   }
