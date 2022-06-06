@@ -39,12 +39,15 @@ class _ProfileViewState extends State<ProfileView>
   String? uid;
   dynamic show;
   dynamic posts;
+  dynamic followers;
 
   Firestore f = Firestore();
   Future<void> getUser() async {
     uid = await f.decideUser();
     show = await f.getUser(uid);
     posts = await f.getPost(uid);
+    followers = await f.getFollowers(uid);
+    //debugPrint("followers is now ${followers.toString()}");
     //debugPrint("show is ${show.toString()}");
   }
 
@@ -134,7 +137,7 @@ class _ProfileViewState extends State<ProfileView>
                                 CircleAvatar(
                                   radius: 42,
                                   foregroundImage: NetworkImage(show != null
-                                      ? show.profilePicture
+                                      ? show[1].profilePicture
                                       : "https://picsum.photos/400"),
                                 ),
                                 const Spacer(),
@@ -145,7 +148,7 @@ class _ProfileViewState extends State<ProfileView>
                                         CrossAxisAlignment.start,
                                     children: [
                                       Text(
-                                        show != null ? show.fullName : "",
+                                        show != null ? show[1].fullName : "",
                                         style: kHeader2TextStyle,
                                       ),
                                     ],
@@ -160,7 +163,10 @@ class _ProfileViewState extends State<ProfileView>
                             child: Column(
                               children: [
                                 Text("About", style: kHeader4TextStyle),
-                                Text((show != null) ? show.biography : "Empty",
+                                Text(
+                                    (show != null)
+                                        ? show[1].biography
+                                        : "Empty",
                                     style: kbody1TextStyle)
                               ],
                             ),
@@ -215,7 +221,7 @@ class _ProfileViewState extends State<ProfileView>
                                               builder: (context) => SinglePost(
                                                   proUrl: show.profilePicture,
                                                   docId: posts[index][0],
-                                                  name: show.fullName,
+                                                  name: show[1].fullName,
                                                   date: posts[index][1].date)),
                                         )
                                       });
@@ -429,14 +435,14 @@ class _ProfileViewState extends State<ProfileView>
                 onPressed: () {
                   pushNewScreenWithRouteSettings(
                     context,
-                    screen: const Followers(),
+                    screen: Followers(mylist: followers.followers),
                     settings: const RouteSettings(name: Followers.routeName),
                     withNavBar: true,
                     pageTransitionAnimation: PageTransitionAnimation.cupertino,
                   );
                 },
-                child: ProfileCount(
-                    "Followers", show != null ? show.follower : -1))),
+                child: ProfileCount("Followers",
+                    followers != null ? followers.followers.length : -1))),
         Expanded(
             child: TextButton(
                 onPressed: () {
@@ -449,7 +455,7 @@ class _ProfileViewState extends State<ProfileView>
                   );
                 },
                 child: ProfileCount(
-                    "Following", show != null ? show.following : -1)))
+                    "Following", show != null ? show[1].following : -1)))
       ],
     );
   }

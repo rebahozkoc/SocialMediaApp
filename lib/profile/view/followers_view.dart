@@ -1,30 +1,33 @@
 import 'package:flutter/material.dart';
+import 'package:sabanci_talks/firestore_classes/firestore_main/firestore.dart';
+import 'package:sabanci_talks/firestore_classes/follower/follower.dart';
 import 'package:sabanci_talks/widgets/person_header_widget.dart';
 
 class Followers extends StatelessWidget {
-  const Followers({Key? key}) : super(key: key);
-
+  Followers({Key? key, required this.mylist}) : super(key: key);
+  dynamic mylist;
   static const String routeName = '/followers';
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-        appBar: AppBar(
-          title: const Text('Followers'),
-        ),
-        body: _body());
-  }
-
-  SizedBox _body() => SizedBox(
-        width: double.infinity,
-        child: ListView.separated(
-          padding: const EdgeInsets.symmetric(vertical: 4),
-          shrinkWrap: true,
-          itemBuilder: (context, index) => const PersonHeaderWidget(),
-          separatorBuilder: (context, index) => const SizedBox(
-            height: 4,
+    return Builder(builder: (context) {
+      return Scaffold(
+          appBar: AppBar(
+            title: const Text('Followers'),
           ),
-          itemCount: 12,
-        ),
-      );
+          body: SizedBox(
+            width: double.infinity,
+            child: ListView.separated(
+              padding: const EdgeInsets.symmetric(vertical: 4),
+              shrinkWrap: true,
+              itemBuilder: (context, index) =>
+                  PersonHeaderWidget(element: mylist[index]),
+              separatorBuilder: (context, index) => const SizedBox(
+                height: 4,
+              ),
+              itemCount: mylist != null ? mylist.length : 0,
+            ),
+          ));
+    });
+  }
 }
