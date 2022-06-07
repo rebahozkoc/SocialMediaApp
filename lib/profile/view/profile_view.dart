@@ -40,36 +40,28 @@ class _ProfileViewState extends State<ProfileView>
   dynamic show;
   dynamic posts;
   dynamic followers;
-
+  dynamic followings;
   Firestore f = Firestore();
+  dynamic miniPostList;
+  dynamic miniTextList;
   Future<void> getUser() async {
     uid = await f.decideUser();
     show = await f.getUser(uid);
     posts = await f.getPost(uid);
     followers = await f.getFollowers(uid);
+    followings = await f.getFollowings(uid);
+    debugPrint("uid is ${uid}");
+    miniPostList = posts != null
+        ? posts.where((i) => i[1].pictureUrl.length != 0).toList()
+        : [];
+    miniTextList = posts != null
+        ? posts.where((i) => i[1].pictureUrl.length == 0).toList()
+        : [];
     //debugPrint("followers is now ${followers.toString()}");
     //debugPrint("show is ${show.toString()}");
   }
 
   late TabController _controller;
-  final List<String> miniPostList = [
-    "https://picsum.photos/600",
-    "https://picsum.photos/501",
-    "https://picsum.photos/601",
-    "https://picsum.photos/502",
-    "https://picsum.photos/603",
-    "https://picsum.photos/404",
-    "https://picsum.photos/605",
-    "https://picsum.photos/706",
-    "https://picsum.photos/607",
-    "https://picsum.photos/808",
-    "https://picsum.photos/609",
-    "https://picsum.photos/520",
-    "https://picsum.photos/612",
-    "https://picsum.photos/523",
-    "https://picsum.photos/646",
-    "https://picsum.photos/343",
-  ];
 
   @override
   void initState() {
@@ -208,18 +200,20 @@ class _ProfileViewState extends State<ProfileView>
                               crossAxisSpacing: 3.0,
                               mainAxisSpacing: 3.0,
                             ),
-                            itemCount: posts != null ? posts.length : 0,
+                            itemCount:
+                                miniPostList != null ? miniPostList.length : 0,
                             itemBuilder: (context, index) {
                               return InkWell(
-                                  child: MiniPost(posts != null
-                                      ? posts[index][1].pictureUrl[0]
+                                  child: MiniPost(miniPostList != null
+                                      ? miniPostList[index][1].pictureUrl[0]
                                       : "https://picsum.photos/600"),
                                   onTap: () => {
                                         Navigator.push(
                                           context,
                                           MaterialPageRoute(
                                               builder: (context) => SinglePost(
-                                                  proUrl: show.profilePicture,
+                                                  proUrl:
+                                                      show[1].profilePicture,
                                                   docId: posts[index][0],
                                                   name: show[1].fullName,
                                                   date: posts[index][1].date)),
@@ -427,8 +421,7 @@ class _ProfileViewState extends State<ProfileView>
         Expanded(
           child: TextButton(
               onPressed: () => {},
-              child:
-                  ProfileCount("Moments", posts != null ? posts.length : -1)),
+              child: ProfileCount("Moments", posts != null ? posts.length : 0)),
         ),
         Expanded(
             child: TextButton(
@@ -442,20 +435,20 @@ class _ProfileViewState extends State<ProfileView>
                   );
                 },
                 child: ProfileCount("Followers",
-                    followers != null ? followers.followers.length : -1))),
+                    followers != null ? followers.followers.length : 0))),
         Expanded(
             child: TextButton(
                 onPressed: () {
                   pushNewScreenWithRouteSettings(
                     context,
-                    screen: const Following(),
+                    screen: Following(mylist: followings.followings),
                     settings: const RouteSettings(name: Following.routeName),
                     withNavBar: true,
                     pageTransitionAnimation: PageTransitionAnimation.cupertino,
                   );
                 },
-                child: ProfileCount(
-                    "Following", show != null ? show[1].following : -1)))
+                child: ProfileCount("Following",
+                    followings != null ? followings.followings.length : 0)))
       ],
     );
   }

@@ -3,7 +3,8 @@ import 'package:sabanci_talks/firestore_classes/user/my_user.dart';
 import 'package:sabanci_talks/widgets/person_header_widget.dart';
 
 class Following extends StatelessWidget {
-  const Following({Key? key}) : super(key: key);
+  Following({Key? key, required this.mylist}) : super(key: key);
+  dynamic mylist;
 
   static const String routeName = '/followers';
 
@@ -21,13 +22,12 @@ class Following extends StatelessWidget {
         child: ListView.separated(
           padding: const EdgeInsets.symmetric(vertical: 4),
           shrinkWrap: true,
-          itemBuilder: (context, index) => PersonHeaderWidget(
-            element: MyUser(uid: "2"),
-          ),
+          itemBuilder: (context, index) =>
+              PersonHeaderWidget(element: mylist[index]),
           separatorBuilder: (context, index) => const SizedBox(
             height: 4,
           ),
-          itemCount: 12,
+          itemCount: mylist != null ? mylist.length : 0,
         ),
       );
 }

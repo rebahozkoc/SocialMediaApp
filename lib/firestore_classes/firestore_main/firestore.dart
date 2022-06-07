@@ -1,10 +1,12 @@
 import 'dart:async';
 
 import 'package:sabanci_talks/firestore_classes/follower/follower.dart';
+import 'package:sabanci_talks/firestore_classes/following/following.dart';
 import 'package:sabanci_talks/firestore_classes/user/my_user.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:sabanci_talks/firestore_classes/post/my_posts.dart';
 import 'package:flutter/material.dart';
+
 import 'package:shared_preferences/shared_preferences.dart';
 
 class Firestore {
@@ -15,9 +17,40 @@ class Firestore {
   CollectionReference posts = FirebaseFirestore.instance.collection('posts');
   CollectionReference followerss =
       FirebaseFirestore.instance.collection('follower');
+  CollectionReference followingss =
+      FirebaseFirestore.instance.collection('following');
   Future<String?> decideUser() async {
     prefs = await SharedPreferences.getInstance();
     return prefs.getString("user");
+  }
+
+  Future<void> addUser(uid, fullName) async {
+    myUser = await users.add({
+      "uid": uid,
+      "fullName": fullName,
+      "gender": "not selected",
+      "private": false,
+      "biography": "",
+      "profilePicture":
+          "https://www.innovaxn.eu/wp-content/uploads/blank-profile-picture-973460_1280.png",
+      "postCount": 0,
+      "following": 0,
+      "follower": 0
+    });
+  }
+
+  Future<void> UpdateUser(
+      docId, fullName, gender, biography, profilePicture) async {
+    await users
+        .doc(docId)
+        .update({
+          "fullName": fullName,
+          "gender": gender,
+          "biography": biography,
+          "profilePicture": profilePicture,
+        })
+        .then((_) => print("success"))
+        .catchError((error) => print('Failed: $error'));
   }
 
   Future<List<dynamic>?> getUser(uid) async {
@@ -53,6 +86,17 @@ class Firestore {
     });
 
     return follower;
+  }
+
+  Future<dynamic> getFollowings(uid) async {
+    dynamic following;
+    myUser = await followingss.where("uid", isEqualTo: uid).get().then((value) {
+      value.docs.map((doc) {
+        following = Following.fromJson(doc.data() as Map<String, dynamic>);
+      }).toList();
+    });
+
+    return following;
   }
 
   Future<List<dynamic>?> getPost(uid) async {

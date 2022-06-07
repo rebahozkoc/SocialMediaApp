@@ -1,5 +1,6 @@
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
+import 'package:sabanci_talks/firestore_classes/firestore_main/firestore.dart';
 import 'package:sabanci_talks/firestore_classes/user/user.dart';
 import 'package:sabanci_talks/util/analytics.dart';
 import 'package:sabanci_talks/util/authentication/auth.dart';
@@ -13,6 +14,7 @@ import "package:sabanci_talks/util/dimensions.dart";
 import "package:sabanci_talks/util/screen_sizes.dart";
 import 'package:flutter/cupertino.dart';
 import 'package:email_validator/email_validator.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 class SignUp extends StatefulWidget {
   const SignUp({Key? key}) : super(key: key);
@@ -30,17 +32,17 @@ class _SignUpState extends State<SignUp> {
   String confirmPass = '';
   String userName = "";
   late String s;
-
+  late SharedPreferences prefs;
   final Authentication _auth = Authentication();
   Future signupUser() async {
     dynamic element = await _auth.registerWithEmailPass(email, pass);
     if (element is String) {
       _showDialog("Sign Up Error", element);
     } else if (element is User) {
-      AddUser newUser = AddUser(userName, null, null, null, element.uid, 0, 0);
-      await newUser.addUser();
-      //Navigator.pushNamedAndRemoveUntil(
-      //context, "/bottombar", (route) => false);
+      Firestore f = Firestore();
+      await f.addUser(element.uid, userName);
+      prefs = await SharedPreferences.getInstance();
+      prefs.setString("user", element.uid);
     } else {
       _showDialog("Sign Up Error", element.toString());
     }
