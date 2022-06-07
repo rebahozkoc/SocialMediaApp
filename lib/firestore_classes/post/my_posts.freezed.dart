@@ -21,11 +21,7 @@ MyPost _$MyPostFromJson(Map<String, dynamic> json) {
 /// @nodoc
 mixin _$MyPost {
   String get uid => throw _privateConstructorUsedError;
-  @JsonKey(
-      name: 'created_at',
-      fromJson: _createdAtFromJson,
-      toJson: _createdAtToJson)
-  DateTime get createdAt => throw _privateConstructorUsedError;
+  String get createdAt => throw _privateConstructorUsedError;
   String get postText => throw _privateConstructorUsedError;
   List<String> get pictureUrlArr => throw _privateConstructorUsedError;
   List<String> get likeArr => throw _privateConstructorUsedError;
@@ -41,8 +37,7 @@ abstract class $MyPostCopyWith<$Res> {
       _$MyPostCopyWithImpl<$Res>;
   $Res call(
       {String uid,
-      @JsonKey(name: 'created_at', fromJson: _createdAtFromJson, toJson: _createdAtToJson)
-          DateTime createdAt,
+      String createdAt,
       String postText,
       List<String> pictureUrlArr,
       List<String> likeArr});
@@ -72,7 +67,7 @@ class _$MyPostCopyWithImpl<$Res> implements $MyPostCopyWith<$Res> {
       createdAt: createdAt == freezed
           ? _value.createdAt
           : createdAt // ignore: cast_nullable_to_non_nullable
-              as DateTime,
+              as String,
       postText: postText == freezed
           ? _value.postText
           : postText // ignore: cast_nullable_to_non_nullable
@@ -96,8 +91,7 @@ abstract class _$$_MyPostCopyWith<$Res> implements $MyPostCopyWith<$Res> {
   @override
   $Res call(
       {String uid,
-      @JsonKey(name: 'created_at', fromJson: _createdAtFromJson, toJson: _createdAtToJson)
-          DateTime createdAt,
+      String createdAt,
       String postText,
       List<String> pictureUrlArr,
       List<String> likeArr});
@@ -128,7 +122,7 @@ class __$$_MyPostCopyWithImpl<$Res> extends _$MyPostCopyWithImpl<$Res>
       createdAt: createdAt == freezed
           ? _value.createdAt
           : createdAt // ignore: cast_nullable_to_non_nullable
-              as DateTime,
+              as String,
       postText: postText == freezed
           ? _value.postText
           : postText // ignore: cast_nullable_to_non_nullable
@@ -148,10 +142,9 @@ class __$$_MyPostCopyWithImpl<$Res> extends _$MyPostCopyWithImpl<$Res>
 /// @nodoc
 @JsonSerializable()
 class _$_MyPost implements _MyPost {
-  const _$_MyPost(
+  _$_MyPost(
       {required this.uid,
-      @JsonKey(name: 'created_at', fromJson: _createdAtFromJson, toJson: _createdAtToJson)
-          required this.createdAt,
+      this.createdAt = "2022-06-07-22:48",
       this.postText = "empty",
       final List<String> pictureUrlArr = const ["https://picsum.photos/600"],
       final List<String> likeArr = const [""]})
@@ -164,11 +157,8 @@ class _$_MyPost implements _MyPost {
   @override
   final String uid;
   @override
-  @JsonKey(
-      name: 'created_at',
-      fromJson: _createdAtFromJson,
-      toJson: _createdAtToJson)
-  final DateTime createdAt;
+  @JsonKey()
+  final String createdAt;
   @override
   @JsonKey()
   final String postText;
@@ -228,10 +218,9 @@ class _$_MyPost implements _MyPost {
 }
 
 abstract class _MyPost implements MyPost {
-  const factory _MyPost(
+  factory _MyPost(
       {required final String uid,
-      @JsonKey(name: 'created_at', fromJson: _createdAtFromJson, toJson: _createdAtToJson)
-          required final DateTime createdAt,
+      final String createdAt,
       final String postText,
       final List<String> pictureUrlArr,
       final List<String> likeArr}) = _$_MyPost;
@@ -241,11 +230,7 @@ abstract class _MyPost implements MyPost {
   @override
   String get uid => throw _privateConstructorUsedError;
   @override
-  @JsonKey(
-      name: 'created_at',
-      fromJson: _createdAtFromJson,
-      toJson: _createdAtToJson)
-  DateTime get createdAt => throw _privateConstructorUsedError;
+  String get createdAt => throw _privateConstructorUsedError;
   @override
   String get postText => throw _privateConstructorUsedError;
   @override

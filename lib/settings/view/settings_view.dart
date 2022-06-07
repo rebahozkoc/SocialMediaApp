@@ -3,15 +3,25 @@ import 'package:sabanci_talks/navigation/navigation_constants.dart';
 import 'package:sabanci_talks/navigation/navigation_service.dart';
 import 'package:sabanci_talks/util/authentication/auth.dart';
 import 'package:sabanci_talks/util/colors.dart';
+import 'package:sabanci_talks/util/dimensions.dart';
 import 'package:sabanci_talks/util/styles.dart';
 import 'package:sabanci_talks/welcome/view/goodby_view.dart';
 import 'package:flutter_switch/flutter_switch.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
-class Settings2 extends StatelessWidget {
+class Settings2 extends StatefulWidget {
   const Settings2({Key? key}) : super(key: key);
 
   static const String routeName = '/settings';
+
+  @override
+  State<Settings2> createState() => _Settings2State();
+}
+
+class _Settings2State extends State<Settings2> {
+  final Authentication _auth = Authentication();
+
+  late SharedPreferences prefs;
 
   @override
   Widget build(BuildContext context) {
@@ -29,18 +39,53 @@ class Settings2 extends StatelessWidget {
                 "Private Account", "People will seek permission to follow you"),
             const ListItemWithSwitch(
                 "Allow Saving", "People can save your posts to their profile"),
-            _ArrowItemState("Block List"),
-            _ArrowItemState("Sign Out"),
-            _ArrowItemState("Delete Account"),
+            listItemWithoutSwitch("Block List", Icons.chevron_right, () {}),
+            listItemWithoutSwitch("Sign Out", Icons.logout_outlined, () {
+              signOut(context);
+            }),
+            listItemWithoutSwitch("Delete Account", Icons.chevron_right, () {
+              deleteAccount(context);
+            }),
           ],
         ),
       );
+
+  InkWell listItemWithoutSwitch(String text, IconData iconData, onPressFunc) {
+    return InkWell(
+      onTap: onPressFunc,
+      child:
+          Padding(
+            padding: Dimen.regularParentPadding ,
+            child: Row(
+              children: [
+                Text(text, style: kHeader4TextStyle), 
+                const Spacer(),
+                Icon(iconData)
+                ]),
+          ),
+    );
+  }
+
+  void signOut(BuildContext context) async {
+    _auth.signOut();
+    prefs = await SharedPreferences.getInstance();
+    prefs.remove("user");
+    NavigationService.instance
+        .navigateToPageClear(path: NavigationConstants.WELCOME);
+  }
+
+  void deleteAccount(BuildContext context) {
+    Navigator.push(
+      context,
+      MaterialPageRoute(builder: (context) => const DeleteAccount()),
+    );
+  }
 }
 
 class ListItemWithSwitch extends StatefulWidget {
   final String text;
-  final String text2;
-  const ListItemWithSwitch(this.text, this.text2, {Key? key}) : super(key: key);
+  final String subText;
+  const ListItemWithSwitch(this.text, this.subText, {Key? key}) : super(key: key);
 
   @override
   State<ListItemWithSwitch> createState() => _ListItemWithSwitchState();
@@ -59,7 +104,7 @@ class _ListItemWithSwitchState extends State<ListItemWithSwitch> {
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
               Text(widget.text, style: kHeader4TextStyle),
-              Text(widget.text2, style: kbody2TextStyle),
+              Text(widget.subText, style: kbody2TextStyle),
             ],
           ),
           FlutterSwitch(
@@ -82,68 +127,6 @@ class _ListItemWithSwitchState extends State<ListItemWithSwitch> {
               })
         ],
       ),
-    );
-  }
-}
-
-class _ArrowItemState extends StatelessWidget {
-  final Authentication _auth = Authentication();
-  bool state = true;
-  String te1 = "";
-  late SharedPreferences prefs;
-  _ArrowItemState(t1) {
-    te1 = t1;
-  }
-  void blockList(BuildContext context) {
-    NavigationService.instance.navigateToPage(path: NavigationConstants.DELETE);
-    Navigator.push(
-      context,
-      MaterialPageRoute(builder: (context) => const DeleteAccount()),
-    );
-  }
-
-  void signOut(BuildContext context) async {
-    _auth.signOut();
-    prefs = await SharedPreferences.getInstance();
-    prefs.remove("user");
-    NavigationService.instance
-        .navigateToPageClear(path: NavigationConstants.WELCOME);
-  }
-
-  void deleteAccount(BuildContext context) {
-    Navigator.push(
-      context,
-      MaterialPageRoute(builder: (context) => const DeleteAccount()),
-    );
-  }
-
-  @override
-  Widget build(BuildContext context) {
-    return Padding(
-      padding: const EdgeInsets.all(8.0),
-      child: Row(mainAxisAlignment: MainAxisAlignment.spaceBetween,  children: [
-        TextButton( onPressed: () {
-            te1 == "Block List"
-                ? blockList(context)
-                : te1 == "Sign Out"
-                    ? signOut(context)
-                    : deleteAccount(context);
-          }, 
-          child: Row(
-            children: [
-              Text(te1, style: kHeader4TextStyle),
-              Icon((te1 == "Sign Out") ? Icons.logout_outlined : Icons.chevron_right)
-
-          ],))
-        
-        //IconButton(
-          //icon: te1 == "Sign Out"
-            //  ? const Icon(Icons.logout_outlined)
-        //    /7  : const Icon(Icons.chevron_right),
-          //iconSize: 30,
-          
-        //),
-      ]),
     );
   }
 }

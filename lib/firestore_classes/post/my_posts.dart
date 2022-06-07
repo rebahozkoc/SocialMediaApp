@@ -8,15 +8,13 @@ import 'package:freezed_annotation/freezed_annotation.dart';
 part 'my_posts.g.dart';
 part 'my_posts.freezed.dart';
 
-DateTime _createdAtFromJson(Timestamp timestamp) => timestamp.toDate();
-Timestamp _createdAtToJson(DateTime date) => Timestamp.fromDate(date);
 
 @Freezed()
 class MyPost with _$MyPost {
-  const factory MyPost({
+  factory MyPost({
     required String uid,
-    @JsonKey(name: 'created_at', fromJson: _createdAtFromJson, toJson: _createdAtToJson)
-        required DateTime createdAt,
+    @Default("2022-06-07-22:48")
+        String createdAt,
     @Default("empty")
         String postText,
     @Default([

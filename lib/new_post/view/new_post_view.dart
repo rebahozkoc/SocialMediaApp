@@ -14,6 +14,7 @@ import 'dart:io';
 import 'package:path/path.dart';
 import 'package:sabanci_talks/widgets/show_dialog.dart';
 import 'package:fluttertoast/fluttertoast.dart';
+import 'package:intl/intl.dart';
 
 class NewPostView extends StatefulWidget {
   const NewPostView({Key? key}) : super(key: key);
@@ -81,9 +82,12 @@ class _NewPostViewState extends State<NewPostView> {
         }
         debugPrint(description);
         debugPrint(fileNames.toString());
+        DateTime now = DateTime.now();
+        String formattedDate = DateFormat('yyyy-MM-dd-kk:mm').format(now);
+
         await f.addPost(
             uid: uid,
-            createdAt: DateTime.now(),
+            createdAt: formattedDate,
             urlArr: fileNames,
             postText: description);
         NavigationService.instance

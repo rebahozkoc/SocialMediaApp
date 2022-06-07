@@ -1,5 +1,6 @@
 import 'dart:async';
 
+import 'package:sabanci_talks/firestore_classes/comment/my_comment.dart';
 import 'package:sabanci_talks/firestore_classes/follower/follower.dart';
 import 'package:sabanci_talks/firestore_classes/user/my_user.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
@@ -8,11 +9,15 @@ import 'package:flutter/material.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 class Firestore {
-  dynamic myUser;
+  dynamic myData;
+
   late SharedPreferences prefs;
   String? uid;
   CollectionReference users = FirebaseFirestore.instance.collection('users');
   CollectionReference posts = FirebaseFirestore.instance.collection('posts');
+  CollectionReference comment =
+      FirebaseFirestore.instance.collection('comment');
+
   CollectionReference followerss =
       FirebaseFirestore.instance.collection('follower');
   Future<String?> decideUser() async {
@@ -23,7 +28,7 @@ class Firestore {
   Future<List<dynamic>?> getUser(uid) async {
     dynamic show;
     dynamic docId;
-    myUser = await users
+    myData = await users
         .where("uid", isEqualTo: uid)
         .get()
         .then((value) => value.docs.map((doc) {
@@ -36,9 +41,11 @@ class Firestore {
     return show;
   }
 
-  Future addUser (String uid, String fullName, String mail, ) async{
-
-  }
+  Future addUser(
+    String uid,
+    String fullName,
+    String mail,
+  ) async {}
 
   // Future<List<dynamic>> getUserByReference(mylist) {
   //   return mylist.map((item) async {
@@ -50,7 +57,7 @@ class Firestore {
 
   Future<dynamic> getFollowers(uid) async {
     dynamic follower;
-    myUser = await followerss.where("uid", isEqualTo: uid).get().then((value) {
+    myData = await followerss.where("uid", isEqualTo: uid).get().then((value) {
       value.docs.map((doc) {
         follower = Follower.fromJson(doc.data() as Map<String, dynamic>);
       }).toList();
@@ -62,30 +69,70 @@ class Firestore {
   Future<List<dynamic>?> getPost(uid) async {
     debugPrint("uid: ${uid}");
     dynamic posts2;
-    myUser = await posts.where("uid", isEqualTo: uid).get().then((value) {
-      
-          posts2 = value.docs.map((doc) {
-            return [
-              doc.id,
-              MyPost.fromJson(doc.data() as Map<String, dynamic>)
-            ];
-          }).toList();
-        });
+    myData = await posts.where("uid", isEqualTo: uid).get().then((value) {
+      posts2 = value.docs.map((doc) {
+        return [doc.id, MyPost.fromJson(doc.data() as Map<String, dynamic>)];
+      }).toList();
+    });
     //debugPrint("Post is ${posts2.toString()}");
     return posts2;
   }
 
   Future<MyPost?> getSpecificPost(documentId) async {
     dynamic posts2;
-    myUser = await posts.doc(documentId).get().then((value) =>
+    myData = await posts.doc(documentId).get().then((value) =>
         {posts2 = MyPost.fromJson(value.data() as Map<String, dynamic>)});
     debugPrint("Post is ${posts2.toString()}");
     return posts2;
   }
 
-  Future<void> addPost({required uid, required createdAt, required urlArr, required postText}) async {
-    myUser = await posts
-        .add({"uid": uid, "createdAt": createdAt, "postText": postText, "pictureUrlArr": urlArr, "likeArr": []});
+
+  Future<List<dynamic>?> getFeedPostsByLimit(int limit) async {
+    dynamic posts2;
+    myData = await posts.orderBy("createdAt", descending: true).limit(limit).get().then((value) {
+      posts2 = value.docs.map((doc) {
+        return [doc.id, MyPost.fromJson(doc.data() as Map<String, dynamic>)];
+      }).toList();
+    });
+    //debugPrint("Post is ${posts2.toString()}");
+    return posts2;
+  }
+
+
+  Future<void> addPost(
+      {required uid,
+      required createdAt,
+      required urlArr,
+      required postText}) async {
+    myData = await posts.add({
+      "uid": uid,
+      "createdAt": createdAt,
+      "postText": postText,
+      "pictureUrlArr": urlArr,
+      "likeArr": []
+    });
     return;
+  }
+
+  Future<void> addComment(
+      {required postid, required uid, required comment}) async {
+    myData =
+        await comment.add({"postid": postid, "uid": uid, "comment": comment});
+    return;
+  }
+
+    Future<List<dynamic>?> getAllComments(postid) async {
+    debugPrint("postid: ${postid}");
+    dynamic result;
+    myData = await comment.where("postid", isEqualTo: postid).get().then((value) {
+          result = value.docs.map((doc) {
+            return [
+              doc.id,
+              MyComment.fromJson(doc.data() as Map<String, dynamic>)
+            ];
+          }).toList();
+        });
+    //debugPrint("Post is ${posts2.toString()}");
+    return result;
   }
 }

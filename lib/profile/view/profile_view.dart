@@ -45,7 +45,7 @@ class _ProfileViewState extends State<ProfileView>
   Future<void> getUser() async {
     uid = await f.decideUser();
     show = await f.getUser(uid);
-    //posts = await f.getPost(uid);
+    posts = await f.getPost(uid);
     followers = await f.getFollowers(uid);
     //debugPrint("followers is now ${followers.toString()}");
     //debugPrint("show is ${show.toString()}");
