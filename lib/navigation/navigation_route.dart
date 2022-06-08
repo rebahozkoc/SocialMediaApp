@@ -8,6 +8,8 @@ import 'package:sabanci_talks/home/view/home_view.dart';
 import 'package:sabanci_talks/home/view/likes_view.dart';
 import 'package:sabanci_talks/navigation/navigation_animation.dart';
 import 'package:sabanci_talks/navigation/navigation_constants.dart';
+import 'package:sabanci_talks/post/view/post_view.dart';
+import 'package:sabanci_talks/post/view/singe_post_view.dart';
 import 'package:sabanci_talks/settings/view/settings_view.dart';
 import 'package:sabanci_talks/sign_in/view/forget_password_view.dart';
 import 'package:sabanci_talks/sign_in/view/reset_password_view.dart';
@@ -53,6 +55,10 @@ class NavigationRoute {
             NavigationConstants.CHAT);
       case NavigationConstants.CHAT_LIST:
         return cupertinoNavigate(ChatList(), NavigationConstants.CHAT_LIST);
+      case NavigationConstants.SINGLE_POST:
+        return cupertinoNavigate(
+            SinglePostView(post: args.arguments as PostHeroModel),
+            NavigationConstants.SINGLE_POST);
       default:
         return defaultNavigate(
             const BottomBarView(), NavigationConstants.DEFAULT);

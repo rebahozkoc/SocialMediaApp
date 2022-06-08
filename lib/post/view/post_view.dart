@@ -8,6 +8,22 @@ import 'package:sabanci_talks/post/model/post_model.dart';
 import 'package:sabanci_talks/util/colors.dart';
 import 'package:sabanci_talks/util/icon/entypo.dart';
 
+class PostHeroModel {
+  int? likeCount;
+  int? commentCount;
+  int? contentCount;
+  int? index;
+  List<String>? imgUrls;
+
+  PostHeroModel({
+    this.likeCount,
+    this.commentCount,
+    this.contentCount,
+    this.imgUrls,
+    this.index,
+  });
+}
+
 class PostView extends StatefulWidget {
   final PostModel postModel;
 
@@ -24,6 +40,21 @@ class _PostViewState extends State<PostView> {
     setState(() {
       isLiked = !isLiked;
     });
+  }
+
+  openPostHero({
+    required PostModel post,
+    required int index,
+  }) {
+    List<String> imgUrls = post.contents!.map((e) => e.source!).toList();
+    PostHeroModel postHero = PostHeroModel(
+      likeCount: post.likeCount,
+      commentCount: post.commentCount,
+      contentCount: post.contentCount,
+      imgUrls: imgUrls,
+      index: index,
+    );
+    NavigationService.instance.navigateToPage(path: NavigationConstants.SINGLE_POST, data: postHero);
   }
 
   changeSave() {
@@ -225,10 +256,10 @@ class _PostViewState extends State<PostView> {
             imageUrl: widget.postModel.contents![0].source!,
           ),
           onTap: () {
-            // viewModel.openPostHero(
-            //   post: widget.postModel,
-            //   index: 0,
-            // );
+            openPostHero(
+              post: widget.postModel,
+              index: 0,
+            );
           },
         ),
       );
@@ -249,10 +280,10 @@ class _PostViewState extends State<PostView> {
                 imageUrl: widget.postModel.contents![0].source!,
               ),
               onTap: () {
-                // viewModel.openPostHero(
-                //   post: widget.postModel,
-                //   index: 0,
-                // );
+                openPostHero(
+                  post: widget.postModel,
+                  index: 0,
+                );
               },
             ),
           ),
@@ -269,10 +300,10 @@ class _PostViewState extends State<PostView> {
                 imageUrl: widget.postModel.contents![1].source!,
               ),
               onTap: () {
-                // viewModel.openPostHero(
-                //   post: widget.postModel,
-                //   index: 1,
-                // );
+                openPostHero(
+                  post: widget.postModel,
+                  index: 1,
+                );
               },
             ),
           )
@@ -295,10 +326,10 @@ class _PostViewState extends State<PostView> {
                 imageUrl: widget.postModel.contents![0].source!,
               ),
               onTap: () {
-                // viewModel.openPostHero(
-                //   post: widget.postModel,
-                //   index: 0,
-                // );
+                openPostHero(
+                  post: widget.postModel,
+                  index: 0,
+                );
               },
             ),
           ),
@@ -320,10 +351,10 @@ class _PostViewState extends State<PostView> {
                       imageUrl: widget.postModel.contents![1].source!,
                     ),
                     onTap: () {
-                      // viewModel.openPostHero(
-                      //   post: widget.postModel,
-                      //   index: 1,
-                      // );
+                      openPostHero(
+                        post: widget.postModel,
+                        index: 1,
+                      );
                     },
                   ),
                 ),
@@ -339,10 +370,10 @@ class _PostViewState extends State<PostView> {
                       imageUrl: widget.postModel.contents![2].source!,
                     ),
                     onTap: () {
-                      // viewModel.openPostHero(
-                      //   post: widget.postModel,
-                      //   index: 2,
-                      // );
+                      openPostHero(
+                        post: widget.postModel,
+                        index: 2,
+                      );
                     },
                   ),
                 ),
@@ -372,10 +403,10 @@ class _PostViewState extends State<PostView> {
                       imageUrl: widget.postModel.contents![0].source!,
                     ),
                     onTap: () {
-                      // viewModel.openPostHero(
-                      //   post: widget.postModel,
-                      //   index: 0,
-                      // );
+                      openPostHero(
+                        post: widget.postModel,
+                        index: 0,
+                      );
                     },
                   ),
                 ),
@@ -391,10 +422,10 @@ class _PostViewState extends State<PostView> {
                       imageUrl: widget.postModel.contents![2].source!,
                     ),
                     onTap: () {
-                      // viewModel.openPostHero(
-                      //   post: widget.postModel,
-                      //   index: 2,
-                      // );
+                      openPostHero(
+                        post: widget.postModel,
+                        index: 2,
+                      );
                     },
                   ),
                 ),
@@ -418,10 +449,10 @@ class _PostViewState extends State<PostView> {
                       imageUrl: widget.postModel.contents![1].source!,
                     ),
                     onTap: () {
-                      // viewModel.openPostHero(
-                      //   post: widget.postModel,
-                      //   index: 1,
-                      // );
+                      openPostHero(
+                        post: widget.postModel,
+                        index: 1,
+                      );
                     },
                   ),
                 ),
@@ -437,10 +468,10 @@ class _PostViewState extends State<PostView> {
                       imageUrl: widget.postModel.contents![3].source!,
                     ),
                     onTap: () {
-                      // viewModel.openPostHero(
-                      //   post: widget.postModel,
-                      //   index: 3,
-                      // );
+                      openPostHero(
+                        post: widget.postModel,
+                        index: 3,
+                      );
                     },
                   ),
                 ),
