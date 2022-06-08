@@ -246,33 +246,33 @@ class _SignInState extends State<SignIn> {
                         ),
                       ),
                     ),
-                    Padding(
-                      padding: const EdgeInsets.all(16.0),
-                      child: OutlinedButton(
-                        onPressed: () async {
-                          dynamic user = await _auth.signInWithGoogle();
-                          if (user != null) {
-                            NavigationService.instance.navigateToPageClear(
-                                path: NavigationConstants.BOTTOM_BAR);
-                          }
-                          MyAnalytics.setLogEvent(email, pass);
-                          //print('Email: $email');
-                        },
-                        child: Padding(
-                          padding: const EdgeInsets.symmetric(vertical: 12.0),
-                          child: Text(
-                            'Sign In With Gmail',
-                            style: kButtonDarkTextStyle,
-                          ),
-                        ),
-                        style: OutlinedButton.styleFrom(
-                          shape: RoundedRectangleBorder(
-                              borderRadius: BorderRadius.circular(10.0)),
-                          backgroundColor: AppColors.primary,
-                        ),
-                      ),
-                    ),
                   ],
+                ),
+              ),
+              Padding(
+                padding: const EdgeInsets.all(16.0),
+                child: OutlinedButton(
+                  onPressed: () async {
+                    dynamic user = await _auth.signInWithGoogle();
+                    if (user != null) {
+                      NavigationService.instance.navigateToPageClear(
+                          path: NavigationConstants.BOTTOM_BAR);
+                    }
+                    MyAnalytics.setLogEvent(email, pass);
+                    //print('Email: $email');
+                  },
+                  child: Padding(
+                    padding: const EdgeInsets.symmetric(vertical: 12.0),
+                    child: Text(
+                      'Sign In With Gmail',
+                      style: kButtonDarkTextStyle,
+                    ),
+                  ),
+                  style: OutlinedButton.styleFrom(
+                    shape: RoundedRectangleBorder(
+                        borderRadius: BorderRadius.circular(10.0)),
+                    backgroundColor: AppColors.primary,
+                  ),
                 ),
               ),
               TextButton(
