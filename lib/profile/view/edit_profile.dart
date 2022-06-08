@@ -1,27 +1,51 @@
 import 'package:flutter/material.dart';
+import 'package:sabanci_talks/firestore_classes/firestore_main/firestore.dart';
+import 'package:sabanci_talks/navigation/navigation_constants.dart';
+import 'package:sabanci_talks/navigation/navigation_service.dart';
 import 'package:sabanci_talks/util/dimensions.dart';
 import 'package:cached_network_image/cached_network_image.dart';
-
+import 'dart:io' show Platform;
 import '../../util/styles.dart';
+import 'package:flutter/cupertino.dart';
 
 class EditProfileView extends StatelessWidget {
-  const EditProfileView({Key? key}) : super(key: key);
-
+  EditProfileView({
+    Key? key,
+    required this.docId,
+    required this.genderPre,
+    required this.fullNamePre,
+    required this.biographyPre,
+    required this.picturePre,
+  }) : super(key: key);
+  final String docId;
+  final String genderPre;
+  final String fullNamePre;
+  final String biographyPre;
+  final String picturePre;
+  final _formKey = GlobalKey<FormState>();
   static const String routeName = '/editProfile';
 
+  String fullName = '';
+  String biography = '';
+  String profilePicture = '';
+  String gender = '';
   @override
   Widget build(BuildContext context) {
     return Scaffold(
         appBar: AppBar(
-          title: Text('Edit Profile', style: kWhiteTextStyle,),
-                actions: [_saveButton()],
-
+          title: Text(
+            'Edit Profile',
+            style: kWhiteTextStyle,
+          ),
+          actions: [_saveButton(context)],
         ),
         body: _body());
   }
 
   Padding _body() => Padding(
-        padding: Dimen.regularParentPadding,
+      padding: Dimen.regularParentPadding,
+      child: Form(
+        key: _formKey,
         child: Column(
           mainAxisSize: MainAxisSize.max,
           mainAxisAlignment: MainAxisAlignment.start,
@@ -31,7 +55,7 @@ class EditProfileView extends StatelessWidget {
               mainAxisAlignment: MainAxisAlignment.start,
               mainAxisSize: MainAxisSize.max,
               children: [
-                _networkImage(),
+                _networkImage(picturePre),
                 _sized(),
                 _profileImageButton(),
               ],
@@ -48,17 +72,24 @@ class EditProfileView extends StatelessWidget {
             ),
           ],
         ),
-      );
+      ));
 
   Divider _divider() => const Divider(height: 30);
 
-  TextButton _saveButton() => TextButton(
-      onPressed: () => {},
-      child: Text(
-        "Save",
-        
-        style: kWhiteTextStyle
-      ));
+  TextButton _saveButton(BuildContext context) => TextButton(
+      onPressed: () async {
+        if (_formKey.currentState!.validate()) {
+          _formKey.currentState!.save();
+          Firestore f = Firestore();
+          await f.UpdateUser(docId, fullName, gender, biography, picturePre);
+          NavigationService.instance
+              .navigateToPageClear(path: NavigationConstants.BOTTOM_BAR);
+        } else {
+          debugPrint("Error is from ${fullName}");
+          //_showDialog('Form Error', 'Your form is invalid', context);
+        }
+      },
+      child: Text("Save", style: kWhiteTextStyle));
 
   TextButton _profileImageButton() => TextButton(
         onPressed: () {
@@ -75,9 +106,9 @@ class EditProfileView extends StatelessWidget {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
-        const Text("Full Name:"),
-        _padding(),
         const Text("Username:"),
+        _padding(),
+        const Text("Gender:"),
         _padding(),
         const Text("Biography:"),
       ],
@@ -93,7 +124,7 @@ class EditProfileView extends StatelessWidget {
         children: [
           _editContainer(widget: _name()),
           _divider(),
-          _editContainer(widget: _username()),
+          _editContainer(widget: _gender()),
           _divider(),
           _editContainer(widget: _bio()),
         ],
@@ -115,16 +146,43 @@ class EditProfileView extends StatelessWidget {
         autocorrect: false,
         maxLines: 1,
         style: const TextStyle(fontSize: 14),
+        initialValue: fullNamePre,
+        validator: (value) {
+          if (value != null) {
+            if (value.isEmpty) {
+              return 'Cannot leave password empty';
+            }
+            if (value.length < 3) {
+              debugPrint("Error is from length");
+              return 'Password too short';
+            }
+          }
+        },
+        onSaved: (value) {
+          debugPrint("Error is from onsaved");
+          fullName = value ?? '';
+        },
       );
 
-  TextFormField _username() => TextFormField(
+  TextFormField _gender() => TextFormField(
         cursorColor: const Color(0xFF5271FF),
         //controller: viewModel.usernameController,
         textInputAction: TextInputAction.next,
         onChanged: (value) {},
         autocorrect: false,
+        initialValue: genderPre,
         maxLines: 1,
         style: const TextStyle(fontSize: 14),
+        validator: (value) {
+          if (value != null) {
+            if (value.isEmpty) {
+              return 'Cannot leave gender empty';
+            }
+          }
+        },
+        onSaved: (value) {
+          gender = value ?? '';
+        },
       );
 
   TextFormField _bio() => TextFormField(
@@ -133,14 +191,24 @@ class EditProfileView extends StatelessWidget {
         textInputAction: TextInputAction.done,
         onChanged: (value) {},
         autocorrect: false,
+        initialValue: biographyPre,
         maxLines: 1,
         style: const TextStyle(fontSize: 14),
+        validator: (value) {
+          if (value != null) {
+            if (value.isEmpty) {
+              return 'Cannot leave biography empty';
+            }
+          }
+        },
+        onSaved: (value) {
+          biography = value ?? '';
+        },
       );
 
-
-    CachedNetworkImage _networkImage() {
+  CachedNetworkImage _networkImage(profileImage) {
     return CachedNetworkImage(
-      imageUrl: "https://media-exp1.licdn.com/dms/image/C4D03AQEHt0PHBly75g/profile-displayphoto-shrink_800_800/0/1577740655027?e=1658361600&v=beta&t=KaSKjXDM6aldHaLR1-otcpGBTV64J6oZstv3yTD6mRM",
+      imageUrl: profileImage,
       imageBuilder: (context, imageProvider) => Container(
         width: 64,
         height: 64,
@@ -152,4 +220,52 @@ class EditProfileView extends StatelessWidget {
     );
   }
 
+  Future<void> _showDialog(
+      String title, String message, BuildContext context) async {
+    bool isAndroid = Platform.isAndroid;
+    return showDialog(
+        context: context,
+        barrierDismissible: false,
+        builder: (BuildContext context) {
+          if (isAndroid) {
+            return AlertDialog(
+              title: Text(title),
+              content: SingleChildScrollView(
+                child: ListBody(
+                  children: [
+                    Text(message),
+                  ],
+                ),
+              ),
+              actions: [
+                TextButton(
+                  child: Text('OK'),
+                  onPressed: () {
+                    Navigator.of(context).pop();
+                  },
+                )
+              ],
+            );
+          } else {
+            return CupertinoAlertDialog(
+              title: Text(title, style: kBoldLabelStyle),
+              content: SingleChildScrollView(
+                child: ListBody(
+                  children: [
+                    Text(message, style: kLabelStyle),
+                  ],
+                ),
+              ),
+              actions: [
+                TextButton(
+                  child: Text('OK'),
+                  onPressed: () {
+                    Navigator.of(context).pop();
+                  },
+                )
+              ],
+            );
+          }
+        });
+  }
 }

@@ -79,7 +79,15 @@ class _ProfileViewState extends State<ProfileView>
             onPressed: () {
               pushNewScreenWithRouteSettings(
                 context,
-                screen: const EditProfileView(),
+                screen: EditProfileView(
+                  docId: show != null ? show[0] : "",
+                  genderPre: show != null ? show[1].gender : "",
+                  fullNamePre: show != null ? show[1].fullName : "",
+                  biographyPre: show != null ? show[1].biography : "",
+                  picturePre: show != null
+                      ? show[1].profilePicture
+                      : "https://picsum.photos/400",
+                ),
                 settings: const RouteSettings(name: EditProfileView.routeName),
                 withNavBar: true,
                 pageTransitionAnimation: PageTransitionAnimation.cupertino,
