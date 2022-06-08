@@ -12,25 +12,59 @@ class PersonHeaderWidget extends StatefulWidget {
 }
 
 class _PersonHeaderWidgetState extends State<PersonHeaderWidget> {
-  bool isFollowing = false;
-
+  dynamic isFollowing = false;
+  dynamic uid;
   dynamic user;
   Firestore f = Firestore();
+  dynamic isWaiting = false;
   Future<void> userList() async {
+    uid = await f.decideUser();
     user = await f.getUser(widget.element);
-    debugPrint("userrrr ${user.toString()}");
+    //debugPrint("userrrr ${user.toString()}");
+    isFollowing = await f.isFollowed(uid, widget.element);
   }
 
-  changeFollowing() {
+  changeFollowing() async {
+    dynamic isPriv = await f.isPrivate(widget.element);
+    if (isFollowing == true) {
+      await f.unFollow(widget.element, uid);
+      await f.deleteFollowing(uid, widget.element);
+    } else {
+      if (isPriv == true) {
+        await f.addRequest(widget.element, uid);
+        await f.addNotification(
+            uid: widget.element,
+            notification_type: "request",
+            uid_sub: uid,
+            isPost: false);
+      } else {
+        await f.addFollow(widget.element, uid);
+        await f.addFollowing(uid, widget.element);
+        await f.addNotification(
+            uid: widget.element,
+            notification_type: "follow",
+            uid_sub: uid,
+            isPost: false);
+      }
+    }
     setState(() {
-      isFollowing = !isFollowing;
+      if (isFollowing == true) {
+        //f.deleteFollowing(widget.element, uid);
+        isFollowing = false;
+      } else {
+        if (isPriv == true) {
+          isWaiting = true;
+        } else {
+          isFollowing == true;
+        }
+      }
     });
     userList();
   }
 
   @override
   Widget build(BuildContext context) {
-    debugPrint("helllooooo ${widget.element.toString()}");
+    //debugPrint("helllooooo ${isFollowing != null ? isFollowing == true : -1}");
     return FutureBuilder(
         future: userList(),
         builder: (context, snapshot) {
@@ -53,18 +87,32 @@ class _PersonHeaderWidgetState extends State<PersonHeaderWidget> {
                   alignment: Alignment.center,
                   decoration: BoxDecoration(
                     borderRadius: BorderRadius.circular(4),
-                    color:
-                        isFollowing ? AppColors.textColor : Colors.transparent,
+                    color: isFollowing == true
+                        ? AppColors.textColor
+                        : isWaiting == true
+                            ? AppColors.textColor
+                            : Colors.transparent,
                     border: Border.all(
-                      color:
-                          isFollowing ? Colors.transparent : AppColors.darkGrey,
+                      color: isFollowing == true
+                          ? Colors.transparent
+                          : isWaiting == true
+                              ? Colors.transparent
+                              : AppColors.darkGrey,
                       width: 1,
                     ),
                   ),
-                  child: Text(isFollowing ? 'Following' : 'Follow',
+                  child: Text(
+                      isFollowing == true
+                          ? 'Following'
+                          : isWaiting == true
+                              ? "Request Sent"
+                              : 'Follow',
                       style: TextStyle(
-                          color:
-                              isFollowing ? Colors.white : AppColors.textColor,
+                          color: isFollowing == true
+                              ? Colors.white
+                              : isWaiting == true
+                                  ? Colors.white
+                                  : AppColors.textColor,
                           fontWeight: FontWeight.w500)),
                 ),
               ));

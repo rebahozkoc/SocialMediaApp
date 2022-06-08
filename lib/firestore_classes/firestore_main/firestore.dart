@@ -1,13 +1,14 @@
 import 'dart:async';
-
 import 'package:sabanci_talks/firestore_classes/comment/my_comment.dart';
 import 'package:sabanci_talks/firestore_classes/follower/follower.dart';
 import 'package:sabanci_talks/firestore_classes/following/following.dart';
+import 'package:sabanci_talks/firestore_classes/notifications/notification.dart';
+
+import 'package:sabanci_talks/firestore_classes/requests/request.dart';
 import 'package:sabanci_talks/firestore_classes/user/my_user.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:sabanci_talks/firestore_classes/post/my_posts.dart';
 import 'package:flutter/material.dart';
-
 import 'package:shared_preferences/shared_preferences.dart';
 
 class Firestore {
@@ -27,6 +28,13 @@ class Firestore {
       FirebaseFirestore.instance.collection('follower');
   CollectionReference followingss =
       FirebaseFirestore.instance.collection('following');
+  CollectionReference requestss =
+      FirebaseFirestore.instance.collection('request');
+  CollectionReference notifications =
+      FirebaseFirestore.instance.collection('notifications');
+  ////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+  //        USER
+  ////////////////////////////////////////////////////////////////////////////////////////////////////////////////
   Future<String?> decideUser() async {
     prefs = await SharedPreferences.getInstance();
     return prefs.getString("user");
@@ -96,6 +104,9 @@ class Firestore {
         }
       ])
     });
+    createFollowers(uid);
+    createFollowing(uid);
+    createRequests(uid);
   }
 
   Future<void> UpdateUser(
@@ -124,18 +135,18 @@ class Firestore {
                 MyUser.fromJson(doc.data() as Map<String, dynamic>)
               ];
             }).toList());
-    //debugPrint("show is now ${show.toString()}");
     return show;
   }
+  //needs to be implemented
+  //change profile picture
+  //update privacy
+  //delete user
 
-  // Future<List<dynamic>> getUserByReference(mylist) {
-  //   return mylist.map((item) async {
-  //     return await item.get().then((value) {
-  //       return MyUser.fromJson(value.data() as Map<String, dynamic>);
-  //     });
-  //   }).toList();
-  // }
+  ////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+  //        follower-following-request
+  ////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
+  // Getter functions for follower-following-request
   Future<dynamic> getFollowers(uid) async {
     dynamic follower;
     myData = await followerss.where("uid", isEqualTo: uid).get().then((value) {
@@ -143,7 +154,6 @@ class Firestore {
         follower = Follower.fromJson(doc.data() as Map<String, dynamic>);
       }).toList();
     });
-
     return follower;
   }
 
@@ -154,21 +164,191 @@ class Firestore {
         following = Following.fromJson(doc.data() as Map<String, dynamic>);
       }).toList();
     });
-
     return following;
   }
 
-  Future<List<dynamic>?> getPost(uid) async {
-    debugPrint("uid: ${uid}");
-    dynamic posts2;
-    myData = await posts.where("uid", isEqualTo: uid).get().then((value) {
-      posts2 = value.docs.map((doc) {
-        return [doc.id, MyPost.fromJson(doc.data() as Map<String, dynamic>)];
+  Future<dynamic> getRequestss(uid) async {
+    dynamic request;
+    myData = await requestss.where("uid", isEqualTo: uid).get().then((value) {
+      value.docs.map((doc) {
+        request = Request.fromJson(doc.data() as Map<String, dynamic>);
+      }).toList();
+    });
+    return request;
+  }
+
+  // checker functions for follower-following-request
+  Future<bool> isPrivate(uid) async {
+    dynamic isPrivate;
+    await getUser(uid)
+        .then((value) => isPrivate = value != null ? value[1].private : true);
+    return isPrivate;
+  }
+
+  //Is uid followed by followuid?
+  Future<bool> isFollowed(uid, followUid) async {
+    dynamic result = false;
+    dynamic followingList = await getFollowings(uid).then((value) => {
+          for (int i = 0; i < value.followings.length; i++)
+            {
+              if (value.followings[i] == followUid) {result = true}
+            }
+        });
+
+    debugPrint("bunu da dene is ${result}");
+    return result;
+  }
+
+  Future<bool> isRequested(uid, followUid) async {
+    dynamic requestList = await getRequestss(uid);
+    for (int i = 0; i < requestList.requests.length; i++) {
+      if (await requestList.followings[i] == followUid) {
+        return true;
+      }
+    }
+    return false;
+  }
+
+  Future<bool> isReqandFollow(uid, followUid) async {
+    dynamic isreq = await isRequested(uid, followUid);
+    dynamic isfol = await isFollowed(uid, followUid);
+    return !(await isreq && await isfol);
+  }
+
+  //Find docId functions for follower-following-request
+  Future<dynamic> findFollowerDocId(uid) async {
+    dynamic docId;
+    myData = await followerss.where("uid", isEqualTo: uid).get().then((value) {
+      value.docs.map((doc) {
+        docId = doc.id;
+      }).toList();
+    });
+    return docId;
+  }
+
+  Future<dynamic> findFollowingDocId(uid) async {
+    dynamic docId;
+    myData = await followingss.where("uid", isEqualTo: uid).get().then((value) {
+      value.docs.map((doc) {
+        docId = doc.id;
+      }).toList();
+    });
+    return docId;
+  }
+
+  Future<dynamic> findRequestsDocId(uid) async {
+    dynamic docId;
+    myData = await requestss.where("uid", isEqualTo: uid).get().then((value) {
+      value.docs.map((doc) {
+        docId = doc.id;
+      }).toList();
+    });
+    return docId;
+  }
+
+  //Adder functions for follower-following-request
+
+  // add followUid to follower list of uid
+  Future<void> addFollow(uid, followUid) async {
+    dynamic docId = await findFollowerDocId(uid);
+    followerss.doc(docId).update({
+      "followers": FieldValue.arrayUnion([followUid])
+    });
+    return;
+  }
+
+  // add followingUid to following list of uid
+  Future<void> addFollowing(uid, followingUid) async {
+    dynamic docId = await findFollowingDocId(uid);
+    followingss.doc(docId).update({
+      "followings": FieldValue.arrayUnion([followingUid])
+    });
+    return;
+  }
+
+  // add requesUid to request list of uid
+  Future<void> addRequest(uid, requestId) async {
+    dynamic docId = await findRequestsDocId(uid);
+    requestss.doc(docId).update({
+      "requests": FieldValue.arrayUnion([requestId])
+    });
+    return;
+  }
+
+  //Delete functions for follower-following-request
+
+  //uid unfollowed by followuid
+  Future<void> unFollow(uid, followUid) async {
+    dynamic docId = await findFollowerDocId(uid);
+    followerss.doc(docId).update({
+      "followers": FieldValue.arrayRemove([followUid])
+    });
+    return;
+  }
+
+  // uid unfollowed followinguid
+  Future<void> deleteFollowing(uid, followingUid) async {
+    dynamic docId = await findFollowingDocId(uid);
+    followingss.doc(docId).update({
+      "followings": FieldValue.arrayRemove([followingUid])
+    });
+    return;
+  }
+
+  // uid delete requestId
+  Future<void> deleteRequest(uid, requestId) async {
+    dynamic docId = await findRequestsDocId(uid);
+    requestss.doc(docId).update({
+      "requests": FieldValue.arrayRemove([requestId])
+    });
+    return;
+  }
+
+  // Create functions for follower-following-request
+
+  Future<void> createFollowers(uid) async {
+    myData = await followerss.add({"uid": uid, "followers": []});
+  }
+
+  Future<void> createFollowing(uid) async {
+    myData = await followingss.add({"uid": uid, "followings": []});
+  }
+
+  Future<void> createRequests(uid) async {
+    myData = await requestss.add({"uid": uid, "requests": []});
+  }
+
+  ////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+  //        Notifications
+  ////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+  Future<List<dynamic>?> getNotification(uid) async {
+    dynamic myNotifications;
+    myData =
+        await notifications.where("uid", isEqualTo: uid).get().then((value) {
+      myNotifications = value.docs.map((doc) {
+        return Notifications.fromJson(doc.data() as Map<String, dynamic>);
       }).toList();
     });
     //debugPrint("Post is ${posts2.toString()}");
-    return posts2;
+    return myNotifications;
   }
+
+  Future<void> addNotification(
+      {required uid,
+      required notification_type,
+      required uid_sub,
+      required isPost}) async {
+    myData = await notifications.add({
+      "uid": uid,
+      "notification_type": notification_type,
+      "uid_sub": uid_sub,
+      "isPost": isPost,
+    });
+    return;
+  }
+  ////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+  //        POSTS
+  ////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
   Future<MyPost?> getSpecificPost(documentId) async {
     dynamic posts2;
@@ -185,6 +365,18 @@ class Firestore {
         .limit(limit)
         .get()
         .then((value) {
+      posts2 = value.docs.map((doc) {
+        return [doc.id, MyPost.fromJson(doc.data() as Map<String, dynamic>)];
+      }).toList();
+    });
+    //debugPrint("Post is ${posts2.toString()}");
+    return posts2;
+  }
+
+  Future<List<dynamic>?> getPost(uid) async {
+    debugPrint("uid: ${uid}");
+    dynamic posts2;
+    myData = await posts.where("uid", isEqualTo: uid).get().then((value) {
       posts2 = value.docs.map((doc) {
         return [doc.id, MyPost.fromJson(doc.data() as Map<String, dynamic>)];
       }).toList();

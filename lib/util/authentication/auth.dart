@@ -72,6 +72,8 @@ class Authentication {
 
     UserCredential uc = await _auth.signInWithCredential(credential);
     prefs.setString("user", (uc.user != null) ? uc.user!.uid : "");
+
+    // need to check this
     return uc.user;
   }
 }
