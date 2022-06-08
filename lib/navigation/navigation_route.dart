@@ -1,12 +1,13 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:sabanci_talks/bottom_bar/view/bottom_bar_view.dart';
+import 'package:sabanci_talks/chat/chat_list_view.dart';
+import 'package:sabanci_talks/chat/chat_view.dart';
 import 'package:sabanci_talks/home/view/comment_view.dart';
 import 'package:sabanci_talks/home/view/home_view.dart';
 import 'package:sabanci_talks/home/view/likes_view.dart';
 import 'package:sabanci_talks/navigation/navigation_animation.dart';
 import 'package:sabanci_talks/navigation/navigation_constants.dart';
-import 'package:sabanci_talks/post/view/single_post.dart';
 import 'package:sabanci_talks/settings/view/settings_view.dart';
 import 'package:sabanci_talks/sign_in/view/forget_password_view.dart';
 import 'package:sabanci_talks/sign_in/view/reset_password_view.dart';
@@ -47,6 +48,11 @@ class NavigationRoute {
       case NavigationConstants.COMMENTS:
         return cupertinoNavigate(
             const Comments(), NavigationConstants.COMMENTS);
+      case NavigationConstants.CHAT:
+        return cupertinoNavigate(ChatView(chatId: args.arguments as String),
+            NavigationConstants.CHAT);
+      case NavigationConstants.CHAT_LIST:
+        return cupertinoNavigate(ChatList(), NavigationConstants.CHAT_LIST);
       default:
         return defaultNavigate(
             const BottomBarView(), NavigationConstants.DEFAULT);

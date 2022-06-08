@@ -55,6 +55,7 @@ dependencies:
   cloud_firestore: any
   firebase_crashlytics: ^2.8.1
   fluttertoast: ^8.0.9
+  flutter_chat_ui: ^1.5.8
 
 dev_dependencies:
   flutter_test:

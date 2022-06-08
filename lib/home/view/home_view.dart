@@ -1,10 +1,9 @@
 import 'package:flutter/material.dart';
+import 'package:sabanci_talks/navigation/navigation_constants.dart';
+import 'package:sabanci_talks/navigation/navigation_service.dart';
 import 'package:sabanci_talks/post/model/post_model.dart';
 import 'package:sabanci_talks/post/view/post_view.dart';
 import 'package:sabanci_talks/util/analytics.dart';
-import 'package:sabanci_talks/util/colors.dart';
-import 'package:firebase_analytics/firebase_analytics.dart';
-import 'package:firebase_analytics/observer.dart';
 
 class HomeView extends StatefulWidget {
   const HomeView({Key? key}) : super(key: key);
@@ -31,7 +30,8 @@ class _HomeViewState extends State<HomeView> {
         actions: <Widget>[
           IconButton(
             icon: const Icon(Icons.chat, color: Colors.white),
-            onPressed: () {},
+            onPressed: () => NavigationService.instance
+                .navigateToPage(path: NavigationConstants.CHAT_LIST),
           ),
         ],
       );

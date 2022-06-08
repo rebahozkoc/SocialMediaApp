@@ -12,4 +12,6 @@ class NavigationConstants {
   static const RESET_PASS = '/reset_pass';
   static const LIKES = '/likes';
   static const COMMENTS = '/comments';
+  static const CHAT = '/chat';
+  static const CHAT_LIST = '/chat_list';
 }

@@ -17,6 +17,9 @@ class Firestore {
   String? uid;
   CollectionReference users = FirebaseFirestore.instance.collection('users');
   CollectionReference posts = FirebaseFirestore.instance.collection('posts');
+  CollectionReference chat = FirebaseFirestore.instance.collection('chat');
+  CollectionReference chatList =
+      FirebaseFirestore.instance.collection('chatList');
   CollectionReference comment =
       FirebaseFirestore.instance.collection('comment');
 
@@ -40,7 +43,58 @@ class Firestore {
           "https://www.innovaxn.eu/wp-content/uploads/blank-profile-picture-973460_1280.png",
       "postCount": 0,
       "following": 0,
-      "follower": 0
+      "follower": 0,
+      "chatId": await createChatList(uid)
+    });
+  }
+
+  Future<String> createChatList(uid) async {
+    DocumentReference document = await chatList.add({
+      "uid": uid,
+      "chatList": [],
+    });
+    return document.id;
+  }
+
+  Future<List> getChatList(uid) async {
+    QuerySnapshot querySnapshot =
+        await chatList.where("uid", isEqualTo: uid).limit(1).get();
+    return (querySnapshot.docs.first.data()! as Map)["chatList"];
+  }
+
+  Future<void> createChat(uid, otherUid) async {
+    DocumentReference chatDoc = await chat.add({
+      "messages": [],
+    });
+
+    var chatListID = await chatList
+        .where("uid", isEqualTo: uid)
+        .limit(1)
+        .get()
+        .then((value) => value.docs.first.id);
+
+    chatList.doc(chatListID).update({
+      "chatList": FieldValue.arrayUnion([
+        {
+          "chatId": chatDoc.id,
+          "uid": otherUid,
+        }
+      ])
+    });
+
+    chatListID = await chatList
+        .where("uid", isEqualTo: otherUid)
+        .limit(1)
+        .get()
+        .then((value) => value.docs.first.id);
+
+    chatList.doc(chatListID).update({
+      "chatList": FieldValue.arrayUnion([
+        {
+          "chatId": chatDoc.id,
+          "uid": uid,
+        }
+      ])
     });
   }
 
