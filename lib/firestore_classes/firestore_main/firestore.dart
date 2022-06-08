@@ -27,7 +27,8 @@ class Firestore {
       FirebaseFirestore.instance.collection('following');
   CollectionReference requestss =
       FirebaseFirestore.instance.collection('request');
-
+  CollectionReference notifications =
+      FirebaseFirestore.instance.collection('notifications');
   ////////////////////////////////////////////////////////////////////////////////////////////////////////////////
   //        USER
   ////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -132,13 +133,16 @@ class Firestore {
 
   //Is uid followed by followuid?
   Future<bool> isFollowed(uid, followUid) async {
-    dynamic followingList = await getFollowings(uid);
-    for (int i = 0; i < followingList.followings.length; i++) {
-      if (await followingList.followings[i] == followUid) {
-        return true;
-      }
-    }
-    return false;
+    dynamic result = false;
+    dynamic followingList = await getFollowings(uid).then((value) => {
+          for (int i = 0; i < value.followings.length; i++)
+            {
+              if (value.followings[i] == followUid) {result = true}
+            }
+        });
+
+    debugPrint("bunu da dene is ${result}");
+    return result;
   }
 
   Future<bool> isRequested(uid, followUid) async {
@@ -203,7 +207,7 @@ class Firestore {
   Future<void> addFollowing(uid, followingUid) async {
     dynamic docId = await findFollowingDocId(uid);
     followingss.doc(docId).update({
-      "followers": FieldValue.arrayUnion([followingUid])
+      "followings": FieldValue.arrayUnion([followingUid])
     });
     return;
   }
@@ -212,7 +216,7 @@ class Firestore {
   Future<void> addRequest(uid, requestId) async {
     dynamic docId = await findRequestsDocId(uid);
     requestss.doc(docId).update({
-      "followers": FieldValue.arrayUnion([requestId])
+      "requests": FieldValue.arrayUnion([requestId])
     });
     return;
   }
@@ -232,7 +236,7 @@ class Firestore {
   Future<void> deleteFollowing(uid, followingUid) async {
     dynamic docId = await findFollowingDocId(uid);
     followingss.doc(docId).update({
-      "followers": FieldValue.arrayRemove([followingUid])
+      "followings": FieldValue.arrayRemove([followingUid])
     });
     return;
   }
@@ -241,7 +245,7 @@ class Firestore {
   Future<void> deleteRequest(uid, requestId) async {
     dynamic docId = await findRequestsDocId(uid);
     requestss.doc(docId).update({
-      "followers": FieldValue.arrayRemove([requestId])
+      "requests": FieldValue.arrayRemove([requestId])
     });
     return;
   }
@@ -265,7 +269,8 @@ class Firestore {
   ////////////////////////////////////////////////////////////////////////////////////////////////////////////////
   Future<List<dynamic>?> getNotification(uid) async {
     dynamic myNotifications;
-    myData = await posts.where("uid", isEqualTo: uid).get().then((value) {
+    myData =
+        await notifications.where("uid", isEqualTo: uid).get().then((value) {
       myNotifications = value.docs.map((doc) {
         return Notifications.fromJson(doc.data() as Map<String, dynamic>);
       }).toList();
@@ -279,7 +284,7 @@ class Firestore {
       required notification_type,
       required uid_sub,
       required isPost}) async {
-    myData = await posts.add({
+    myData = await notifications.add({
       "uid": uid,
       "notification_type": notification_type,
       "uid_sub": uid_sub,
