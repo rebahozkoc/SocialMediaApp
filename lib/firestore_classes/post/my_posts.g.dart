@@ -17,7 +17,7 @@ _$_MyPost _$$_MyPostFromJson(Map<String, dynamic> json) => _$_MyPost(
       likeArr: (json['likeArr'] as List<dynamic>?)
               ?.map((e) => e as String)
               .toList() ??
-          const [""],
+          const [],
     );
 
 Map<String, dynamic> _$$_MyPostToJson(_$_MyPost instance) => <String, dynamic>{

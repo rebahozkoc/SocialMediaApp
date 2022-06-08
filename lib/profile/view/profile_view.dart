@@ -52,10 +52,10 @@ class _ProfileViewState extends State<ProfileView>
     followings = await f.getFollowings(uid);
     debugPrint("uid is ${uid}");
     miniPostList = posts != null
-        ? posts.where((i) => i[1].pictureUrl.length != 0).toList()
+        ? posts.where((i) => i[1].pictureUrlArr.length != 0).toList()
         : [];
     miniTextList = posts != null
-        ? posts.where((i) => i[1].pictureUrl.length == 0).toList()
+        ? posts.where((i) => i[1].pictureUrlArr.length == 0).toList()
         : [];
     //debugPrint("followers is now ${followers.toString()}");
     //debugPrint("show is ${show.toString()}");
@@ -213,7 +213,7 @@ class _ProfileViewState extends State<ProfileView>
                             itemBuilder: (context, index) {
                               return InkWell(
                                   child: MiniPost(miniPostList != null
-                                      ? miniPostList[index][1].pictureUrl[0]
+                                      ? miniPostList[index][1].pictureUrlArr[0]
                                       : "https://picsum.photos/600"),
                                   onTap: () => {
                                         Navigator.push(
@@ -224,7 +224,8 @@ class _ProfileViewState extends State<ProfileView>
                                                       show[1].profilePicture,
                                                   docId: posts[index][0],
                                                   name: show[1].fullName,
-                                                  date: posts[index][1].date)),
+                                                  date: posts[index][1]
+                                                      .createdAt)),
                                         )
                                       });
                             },
@@ -455,8 +456,8 @@ class _ProfileViewState extends State<ProfileView>
                     pageTransitionAnimation: PageTransitionAnimation.cupertino,
                   );
                 },
-                child: ProfileCount(
-                    "Following", show != null ? show[1].following : 0)))
+                child: ProfileCount("Following",
+                    followings != null ? followings.followings.length : 0)))
       ],
     );
   }

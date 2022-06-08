@@ -8,7 +8,6 @@ import 'package:freezed_annotation/freezed_annotation.dart';
 part 'my_posts.g.dart';
 part 'my_posts.freezed.dart';
 
-
 @Freezed()
 class MyPost with _$MyPost {
   factory MyPost({
@@ -21,11 +20,8 @@ class MyPost with _$MyPost {
       "https://picsum.photos/600",
     ])
         List<String> pictureUrlArr,
-    @Default([
-      ""
-    ]) 
+    @Default([])
         List<String> likeArr,
-       
   }) = _MyPost;
 
   factory MyPost.fromJson(Map<String, dynamic> json) => _$MyPostFromJson(json);

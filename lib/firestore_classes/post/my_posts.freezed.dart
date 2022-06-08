@@ -147,7 +147,7 @@ class _$_MyPost implements _MyPost {
       this.createdAt = "2022-06-07-22:48",
       this.postText = "empty",
       final List<String> pictureUrlArr = const ["https://picsum.photos/600"],
-      final List<String> likeArr = const [""]})
+      final List<String> likeArr = const []})
       : _pictureUrlArr = pictureUrlArr,
         _likeArr = likeArr;
 
