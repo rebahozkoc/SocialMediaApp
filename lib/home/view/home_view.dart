@@ -1,4 +1,6 @@
 import 'package:flutter/material.dart';
+import 'package:sabanci_talks/firestore_classes/firestore_main/firestore.dart';
+import 'package:sabanci_talks/firestore_classes/post/my_posts.dart';
 import 'package:sabanci_talks/navigation/navigation_constants.dart';
 import 'package:sabanci_talks/navigation/navigation_service.dart';
 import 'package:sabanci_talks/post/model/post_model.dart';
@@ -15,13 +17,70 @@ class HomeView extends StatefulWidget {
 }
 
 class _HomeViewState extends State<HomeView> {
+  List<PostView> posts = [];
+  List<dynamic> postsJSONs = [];
+  Future<void> getMyPost() async {
+    Firestore f = Firestore();
+    postsJSONs = await f.getFeedPostsByLimit(5);
+    debugPrint("postsJSONs: ${postsJSONs}");
+    for (dynamic post in postsJSONs) {
+      posts.add(PostView(
+        postModel: PostModel(
+          name: "Post testi",
+          date: post[1].createdAt,
+          profileImg:
+              "https://pbs.twimg.com/profile_images/1276567411240681472/8KdXHFdK_400x400.jpg",
+          likeCount: post[1].likeArr.length,
+          commentCount: 58,
+          contentCount: post[1].pictureUrlArr.length,
+          postText: post[1].postText,
+           contents: post[1].pictureUrlArr.map<Content>((url) {
+            return Content(
+              type: "image",
+              contentId: url,
+              source: url,
+            );
+          }).toList()    
+         
+          
+          
+          
+        ),
+      ));
+    }
+
+    debugPrint("posts: ${posts.length}");
+    for (int i = 0; i < posts.length; i++) {
+      debugPrint("posts[$i]: ${posts[i].postModel.name}");
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
     MyAnalytics.setCurrentScreen("Home Page");
-    return Scaffold(
-      appBar: _appBar(),
-      body: _body(),
-    );
+    return FutureBuilder(
+        future: getMyPost(),
+        builder: (context, snapshot) {
+          switch (snapshot.connectionState) {
+            case ConnectionState.waiting:
+              return Scaffold(
+                  body: Container(
+                      alignment: Alignment.center,
+                      child: const Text("Home page is loading")));
+            default:
+              return Scaffold(
+                appBar: _appBar(),
+                body: SizedBox(
+                  width: double.infinity,
+                  child: ListView(
+                    primary: true,
+                    shrinkWrap: true,
+                    children: posts,
+                  ),
+                ),
+              );
+          }
+        });
   }
 
   AppBar _appBar() => AppBar(
@@ -34,159 +93,5 @@ class _HomeViewState extends State<HomeView> {
                 .navigateToPage(path: NavigationConstants.CHAT_LIST),
           ),
         ],
-      );
-
-  SizedBox _body() => SizedBox(
-        width: double.infinity,
-        child: ListView(
-          primary: true,
-          shrinkWrap: true,
-          children: [
-            PostView(
-              postModel: PostModel(
-                name: "Charles Leclerc",
-                date: "2022-03-22T20:18:04.000Z",
-                profileImg:
-                    "https://pbs.twimg.com/profile_images/1276567411240681472/8KdXHFdK_400x400.jpg",
-                likeCount: 58100000,
-                commentCount: 58,
-                contentCount: 1,
-                postText:
-                    "Red Bull’un dünkü arızalarla ilgili ilk tahmini yakıt pompasıydı.\n\nFarklı bir sorun olabileceğini düşünüyorum. Yarınki yazımda..",
-                contents: [
-                  Content(
-                      type: "image",
-                      contentId: "text",
-                      source:
-                          "https://pbs.twimg.com/media/FOZ58QxXEAYvEsF?format=jpg&name=medium"),
-                ],
-              ),
-            ),
-            PostView(
-              postModel: PostModel(
-                name: "Charles Leclerc",
-                date: "2022-03-22T20:18:04.000Z",
-                profileImg:
-                    "https://pbs.twimg.com/profile_images/1276567411240681472/8KdXHFdK_400x400.jpg",
-                likeCount: 58100000,
-                commentCount: 58,
-                contentCount: 4,
-                postText:
-                    "Red Bull’un dünkü arızalarla ilgili ilk tahmini yakıt pompasıydı.\n\nFarklı bir sorun olabileceğini düşünüyorum. Yarınki yazımda..",
-                contents: [
-                  Content(
-                      type: "image",
-                      contentId: "text",
-                      source:
-                          "https://pbs.twimg.com/media/FOZ58QxXEAYvEsF?format=jpg&name=medium"),
-                  Content(
-                      type: "image",
-                      contentId: "text",
-                      source:
-                          "https://pbs.twimg.com/media/FOZ58QxXEAYvEsF?format=jpg&name=medium"),
-                  Content(
-                      type: "image",
-                      contentId: "text",
-                      source:
-                          "https://pbs.twimg.com/media/FOZ58QxXEAYvEsF?format=jpg&name=medium"),
-                  Content(
-                      type: "image",
-                      contentId: "text",
-                      source:
-                          "https://pbs.twimg.com/media/FOZ58QxXEAYvEsF?format=jpg&name=medium"),
-                ],
-              ),
-            ),
-            PostView(
-              postModel: PostModel(
-                name: "Charles Leclerc",
-                date: "2022-03-21T20:18:04.000Z",
-                profileImg:
-                    "https://pbs.twimg.com/profile_images/1276567411240681472/8KdXHFdK_400x400.jpg",
-                likeCount: 1217,
-                commentCount: 32,
-                contentCount: 0,
-                postText:
-                    "When you thought you already had all the bad luck of the world in Monaco and you lose the brakes into rascasse with one of the most iconic historical Ferrari Formula 1 car. 🙃🔫",
-                contents: [],
-              ),
-            ),
-            PostView(
-              postModel: PostModel(
-                name: "Charles Leclerc",
-                date: "2022-03-21T20:18:04.000Z",
-                profileImg:
-                    "https://pbs.twimg.com/profile_images/1276567411240681472/8KdXHFdK_400x400.jpg",
-                likeCount: 44567,
-                commentCount: 11518,
-                contentCount: 2,
-                postText: "10 minutes to go.",
-                contents: [
-                  Content(
-                      type: "image",
-                      contentId: "text",
-                      source:
-                          "https://pbs.twimg.com/media/FOTQrLJXMAEYEDn?format=jpg&name=large"),
-                  Content(
-                      type: "image",
-                      contentId: "text",
-                      source:
-                          "https://pbs.twimg.com/media/FOTQrLKXIAMKbDB?format=jpg&name=large")
-                ],
-              ),
-            ),
-            PostView(
-              postModel: PostModel(
-                name: "Charles Leclerc",
-                date: "2021-03-20T20:18:04.000Z",
-                profileImg:
-                    "https://pbs.twimg.com/profile_images/1276567411240681472/8KdXHFdK_400x400.jpg",
-                likeCount: 111111111,
-                commentCount: 583453,
-                contentCount: 1,
-                postText: "This means so much...",
-                contents: [
-                  Content(
-                      type: "image",
-                      contentId: "text",
-                      source:
-                          "https://pbs.twimg.com/media/FOYNTX9XwAMy_Wu?format=jpg&name=large"),
-                ],
-              ),
-            ),
-            PostView(
-              postModel: PostModel(
-                name: "Charles Leclerc",
-                date: "2021-03-20T20:18:04.000Z",
-                profileImg:
-                    "https://pbs.twimg.com/profile_images/1276567411240681472/8KdXHFdK_400x400.jpg",
-                likeCount: 111111111,
-                commentCount: 583453,
-                contentCount: 3,
-                postText: "This means so much...",
-                contents: [
-                  Content(
-                      type: "image",
-                      contentId: "text",
-                      source:
-                          "https://pbs.twimg.com/media/FOYNTX9XwAMy_Wu?format=jpg&name=large"),
-                  Content(
-                      type: "image",
-                      contentId: "text",
-                      source:
-                          "https://pbs.twimg.com/media/FOYNTX9XwAMy_Wu?format=jpg&name=large"),
-                  Content(
-                      type: "image",
-                      contentId: "text",
-                      source:
-                          "https://pbs.twimg.com/media/FOYNTX9XwAMy_Wu?format=jpg&name=large"),
-                ],
-              ),
-            ),
-            const SizedBox(
-              height: 12,
-            )
-          ],
-        ),
       );
 }

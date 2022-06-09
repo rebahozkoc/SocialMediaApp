@@ -81,7 +81,7 @@ class EditProfileView extends StatelessWidget {
         if (_formKey.currentState!.validate()) {
           _formKey.currentState!.save();
           Firestore f = Firestore();
-          await f.UpdateUser(docId, fullName, gender, biography, picturePre);
+          await f.updateUser(docId, fullName, gender, biography, picturePre);
           NavigationService.instance
               .navigateToPageClear(path: NavigationConstants.BOTTOM_BAR);
         } else {

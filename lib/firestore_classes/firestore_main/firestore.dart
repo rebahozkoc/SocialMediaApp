@@ -109,7 +109,7 @@ class Firestore {
     createRequests(uid);
   }
 
-  Future<void> UpdateUser(
+  Future<void> updateUser(
       docId, fullName, gender, biography, profilePicture) async {
     await users
         .doc(docId)
@@ -358,7 +358,7 @@ class Firestore {
     return posts2;
   }
 
-  Future<List<dynamic>?> getFeedPostsByLimit(int limit) async {
+  Future<List<dynamic>> getFeedPostsByLimit(int limit) async {
     dynamic posts2;
     myData = await posts
         .orderBy("createdAt", descending: true)
