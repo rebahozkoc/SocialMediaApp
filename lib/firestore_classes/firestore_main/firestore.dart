@@ -70,40 +70,43 @@ class Firestore {
     return (querySnapshot.docs.first.data()! as Map)["chatList"];
   }
 
-  Future<void> createChat(uid, otherUid) async {
-    DocumentReference chatDoc = await chat.add({
-      "messages": [],
-    });
+  Future<String> createChat(uid, otherUid) async {
+    var data = await chatList.where("uid", isEqualTo: uid).limit(1).get();
 
-    var chatListID = await chatList
-        .where("uid", isEqualTo: uid)
-        .limit(1)
-        .get()
-        .then((value) => value.docs.first.id);
+    assert(data.docs.isNotEmpty);
 
-    chatList.doc(chatListID).update({
-      "chatList": FieldValue.arrayUnion([
-        {
-          "chatId": chatDoc.id,
-          "uid": otherUid,
-        }
-      ])
-    });
+    if (!((data.docs.first.data() as Map)["chatList"]
+        .map((e) => e["uid"])
+        .toList().contains(otherUid))) {
+      DocumentReference chatDoc = await chat.add({
+        "messages": [],
+      });
 
-    chatListID = await chatList
-        .where("uid", isEqualTo: otherUid)
-        .limit(1)
-        .get()
-        .then((value) => value.docs.first.id);
+      chatList.doc(data.docs.first.id).update({
+        "chatList": FieldValue.arrayUnion([
+          {
+            "chatId": chatDoc.id,
+            "uid": otherUid,
+          }
+        ])
+      });
 
-    chatList.doc(chatListID).update({
-      "chatList": FieldValue.arrayUnion([
-        {
-          "chatId": chatDoc.id,
-          "uid": uid,
-        }
-      ])
-    });
+      data = await chatList.where("uid", isEqualTo: otherUid).limit(1).get();
+
+      chatList.doc(data.docs.first.id).update({
+        "chatList": FieldValue.arrayUnion([
+          {
+            "chatId": chatDoc.id,
+            "uid": uid,
+          }
+        ])
+      });
+
+      return chatDoc.id;
+    } else {
+      return (data.docs.first["chatList"] as List)
+          .firstWhere((element) => element["uid"] == otherUid)["chatId"];
+    }
   }
 
   Future<void> updateUser(

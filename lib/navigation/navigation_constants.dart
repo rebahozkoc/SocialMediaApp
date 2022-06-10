@@ -14,4 +14,5 @@ class NavigationConstants {
   static const COMMENTS = '/comments';
   static const CHAT = '/chat';
   static const CHAT_LIST = '/chat_list';
+  static const NEW_CHAT = '/new_chat';
 }
