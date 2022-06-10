@@ -404,7 +404,10 @@ class Firestore {
       dynamic followings = await getFollowings(myUid);
       // get the followings list of uids
       if (followings != null) {
+        
         List<dynamic> followingsUids = followings.followings;
+        if (followingsUids.isNotEmpty) {
+          // get the posts of the followings
         debugPrint("followings $followings");
         myData = await posts
             .where("uid", whereIn: followingsUids)
@@ -421,6 +424,12 @@ class Firestore {
         });
         //debugPrint("Post is ${posts2.toString()}");
         return postsJSON;
+        }else{
+        List<dynamic> emptyList = [];
+        return emptyList;
+
+        }
+
       } else {
         List<dynamic> emptyList = [];
         return emptyList;

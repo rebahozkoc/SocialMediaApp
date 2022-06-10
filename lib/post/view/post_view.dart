@@ -40,9 +40,7 @@ class _PostViewState extends State<PostView> {
     setState(() {
       widget.postModel.isLiked = !widget.postModel.isLiked!;
       // If I liked the post before, remove my uid from the likeArr else add my uid to the likeArr
-      if (widget.postModel.isLiked!){
-        
-      }
+      if (widget.postModel.isLiked!) {}
     });
   }
 
@@ -150,16 +148,20 @@ class _PostViewState extends State<PostView> {
 
   Padding _buttons() {
     return Padding(
-      padding: const EdgeInsets.fromLTRB(62, 0, 0, 0),
-      child: Row(mainAxisAlignment: MainAxisAlignment.spaceBetween, children: [
+      padding: const EdgeInsets.fromLTRB(0, 0, 0, 0),
+      child: Row(mainAxisAlignment: MainAxisAlignment.spaceEvenly, children: [
         Row(
           children: [
             IconButton(
               splashColor: Colors.transparent,
               icon: Icon(
-                widget.postModel.isLiked! ? CupertinoIcons.heart_fill : CupertinoIcons.heart,
+                widget.postModel.isLiked!
+                    ? CupertinoIcons.heart_fill
+                    : CupertinoIcons.heart,
               ),
-              color: widget.postModel.isLiked! ? AppColors.secondary : AppColors.darkGrey,
+              color: widget.postModel.isLiked!
+                  ? AppColors.secondary
+                  : AppColors.darkGrey,
               iconSize: 18,
               onPressed: () => changeLike(),
             ),
@@ -184,22 +186,6 @@ class _PostViewState extends State<PostView> {
                   .navigateToPage(path: NavigationConstants.COMMENTS),
             ),
             _integrationCount(convertCount(widget.postModel.commentCount!))
-          ],
-        ),
-        Row(
-          children: [
-            IconButton(
-              padding: const EdgeInsets.fromLTRB(16, 16, 8, 16),
-              splashColor: Colors.transparent,
-              constraints: const BoxConstraints(),
-              icon: Icon(isSaved
-                  ? CupertinoIcons.bookmark_fill
-                  : CupertinoIcons.bookmark),
-              color: AppColors.darkGrey,
-              iconSize: 18,
-              onPressed: () => changeSave(),
-            ),
-            _integrationCount("")
           ],
         ),
       ]),
