@@ -455,7 +455,11 @@ class _ProfileViewState extends State<ProfileView>
                 onPressed: () {
                   pushNewScreenWithRouteSettings(
                     context,
-                    screen: Followers(mylist: followers.followers),
+                    screen: Followers(
+                        mylist: followers.followers,
+                        refresher: () {
+                          setState(() {});
+                        }),
                     settings: const RouteSettings(name: Followers.routeName),
                     withNavBar: true,
                     pageTransitionAnimation: PageTransitionAnimation.cupertino,
@@ -468,7 +472,11 @@ class _ProfileViewState extends State<ProfileView>
                 onPressed: () {
                   pushNewScreenWithRouteSettings(
                     context,
-                    screen: Following(mylist: followings.followings),
+                    screen: Following(
+                        mylist: followings.followings,
+                        refresher: () {
+                          setState(() {});
+                        }),
                     settings: const RouteSettings(name: Following.routeName),
                     withNavBar: true,
                     pageTransitionAnimation: PageTransitionAnimation.cupertino,

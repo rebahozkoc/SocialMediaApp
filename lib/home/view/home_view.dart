@@ -30,26 +30,22 @@ class _HomeViewState extends State<HomeView> {
       // Add post information to the view
       posts.add(PostView(
         postModel: PostModel(
-          name: userJSON != null ? userJSON[1].fullName : "John Doe",
-          date: post[1].createdAt,
-          profileImg:
-              userJSON != null ? userJSON[1].profilePicture : "https://www.business2community.com/wp-content/uploads/2017/08/blank-profile-picture-973460_640.png",
-          likeCount: post[1].likeArr.length,
-          commentCount: 58,
-          contentCount: post[1].pictureUrlArr.length,
-          postText: post[1].postText,
-           contents: post[1].pictureUrlArr.map<Content>((url) {
-            return Content(
-              type: "image",
-              contentId: url,
-              source: url,
-            );
-          }).toList()    
-         
-          
-          
-          
-        ),
+            name: userJSON != null ? userJSON[1].fullName : "John Doe",
+            date: post[1].createdAt,
+            profileImg: userJSON != null
+                ? userJSON[1].profilePicture
+                : "https://www.business2community.com/wp-content/uploads/2017/08/blank-profile-picture-973460_640.png",
+            likeCount: post[1].likeArr.length,
+            commentCount: 58,
+            contentCount: post[1].pictureUrlArr.length,
+            postText: post[1].postText,
+            contents: post[1].pictureUrlArr.map<Content>((url) {
+              return Content(
+                type: "image",
+                contentId: url,
+                source: url,
+              );
+            }).toList()),
       ));
     }
 
