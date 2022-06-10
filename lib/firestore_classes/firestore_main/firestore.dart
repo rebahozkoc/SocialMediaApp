@@ -205,13 +205,16 @@ class Firestore {
   }
 
   Future<bool> isRequested(uid, followUid) async {
-    dynamic requestList = await getRequestss(uid);
-    for (int i = 0; i < requestList.requests.length; i++) {
-      if (await requestList.followings[i] == followUid) {
-        return true;
-      }
-    }
-    return false;
+    dynamic result = false;
+    dynamic requestList = await getRequestss(uid).then((value) => {
+          for (int i = 0; i < value.requests.length; i++)
+            {
+              if (value.requests[i] == followUid) {result = true}
+            }
+        });
+
+    debugPrint("bunu da dene is ${result}");
+    return result;
   }
 
   Future<bool> isReqandFollow(uid, followUid) async {
@@ -397,26 +400,28 @@ class Firestore {
       final myUid = await decideUser();
       dynamic followings = await getFollowings(myUid);
       // get the followings list of uids
-      if (followings != null){
+      if (followings != null) {
         List<dynamic> followingsUids = followings.followings;
-      debugPrint("followings $followings");
-      myData = await posts
-          .where("uid", whereIn: followingsUids)
-          .orderBy("createdAt", descending: true)
-          .limit(limit)
-          .get()
-          .then((value) {
-        postsJSON = value.docs.map((doc) {
-          return [doc.id, MyPost.fromJson(doc.data() as Map<String, dynamic>)];
-        }).toList();
-      });
-      //debugPrint("Post is ${posts2.toString()}");
-      return postsJSON;
-      }else{
+        debugPrint("followings $followings");
+        myData = await posts
+            .where("uid", whereIn: followingsUids)
+            .orderBy("createdAt", descending: true)
+            .limit(limit)
+            .get()
+            .then((value) {
+          postsJSON = value.docs.map((doc) {
+            return [
+              doc.id,
+              MyPost.fromJson(doc.data() as Map<String, dynamic>)
+            ];
+          }).toList();
+        });
+        //debugPrint("Post is ${posts2.toString()}");
+        return postsJSON;
+      } else {
         List<dynamic> emptyList = [];
         return emptyList;
       }
-      
     } else {
       myData = await posts
           .orderBy("createdAt", descending: true)

@@ -1,5 +1,7 @@
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:flutter/material.dart';
 import 'package:google_sign_in/google_sign_in.dart';
+import 'package:sabanci_talks/firestore_classes/firestore_main/firestore.dart';
 import "package:shared_preferences/shared_preferences.dart";
 
 class Authentication {
@@ -21,6 +23,7 @@ class Authentication {
       UserCredential uc =
           await _auth.signInWithEmailAndPassword(email: email, password: pass);
       prefs.setString("user", (uc.user != null) ? uc.user!.uid : "");
+
       return uc.user;
       //print(uc.toString());
     } on FirebaseAuthException catch (e) {
@@ -69,10 +72,23 @@ class Authentication {
       accessToken: googleAuth?.accessToken,
       idToken: googleAuth?.idToken,
     );
+    debugPrint("out the if");
 
     UserCredential uc = await _auth.signInWithCredential(credential);
     prefs.setString("user", (uc.user != null) ? uc.user!.uid : "");
 
+    Firestore f = Firestore();
+
+    if (uc.user != null) {
+      dynamic id = await f.getUser(uc.user!.uid);
+
+      if (id == null) {
+        await f.addUser(uc.user!.uid, uc.user!.displayName);
+        await f.createFollowers(uc.user!.uid);
+        await f.createFollowing(uc.user!.uid);
+        await f.createRequests(uc.user!.uid);
+      }
+    }
     // need to check this
     return uc.user;
   }
