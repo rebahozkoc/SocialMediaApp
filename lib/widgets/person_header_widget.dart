@@ -7,7 +7,9 @@ import 'package:sabanci_talks/userProfile/userProfile.dart';
 import 'package:sabanci_talks/util/colors.dart';
 
 class PersonHeaderWidget extends StatefulWidget {
-  PersonHeaderWidget({Key? key, required this.element}) : super(key: key);
+  PersonHeaderWidget({Key? key, required this.element, required this.refresher})
+      : super(key: key);
+  VoidCallback refresher;
   dynamic element;
   @override
   State<PersonHeaderWidget> createState() => _PersonHeaderWidgetState();
@@ -24,11 +26,12 @@ class _PersonHeaderWidgetState extends State<PersonHeaderWidget> {
     uid = await f.decideUser();
     user = await f.getUser(widget.element);
     //debugPrint("userrrr ${user.toString()}");
-    isFollowing = await f.isFollowed(widget.element, uid);
+    isFollowing = await f.isFollowed(uid, widget.element);
+    isWaiting = await f.isRequested(widget.element, uid);
   }
 
   dynamic isPriv;
-  changeFollowing() async {
+  changeFollowing(refresher) async {
     if (isFollowing == true) {
       await f.unFollow(widget.element, uid);
       await f.deleteFollowing(uid, widget.element);
@@ -64,6 +67,7 @@ class _PersonHeaderWidgetState extends State<PersonHeaderWidget> {
         }
       }
     });
+    refresher;
     userList();
   }
 
@@ -116,7 +120,7 @@ class _PersonHeaderWidgetState extends State<PersonHeaderWidget> {
               ),
               //subtitle: const Text('@Carlossainz55'),
               trailing: InkWell(
-                onTap: () => changeFollowing(),
+                onTap: () => changeFollowing(widget.refresher),
                 child: Container(
                   width: 128,
                   height: 32,

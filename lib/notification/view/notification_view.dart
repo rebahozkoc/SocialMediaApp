@@ -29,8 +29,12 @@ class _NotificationViewState extends State<NotificationView> {
               shrinkWrap: true,
               physics: const NeverScrollableScrollPhysics(),
               padding: const EdgeInsets.symmetric(vertical: 12),
-              itemBuilder: (context, index) =>
-                  NotificationWidget(notification: notificationList[index]),
+              itemBuilder: (context, index) => NotificationWidget(
+                    notification: notificationList[index],
+                    refreshFunction: () {
+                      setState(() {});
+                    },
+                  ),
               separatorBuilder: (context, index) => const SizedBox(
                     height: 12,
                   ),

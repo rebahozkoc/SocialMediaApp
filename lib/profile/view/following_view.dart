@@ -3,8 +3,10 @@ import 'package:sabanci_talks/firestore_classes/user/my_user.dart';
 import 'package:sabanci_talks/widgets/person_header_widget.dart';
 
 class Following extends StatelessWidget {
-  Following({Key? key, required this.mylist}) : super(key: key);
+  Following({Key? key, required this.mylist, required this.refresher})
+      : super(key: key);
   dynamic mylist;
+  VoidCallback refresher;
 
   static const String routeName = '/followers';
 
@@ -13,6 +15,10 @@ class Following extends StatelessWidget {
     return Scaffold(
         appBar: AppBar(
           title: const Text('Following'),
+          leading: BackButton(onPressed: () {
+            refresher;
+            Navigator.of(context).pop();
+          }),
         ),
         body: _body());
   }
@@ -23,7 +29,7 @@ class Following extends StatelessWidget {
           padding: const EdgeInsets.symmetric(vertical: 4),
           shrinkWrap: true,
           itemBuilder: (context, index) =>
-              PersonHeaderWidget(element: mylist[index]),
+              PersonHeaderWidget(element: mylist[index], refresher: refresher),
           separatorBuilder: (context, index) => const SizedBox(
             height: 4,
           ),

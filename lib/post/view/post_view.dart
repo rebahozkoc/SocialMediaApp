@@ -6,7 +6,6 @@ import 'package:sabanci_talks/navigation/navigation_service.dart';
 import 'package:sabanci_talks/post/functions/post_functions.dart';
 import 'package:sabanci_talks/post/model/post_model.dart';
 import 'package:sabanci_talks/util/colors.dart';
-import 'package:sabanci_talks/util/icon/entypo.dart';
 
 class PostHeroModel {
   int? likeCount;
@@ -14,6 +13,7 @@ class PostHeroModel {
   int? contentCount;
   int? index;
   List<String>? imgUrls;
+  bool? isLiked;
 
   PostHeroModel({
     this.likeCount,
@@ -21,12 +21,12 @@ class PostHeroModel {
     this.contentCount,
     this.imgUrls,
     this.index,
+    this.isLiked = false,
   });
 }
 
 class PostView extends StatefulWidget {
   final PostModel postModel;
-
   const PostView({Key? key, required this.postModel}) : super(key: key);
 
   @override
@@ -34,11 +34,15 @@ class PostView extends StatefulWidget {
 }
 
 class _PostViewState extends State<PostView> {
-  bool isLiked = false, isSaved = false;
+  bool isSaved = false;
 
   changeLike() {
     setState(() {
-      isLiked = !isLiked;
+      widget.postModel.isLiked = !widget.postModel.isLiked!;
+      // If I liked the post before, remove my uid from the likeArr else add my uid to the likeArr
+      if (widget.postModel.isLiked!){
+        
+      }
     });
   }
 
@@ -48,12 +52,12 @@ class _PostViewState extends State<PostView> {
   }) {
     List<String> imgUrls = post.contents!.map((e) => e.source!).toList();
     PostHeroModel postHero = PostHeroModel(
-      likeCount: post.likeCount,
-      commentCount: post.commentCount,
-      contentCount: post.contentCount,
-      imgUrls: imgUrls,
-      index: index,
-    );
+        likeCount: post.likeCount,
+        commentCount: post.commentCount,
+        contentCount: post.contentCount,
+        imgUrls: imgUrls,
+        index: index,
+        isLiked: post.isLiked);
     NavigationService.instance
         .navigateToPage(path: NavigationConstants.SINGLE_POST, data: postHero);
   }
@@ -101,7 +105,6 @@ class _PostViewState extends State<PostView> {
       leading: _profilePicture(),
       title: _title(),
       subtitle: _subtitle(),
-      trailing: _trailing(),
     );
   }
 
@@ -131,12 +134,6 @@ class _PostViewState extends State<PostView> {
 
   Text _subtitle() => Text(widget.postModel.date!);
 
-  IconButton _trailing() => IconButton(
-        icon: const Icon(Entypo.dot_3),
-        color: const Color(0xFF74798B),
-        onPressed: () {},
-      );
-
   Padding _postText() {
     return Padding(
       padding: const EdgeInsets.fromLTRB(78, 0, 24, 12),
@@ -154,17 +151,15 @@ class _PostViewState extends State<PostView> {
   Padding _buttons() {
     return Padding(
       padding: const EdgeInsets.fromLTRB(62, 0, 0, 0),
-      child: Row(children: [
+      child: Row(mainAxisAlignment: MainAxisAlignment.spaceBetween, children: [
         Row(
           children: [
             IconButton(
-              padding: const EdgeInsets.fromLTRB(16, 16, 8, 16),
-              constraints: const BoxConstraints(),
               splashColor: Colors.transparent,
               icon: Icon(
-                isLiked ? CupertinoIcons.heart_fill : CupertinoIcons.heart,
+                widget.postModel.isLiked! ? CupertinoIcons.heart_fill : CupertinoIcons.heart,
               ),
-              color: isLiked ? AppColors.secondary : AppColors.darkGrey,
+              color: widget.postModel.isLiked! ? AppColors.secondary : AppColors.darkGrey,
               iconSize: 18,
               onPressed: () => changeLike(),
             ),

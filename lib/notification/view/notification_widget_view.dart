@@ -7,8 +7,11 @@ import 'package:sabanci_talks/util/screen_sizes.dart';
 import 'package:sabanci_talks/util/styles.dart';
 
 class NotificationWidget extends StatefulWidget {
-  NotificationWidget({Key? key, required this.notification}) : super(key: key);
+  NotificationWidget(
+      {Key? key, required this.notification, required this.refreshFunction})
+      : super(key: key);
   dynamic notification;
+  VoidCallback refreshFunction;
   @override
   State<NotificationWidget> createState() => _NotificationState();
 }
@@ -298,6 +301,7 @@ class _NotificationState extends State<NotificationWidget>
                         uid_sub: widget.notification.uid_sub,
                         isPost: false,
                         postId: "");
+                    widget.refreshFunction();
                   },
                   icon: const Icon(
                       IconData(0xef49, fontFamily: 'MaterialIcons'))),
@@ -308,6 +312,7 @@ class _NotificationState extends State<NotificationWidget>
 
                     await f.deleteNotification(
                         widget.notification.uid, widget.notification.uid_sub);
+                    widget.refreshFunction();
                   },
                   icon: const Icon(
                       IconData(0xef58, fontFamily: 'MaterialIcons'))),

@@ -10,7 +10,8 @@ class SinglePost extends StatefulWidget {
       required this.docId,
       required this.proUrl,
       required this.name,
-      required this.date})
+      required this.date
+      })
       : super(key: key);
   final String docId;
   final String proUrl;
