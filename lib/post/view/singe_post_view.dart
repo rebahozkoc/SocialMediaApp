@@ -7,17 +7,27 @@ import 'package:sabanci_talks/post/view/post_view.dart';
 
 class SinglePostView extends StatefulWidget {
   final PostHeroModel post;
-  final PageController pageController;
 
-  SinglePostView({Key? key, required this.post})
-      : pageController = PageController(initialPage: post.index!),
-        super(key: key);
+  const SinglePostView({Key? key, required this.post}) : super(key: key);
 
   @override
   State<SinglePostView> createState() => _SinglePostViewState();
 }
 
 class _SinglePostViewState extends State<SinglePostView> {
+  late PageController pageController;
+  @override
+  void dispose() {
+    pageController.dispose();
+    super.dispose();
+  }
+
+  @override
+  void initState() {
+    pageController = PageController(initialPage: widget.post.index!);
+    super.initState();
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -31,7 +41,10 @@ class _SinglePostViewState extends State<SinglePostView> {
           child: Column(
             children: [
               Expanded(child: _gallery()),
-              SizedBox(height: 56, width: double.infinity, child: _buttons())
+              const SizedBox(
+                height: 56,
+                width: double.infinity,
+              )
             ],
           ),
         ),
@@ -112,16 +125,13 @@ class _SinglePostViewState extends State<SinglePostView> {
 
   PhotoViewGallery _gallery() {
     return PhotoViewGallery.builder(
-      pageController: widget.pageController,
+      pageController: pageController,
       itemCount: widget.post.contentCount,
       builder: (context, index) {
         return PhotoViewGalleryPageOptions(
           imageProvider: CachedNetworkImageProvider(
             widget.post.imgUrls![index],
           ),
-          onScaleEnd: (context, tapUpDetails, value) {
-            Navigator.pop(context);
-          },
         );
       },
       onPageChanged: (index) {

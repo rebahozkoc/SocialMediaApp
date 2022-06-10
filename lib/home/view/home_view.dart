@@ -29,7 +29,6 @@ class _HomeViewState extends State<HomeView> {
     for (dynamic post in postsJSONs) {
       // Get the post owner information by uid
       final userJSON = await f.getUser(post[1].uid);
-      debugPrint("userJSON: ${userJSON}");
       // Add post information to the view
       posts.add(PostView(
         postModel: PostModel(

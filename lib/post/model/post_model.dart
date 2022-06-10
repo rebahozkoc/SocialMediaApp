@@ -9,6 +9,7 @@ class PostModel {
   int? contentCount;
   List<Content>? contents;
   bool? isLiked;
+  List<String>? likeArray;
 
   PostModel(
       {this.postId,
@@ -18,6 +19,7 @@ class PostModel {
       this.postText,
       this.likeCount,
       this.commentCount,
+      this.likeArray,
       this.contentCount,
       this.contents,
       this.isLiked = false});
@@ -36,6 +38,12 @@ class PostModel {
       contents = <Content>[];
       json['contents'].forEach((v) {
         contents!.add(Content.fromJson(v));
+      });
+    }
+    if (json['likeArr'] != null) {
+      contents = <Content>[];
+      json['likeArr'].forEach((v) {
+        likeArray!.add(v);
       });
     }
   }
