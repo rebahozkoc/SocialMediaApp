@@ -323,6 +323,14 @@ class Firestore {
     myData = await requestss.add({"uid": uid, "requests": []});
   }
 
+  //Accept and Reject request
+
+  Future<void> acceptRequest(uid, requestUid) async {
+    await deleteRequest(uid, requestUid);
+    await addFollow(uid, requestUid);
+    await addFollowing(requestUid, uid);
+  }
+
   ////////////////////////////////////////////////////////////////////////////////////////////////////////////////
   //        Notifications
   ////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -342,14 +350,32 @@ class Firestore {
       {required uid,
       required notification_type,
       required uid_sub,
-      required isPost}) async {
+      required isPost,
+      required postId}) async {
     myData = await notifications.add({
       "uid": uid,
       "notification_type": notification_type,
       "uid_sub": uid_sub,
       "isPost": isPost,
+      "postId": postId,
     });
     return;
+  }
+
+  Future<void> deleteNotification(uid, uid_sub) async {
+    debugPrint("helllloooo are you there");
+    dynamic docId;
+    myData =
+        await notifications.where("uid", isEqualTo: uid).get().then((value) {
+      value.docs.map((doc) {
+        dynamic temp =
+            Notifications.fromJson(doc.data() as Map<String, dynamic>);
+
+        if (temp.uid_sub == uid_sub) {
+          notifications.doc(doc.id).delete();
+        }
+      }).toList();
+    });
   }
   ////////////////////////////////////////////////////////////////////////////////////////////////////////////////
   //        POSTS
@@ -363,41 +389,41 @@ class Firestore {
     return posts2;
   }
 
-  Future<List<dynamic>> getFeedPostsByLimit(int limit, {bool onlyFollowed = false}) async {
-    
+  Future<List<dynamic>> getFeedPostsByLimit(int limit,
+      {bool onlyFollowed = false}) async {
     dynamic postsJSON;
-    
-    if (onlyFollowed){
+
+    if (onlyFollowed) {
       final myUid = await decideUser();
       dynamic followings = await getFollowings(myUid);
       // get the followings list of uids
       List<dynamic> followingsUids = followings.followings;
       debugPrint("followings $followings");
-      myData = await posts.where("uid", whereIn: followingsUids)
-        .orderBy("createdAt", descending: true)
-        .limit(limit)
-        .get()
-        .then((value) {
-      postsJSON = value.docs.map((doc) {
-        return [doc.id, MyPost.fromJson(doc.data() as Map<String, dynamic>)];
-      }).toList();
-    });
-    //debugPrint("Post is ${posts2.toString()}");
-    return postsJSON;
-    }else{
       myData = await posts
-        .orderBy("createdAt", descending: true)
-        .limit(limit)
-        .get()
-        .then((value) {
-      postsJSON = value.docs.map((doc) {
-        return [doc.id, MyPost.fromJson(doc.data() as Map<String, dynamic>)];
-      }).toList();
-    });
-    //debugPrint("Post is ${posts2.toString()}");
-    return postsJSON;
+          .where("uid", whereIn: followingsUids)
+          .orderBy("createdAt", descending: true)
+          .limit(limit)
+          .get()
+          .then((value) {
+        postsJSON = value.docs.map((doc) {
+          return [doc.id, MyPost.fromJson(doc.data() as Map<String, dynamic>)];
+        }).toList();
+      });
+      //debugPrint("Post is ${posts2.toString()}");
+      return postsJSON;
+    } else {
+      myData = await posts
+          .orderBy("createdAt", descending: true)
+          .limit(limit)
+          .get()
+          .then((value) {
+        postsJSON = value.docs.map((doc) {
+          return [doc.id, MyPost.fromJson(doc.data() as Map<String, dynamic>)];
+        }).toList();
+      });
+      //debugPrint("Post is ${posts2.toString()}");
+      return postsJSON;
     }
-    
   }
 
   Future<List<dynamic>?> getPost(uid) async {

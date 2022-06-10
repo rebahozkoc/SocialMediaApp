@@ -12,6 +12,7 @@ _$_Notifications _$$_NotificationsFromJson(Map<String, dynamic> json) =>
       notification_type: json['notification_type'] ?? "",
       uid_sub: json['uid_sub'] ?? "",
       isPost: json['isPost'] ?? false,
+      postId: json['postId'] ?? "",
     );
 
 Map<String, dynamic> _$$_NotificationsToJson(_$_Notifications instance) =>
@@ -20,4 +21,5 @@ Map<String, dynamic> _$$_NotificationsToJson(_$_Notifications instance) =>
       'notification_type': instance.notification_type,
       'uid_sub': instance.uid_sub,
       'isPost': instance.isPost,
+      'postId': instance.postId,
     };

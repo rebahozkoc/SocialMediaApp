@@ -24,7 +24,7 @@ class _PersonHeaderWidgetState extends State<PersonHeaderWidget> {
     uid = await f.decideUser();
     user = await f.getUser(widget.element);
     //debugPrint("userrrr ${user.toString()}");
-    isFollowing = await f.isFollowed(uid, widget.element);
+    isFollowing = await f.isFollowed(widget.element, uid);
   }
 
   dynamic isPriv;
@@ -39,7 +39,8 @@ class _PersonHeaderWidgetState extends State<PersonHeaderWidget> {
             uid: widget.element,
             notification_type: "request",
             uid_sub: uid,
-            isPost: false);
+            isPost: false,
+            postId: "");
       } else {
         await f.addFollow(widget.element, uid);
         await f.addFollowing(uid, widget.element);
@@ -47,7 +48,8 @@ class _PersonHeaderWidgetState extends State<PersonHeaderWidget> {
             uid: widget.element,
             notification_type: "follow",
             uid_sub: uid,
-            isPost: false);
+            isPost: false,
+            postId: "");
       }
     }
     setState(() {

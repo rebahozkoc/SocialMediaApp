@@ -1,6 +1,7 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
-
+import 'dart:io' show Platform;
+import 'package:flutter/cupertino.dart';
 import 'package:persistent_bottom_nav_bar/persistent-tab-view.dart';
 import 'package:provider/provider.dart';
 
@@ -137,11 +138,22 @@ class _ProfileViewState extends State<ProfileView>
                             child: Row(
                               mainAxisAlignment: MainAxisAlignment.center,
                               children: [
-                                CircleAvatar(
-                                  radius: 42,
-                                  foregroundImage: NetworkImage(show != null
-                                      ? show[1].profilePicture
-                                      : "https://picsum.photos/400"),
+                                IconButton(
+                                  onPressed: () async {
+                                    await _showProfilePicture(
+                                        show != null ? show[1].fullName : "",
+                                        show != null
+                                            ? show[1].profilePicture
+                                            : "https://picsum.photos/400",
+                                        true);
+                                  },
+                                  iconSize: 100,
+                                  icon: CircleAvatar(
+                                    radius: 42,
+                                    foregroundImage: NetworkImage(show != null
+                                        ? show[1].profilePicture
+                                        : "https://picsum.photos/400"),
+                                  ),
                                 ),
                                 const Spacer(),
                                 Padding(
@@ -215,9 +227,12 @@ class _ProfileViewState extends State<ProfileView>
                                 miniPostList != null ? miniPostList.length : 0,
                             itemBuilder: (context, index) {
                               return InkWell(
-                                  child: MiniPost(miniPostList != null
-                                      ? miniPostList[index][1].pictureUrlArr[0]
-                                      : "https://picsum.photos/600"),
+                                  child: MiniPost(
+                                      miniPostList != null
+                                          ? miniPostList[index][1]
+                                              .pictureUrlArr[0]
+                                          : "https://picsum.photos/600",
+                                      isNetworkImg: miniPostList != null),
                                   onTap: () => {
                                         Navigator.push(
                                           context,
@@ -464,6 +479,49 @@ class _ProfileViewState extends State<ProfileView>
       ],
     );
   }
+
+  Future<void> _showProfilePicture(
+      String title, dynamic image, bool isNetwork) async {
+    bool isAndroid = Platform.isAndroid;
+
+    return showDialog(
+        context: context,
+        barrierDismissible: false,
+        builder: (BuildContext context) {
+          if (isAndroid) {
+            debugPrint("hello is exploded");
+            return AlertDialog(
+              title: Center(child: Text(title)),
+              content: MiniPost(
+                image,
+              ),
+              actions: [
+                TextButton(
+                  child: const Text('OK'),
+                  onPressed: () {
+                    Navigator.of(context).pop();
+                  },
+                )
+              ],
+            );
+          } else {
+            return CupertinoAlertDialog(
+              title: Text(title, style: kBoldLabelStyle),
+              content: MiniPost(
+                image,
+              ),
+              actions: [
+                TextButton(
+                  child: const Text('OK'),
+                  onPressed: () {
+                    Navigator.of(context).pop();
+                  },
+                )
+              ],
+            );
+          }
+        });
+  }
 }
 
 class ProfileCount extends StatelessWidget {
@@ -497,50 +555,3 @@ class ProfileCount extends StatelessWidget {
     );
   }
 }
-
-
-/*
-
-                  const TabBar(
-                    
-                    tabs: [
-                      Tab(icon: Icon(Icons.photo_library_rounded, color: AppColors.primary)),
-                      Tab(icon: Icon(Icons.telegram, color: AppColors.primary)),
-                    ],
-                    
-                  ),
-
-
-
-
-
-
-
-
-
-DefaultTabController(
-                
-                length: 2,
-                child: Column(
-                  children: [
-                  const TabBar(
-                    
-                    tabs: [
-                      Tab(icon: Icon(Icons.photo_library_rounded, color: AppColors.primary)),
-                      Tab(icon: Icon(Icons.telegram, color: AppColors.primary)),
-                    ],
-                    
-                  ),
-                  Expanded(
-                    flex: 2,
-                    child: TabBarView(
-                      
-                      children: [
-                        mediaPostGrid(),
-                        Icon(Icons.directions_transit),
-                      ],
-                    ),
-                  ),
-                ]),
-              ),
-                  */

@@ -14,6 +14,7 @@ class Notifications with _$Notifications {
     @Default("") notification_type,
     @Default("") uid_sub,
     @Default(false) isPost,
+    @Default("") postId,
   }) = _Notifications;
 
   factory Notifications.fromJson(Map<String, dynamic> json) =>

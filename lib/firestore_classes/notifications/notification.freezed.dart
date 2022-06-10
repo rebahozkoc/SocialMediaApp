@@ -24,6 +24,7 @@ mixin _$Notifications {
   dynamic get notification_type => throw _privateConstructorUsedError;
   dynamic get uid_sub => throw _privateConstructorUsedError;
   dynamic get isPost => throw _privateConstructorUsedError;
+  dynamic get postId => throw _privateConstructorUsedError;
 
   Map<String, dynamic> toJson() => throw _privateConstructorUsedError;
   @JsonKey(ignore: true)
@@ -37,7 +38,11 @@ abstract class $NotificationsCopyWith<$Res> {
           Notifications value, $Res Function(Notifications) then) =
       _$NotificationsCopyWithImpl<$Res>;
   $Res call(
-      {String uid, dynamic notification_type, dynamic uid_sub, dynamic isPost});
+      {String uid,
+      dynamic notification_type,
+      dynamic uid_sub,
+      dynamic isPost,
+      dynamic postId});
 }
 
 /// @nodoc
@@ -55,6 +60,7 @@ class _$NotificationsCopyWithImpl<$Res>
     Object? notification_type = freezed,
     Object? uid_sub = freezed,
     Object? isPost = freezed,
+    Object? postId = freezed,
   }) {
     return _then(_value.copyWith(
       uid: uid == freezed
@@ -73,6 +79,10 @@ class _$NotificationsCopyWithImpl<$Res>
           ? _value.isPost
           : isPost // ignore: cast_nullable_to_non_nullable
               as dynamic,
+      postId: postId == freezed
+          ? _value.postId
+          : postId // ignore: cast_nullable_to_non_nullable
+              as dynamic,
     ));
   }
 }
@@ -85,7 +95,11 @@ abstract class _$$_NotificationsCopyWith<$Res>
       __$$_NotificationsCopyWithImpl<$Res>;
   @override
   $Res call(
-      {String uid, dynamic notification_type, dynamic uid_sub, dynamic isPost});
+      {String uid,
+      dynamic notification_type,
+      dynamic uid_sub,
+      dynamic isPost,
+      dynamic postId});
 }
 
 /// @nodoc
@@ -105,6 +119,7 @@ class __$$_NotificationsCopyWithImpl<$Res>
     Object? notification_type = freezed,
     Object? uid_sub = freezed,
     Object? isPost = freezed,
+    Object? postId = freezed,
   }) {
     return _then(_$_Notifications(
       uid: uid == freezed
@@ -116,6 +131,7 @@ class __$$_NotificationsCopyWithImpl<$Res>
           : notification_type,
       uid_sub: uid_sub == freezed ? _value.uid_sub : uid_sub,
       isPost: isPost == freezed ? _value.isPost : isPost,
+      postId: postId == freezed ? _value.postId : postId,
     ));
   }
 }
@@ -127,7 +143,8 @@ class _$_Notifications implements _Notifications {
       {required this.uid,
       this.notification_type = "",
       this.uid_sub = "",
-      this.isPost = false});
+      this.isPost = false,
+      this.postId = ""});
 
   factory _$_Notifications.fromJson(Map<String, dynamic> json) =>
       _$$_NotificationsFromJson(json);
@@ -143,10 +160,13 @@ class _$_Notifications implements _Notifications {
   @override
   @JsonKey()
   final dynamic isPost;
+  @override
+  @JsonKey()
+  final dynamic postId;
 
   @override
   String toString() {
-    return 'Notifications(uid: $uid, notification_type: $notification_type, uid_sub: $uid_sub, isPost: $isPost)';
+    return 'Notifications(uid: $uid, notification_type: $notification_type, uid_sub: $uid_sub, isPost: $isPost, postId: $postId)';
   }
 
   @override
@@ -158,7 +178,8 @@ class _$_Notifications implements _Notifications {
             const DeepCollectionEquality()
                 .equals(other.notification_type, notification_type) &&
             const DeepCollectionEquality().equals(other.uid_sub, uid_sub) &&
-            const DeepCollectionEquality().equals(other.isPost, isPost));
+            const DeepCollectionEquality().equals(other.isPost, isPost) &&
+            const DeepCollectionEquality().equals(other.postId, postId));
   }
 
   @JsonKey(ignore: true)
@@ -168,7 +189,8 @@ class _$_Notifications implements _Notifications {
       const DeepCollectionEquality().hash(uid),
       const DeepCollectionEquality().hash(notification_type),
       const DeepCollectionEquality().hash(uid_sub),
-      const DeepCollectionEquality().hash(isPost));
+      const DeepCollectionEquality().hash(isPost),
+      const DeepCollectionEquality().hash(postId));
 
   @JsonKey(ignore: true)
   @override
@@ -186,7 +208,8 @@ abstract class _Notifications implements Notifications {
       {required final String uid,
       final dynamic notification_type,
       final dynamic uid_sub,
-      final dynamic isPost}) = _$_Notifications;
+      final dynamic isPost,
+      final dynamic postId}) = _$_Notifications;
 
   factory _Notifications.fromJson(Map<String, dynamic> json) =
       _$_Notifications.fromJson;
@@ -199,6 +222,8 @@ abstract class _Notifications implements Notifications {
   dynamic get uid_sub => throw _privateConstructorUsedError;
   @override
   dynamic get isPost => throw _privateConstructorUsedError;
+  @override
+  dynamic get postId => throw _privateConstructorUsedError;
   @override
   @JsonKey(ignore: true)
   _$$_NotificationsCopyWith<_$_Notifications> get copyWith =>
