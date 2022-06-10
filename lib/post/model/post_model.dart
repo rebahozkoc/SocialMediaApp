@@ -8,6 +8,7 @@ class PostModel {
   int? commentCount;
   int? contentCount;
   List<Content>? contents;
+  bool? isLiked;
 
   PostModel(
       {this.postId,
@@ -18,7 +19,8 @@ class PostModel {
       this.likeCount,
       this.commentCount,
       this.contentCount,
-      this.contents});
+      this.contents,
+      this.isLiked = false});
 
   PostModel.fromJson(Map<String, dynamic> json) {
     postId = json['postId'];
@@ -29,6 +31,7 @@ class PostModel {
     likeCount = json['likeCount'];
     commentCount = json['commentCount'];
     contentCount = json['contentCount'];
+    isLiked = json['isLiked'] ?? false;
     if (json['contents'] != null) {
       contents = <Content>[];
       json['contents'].forEach((v) {
@@ -47,6 +50,7 @@ class PostModel {
     data['likeCount'] = likeCount;
     data['commentCount'] = commentCount;
     data['contentCount'] = contentCount;
+    data['isLiked'] = isLiked;
     if (contents != null) {
       data['contents'] = contents!.map((v) => v.toJson()).toList();
     }

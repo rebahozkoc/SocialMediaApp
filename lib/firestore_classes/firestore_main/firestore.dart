@@ -397,7 +397,8 @@ class Firestore {
       final myUid = await decideUser();
       dynamic followings = await getFollowings(myUid);
       // get the followings list of uids
-      List<dynamic> followingsUids = followings.followings;
+      if (followings != null){
+        List<dynamic> followingsUids = followings.followings;
       debugPrint("followings $followings");
       myData = await posts
           .where("uid", whereIn: followingsUids)
@@ -411,6 +412,11 @@ class Firestore {
       });
       //debugPrint("Post is ${posts2.toString()}");
       return postsJSON;
+      }else{
+        List<dynamic> emptyList = [];
+        return emptyList;
+      }
+      
     } else {
       myData = await posts
           .orderBy("createdAt", descending: true)

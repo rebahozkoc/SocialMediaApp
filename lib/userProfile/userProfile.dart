@@ -197,6 +197,7 @@ class _UserProfileView extends State<UserProfileView>
                                                 MaterialPageRoute(
                                                     builder: (context) =>
                                                         SinglePost(
+                                                          
                                                             proUrl: show[1]
                                                                 .profilePicture,
                                                             docId: posts[index]

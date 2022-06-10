@@ -21,8 +21,11 @@ class _HomeViewState extends State<HomeView> {
   List<dynamic> postsJSONs = [];
   Future<void> getMyPost() async {
     Firestore f = Firestore();
-    postsJSONs = await f.getFeedPostsByLimit(5, onlyFollowed: true);
+    postsJSONs = await f.getFeedPostsByLimit(15, onlyFollowed: true);
     debugPrint("postsJSONs: ${postsJSONs}");
+    // Get my uid to decide if I liked the posts before or not
+    String myUid = await f.decideUser() ?? "";
+
     for (dynamic post in postsJSONs) {
       // Get the post owner information by uid
       final userJSON = await f.getUser(post[1].uid);
@@ -38,6 +41,8 @@ class _HomeViewState extends State<HomeView> {
           commentCount: 58,
           contentCount: post[1].pictureUrlArr.length,
           postText: post[1].postText,
+          isLiked: post[1].likeArr.contains(myUid),
+        
            contents: post[1].pictureUrlArr.map<Content>((url) {
             return Content(
               type: "image",
@@ -45,18 +50,11 @@ class _HomeViewState extends State<HomeView> {
               source: url,
             );
           }).toList()    
-         
-          
-          
-          
         ),
       ));
     }
 
-    debugPrint("posts: ${posts.length}");
-    for (int i = 0; i < posts.length; i++) {
-      debugPrint("posts[$i]: ${posts[i].postModel.name}");
-    }
+    
   }
 
   @override
