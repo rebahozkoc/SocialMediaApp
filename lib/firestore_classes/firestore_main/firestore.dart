@@ -358,19 +358,41 @@ class Firestore {
     return posts2;
   }
 
-  Future<List<dynamic>> getFeedPostsByLimit(int limit) async {
-    dynamic posts2;
-    myData = await posts
+  Future<List<dynamic>> getFeedPostsByLimit(int limit, {bool onlyFollowed = false}) async {
+    
+    dynamic postsJSON;
+    
+    if (onlyFollowed){
+      final myUid = await decideUser();
+      dynamic followings = await getFollowings(myUid);
+      // get the followings list of uids
+      List<dynamic> followingsUids = followings.followings;
+      debugPrint("followings $followings");
+      myData = await posts.where("uid", whereIn: followingsUids)
         .orderBy("createdAt", descending: true)
         .limit(limit)
         .get()
         .then((value) {
-      posts2 = value.docs.map((doc) {
+      postsJSON = value.docs.map((doc) {
         return [doc.id, MyPost.fromJson(doc.data() as Map<String, dynamic>)];
       }).toList();
     });
     //debugPrint("Post is ${posts2.toString()}");
-    return posts2;
+    return postsJSON;
+    }else{
+      myData = await posts
+        .orderBy("createdAt", descending: true)
+        .limit(limit)
+        .get()
+        .then((value) {
+      postsJSON = value.docs.map((doc) {
+        return [doc.id, MyPost.fromJson(doc.data() as Map<String, dynamic>)];
+      }).toList();
+    });
+    //debugPrint("Post is ${posts2.toString()}");
+    return postsJSON;
+    }
+    
   }
 
   Future<List<dynamic>?> getPost(uid) async {

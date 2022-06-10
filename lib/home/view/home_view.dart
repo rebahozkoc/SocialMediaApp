@@ -21,15 +21,19 @@ class _HomeViewState extends State<HomeView> {
   List<dynamic> postsJSONs = [];
   Future<void> getMyPost() async {
     Firestore f = Firestore();
-    postsJSONs = await f.getFeedPostsByLimit(5);
+    postsJSONs = await f.getFeedPostsByLimit(5, onlyFollowed: true);
     debugPrint("postsJSONs: ${postsJSONs}");
     for (dynamic post in postsJSONs) {
+      // Get the post owner information by uid
+      final userJSON = await f.getUser(post[1].uid);
+      debugPrint("userJSON: ${userJSON}");
+      // Add post information to the view
       posts.add(PostView(
         postModel: PostModel(
-          name: "Post testi",
+          name: userJSON != null ? userJSON[1].fullName : "John Doe",
           date: post[1].createdAt,
           profileImg:
-              "https://pbs.twimg.com/profile_images/1276567411240681472/8KdXHFdK_400x400.jpg",
+              userJSON != null ? userJSON[1].profilePicture : "https://www.business2community.com/wp-content/uploads/2017/08/blank-profile-picture-973460_640.png",
           likeCount: post[1].likeArr.length,
           commentCount: 58,
           contentCount: post[1].pictureUrlArr.length,
