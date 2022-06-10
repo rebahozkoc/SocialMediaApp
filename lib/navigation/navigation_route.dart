@@ -47,7 +47,7 @@ class NavigationRoute {
         return cupertinoNavigate(const Likes(), NavigationConstants.LIKES);
       case NavigationConstants.COMMENTS:
         return cupertinoNavigate(
-            const Comments(), NavigationConstants.COMMENTS);
+            Comments(postId: args.arguments as String), NavigationConstants.COMMENTS);
       case NavigationConstants.CHAT:
         return cupertinoNavigate(ChatView(chatId: args.arguments as String),
             NavigationConstants.CHAT);

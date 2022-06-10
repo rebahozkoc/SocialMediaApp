@@ -1,9 +1,12 @@
 import 'package:flutter/material.dart';
+import 'package:sabanci_talks/firestore_classes/firestore_main/firestore.dart';
+import 'package:sabanci_talks/util/analytics.dart';
 import 'package:sabanci_talks/util/colors.dart';
 import 'package:sabanci_talks/widgets/comment_widget.dart';
 
 class Comments extends StatefulWidget {
-  const Comments({Key? key}) : super(key: key);
+  final String postId;
+  const Comments({Key? key, required this.postId}) : super(key: key);
 
   static const String routeName = '/comments';
 
@@ -13,21 +16,44 @@ class Comments extends StatefulWidget {
 
 class _CommentsState extends State<Comments> {
   late TextEditingController controller;
-
+  List<dynamic> commentsJSON = [];
   @override
   void initState() {
     controller = TextEditingController();
     super.initState();
   }
 
+  Future<void> getComments() async{
+    Firestore f = Firestore();
+    commentsJSON = await f.getAllComments(widget.postId);
+    debugPrint("commentsJSON $commentsJSON");
+    
+  }
+
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
+    MyAnalytics.setCurrentScreen("Comment Page");
+    return FutureBuilder(
+      future: getComments(),
+
+      builder: (context, snapshot) {
+        switch (snapshot.connectionState) {
+          case ConnectionState.waiting:
+              return Scaffold(
+                  body: Container(
+                      alignment: Alignment.center,
+                      child: const Text("Comments are loading")));
+            default:
+            return Scaffold(
         appBar: AppBar(
           title: const Text('Comments'),
         ),
         body: _body());
+      }});
+
   }
+
+
 
   SafeArea _body() => SafeArea(
           child: Column(
@@ -42,11 +68,14 @@ class _CommentsState extends State<Comments> {
           child: ListView.separated(
             padding: const EdgeInsets.symmetric(vertical: 8,horizontal: 8),
             shrinkWrap: false,
-            itemBuilder: (context, index) => const CommentWidget(),
+            itemBuilder: (context, index) => CommentWidget(
+              comment: commentsJSON[index][1].comment,
+              uid: commentsJSON[index][1].uid,
+              ),
             separatorBuilder: (context, index) => const SizedBox(
               height: 8,
             ),
-            itemCount: 12,
+            itemCount: commentsJSON.length,
           ),
         );
   }

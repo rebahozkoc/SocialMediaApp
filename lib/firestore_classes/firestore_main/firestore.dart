@@ -483,7 +483,7 @@ class Firestore {
     return;
   }
 
-  Future<List<dynamic>?> getAllComments(postid) async {
+  Future<List<dynamic>> getAllComments(postid) async {
     debugPrint("postid: ${postid}");
     dynamic result;
     myData =
@@ -493,6 +493,12 @@ class Firestore {
       }).toList();
     });
     //debugPrint("Post is ${posts2.toString()}");
-    return result;
+    if (result !=null){
+      return result;
+    }else{
+      List<dynamic> emptyList = [];
+      return emptyList;
+    }
+
   }
 }

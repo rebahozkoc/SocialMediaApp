@@ -181,7 +181,7 @@ class _PostViewState extends State<PostView> {
               color: AppColors.darkGrey,
               iconSize: 18,
               onPressed: () => NavigationService.instance
-                  .navigateToPage(path: NavigationConstants.COMMENTS),
+                  .navigateToPage(path: NavigationConstants.COMMENTS, data: widget.postModel.postId),
             ),
             _integrationCount(convertCount(widget.postModel.commentCount!))
           ],
