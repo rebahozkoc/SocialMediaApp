@@ -54,7 +54,8 @@ class _PostViewState extends State<PostView> {
       imgUrls: imgUrls,
       index: index,
     );
-    NavigationService.instance.navigateToPage(path: NavigationConstants.SINGLE_POST, data: postHero);
+    NavigationService.instance
+        .navigateToPage(path: NavigationConstants.SINGLE_POST, data: postHero);
   }
 
   changeSave() {

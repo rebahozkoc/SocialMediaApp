@@ -1,9 +1,7 @@
-import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'dart:io' show Platform;
 import 'package:flutter/cupertino.dart';
 import 'package:persistent_bottom_nav_bar/persistent-tab-view.dart';
-import 'package:provider/provider.dart';
 
 //import 'package:sabanci_talks/firestore_classes/user/user.dart';
 import 'package:sabanci_talks/firestore_classes/user/my_user.dart';
@@ -18,9 +16,6 @@ import 'package:sabanci_talks/util/colors.dart';
 import 'package:sabanci_talks/util/styles.dart';
 import 'package:sabanci_talks/util/dimensions.dart';
 import 'package:sabanci_talks/widgets/mini_post.dart';
-import 'package:firebase_analytics/firebase_analytics.dart';
-import 'package:firebase_analytics/observer.dart';
-import 'package:shared_preferences/shared_preferences.dart';
 import '../../post/model/post_model.dart';
 import '../../post/view/post_view.dart';
 import "package:sabanci_talks/firestore_classes/firestore_main/firestore.dart";

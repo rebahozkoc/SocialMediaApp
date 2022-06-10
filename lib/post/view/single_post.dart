@@ -5,7 +5,6 @@ import 'package:sabanci_talks/post/view/post_view.dart';
 import 'package:sabanci_talks/firestore_classes/post/my_posts.dart';
 
 class SinglePost extends StatefulWidget {
-
   const SinglePost(
       {Key? key,
       required this.docId,
@@ -17,7 +16,7 @@ class SinglePost extends StatefulWidget {
   final String proUrl;
   final String name;
   final String date;
-  
+
   @override
   State<SinglePost> createState() => _SinglePostState();
 
@@ -31,24 +30,17 @@ class _SinglePostState extends State<SinglePost> {
   Future<void> getMyPost() async {
     Firestore f = Firestore();
     post = await f.getSpecificPost(widget.docId);
-      for (String url in post!.pictureUrlArr) {
+    for (String url in post!.pictureUrlArr) {
       contents.add(Content(
         type: "image",
         contentId: url,
         source: url,
       ));
     }
-    
-    debugPrint("contents: ${contents.length}");
-    for (int i = 0; i < contents.length; i++) {
-      debugPrint("contents[$i]: ${contents[i].source}");
-    }
   }
 
   @override
   Widget build(BuildContext context) {
-    
-
     return FutureBuilder(
         future: getMyPost(),
         builder: (context, snapshot) {
@@ -58,8 +50,6 @@ class _SinglePostState extends State<SinglePost> {
           );
         });
   }
-
-
 
   AppBar _appBar() => AppBar(
         title: const Text("Sabanci Talks"),
@@ -83,22 +73,11 @@ class _SinglePostState extends State<SinglePost> {
                 name: widget.name,
                 date: widget.date,
                 profileImg: widget.proUrl,
-                likeCount: 58100000,
+                likeCount: post != null ? post!.likeArr.length : 0,
                 commentCount: 58,
                 contentCount: contents.length,
                 postText: post != null ? post!.postText : "",
-                contents: contents.isNotEmpty ? contents : [
-                  Content(
-                    type: "image",
-                    contentId: "text",
-                    source: post != null && post!.pictureUrlArr.isNotEmpty
-                        ? post!.pictureUrlArr[0]
-                        : "https://picsum.photos/400",
-                  )
-                ],
-                  
-                  
-                
+                contents: contents,
               ),
             ),
             const SizedBox(
