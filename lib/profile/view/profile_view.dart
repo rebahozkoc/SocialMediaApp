@@ -100,7 +100,10 @@ class _ProfileViewState extends State<ProfileView>
             onPressed: () {
               pushNewScreenWithRouteSettings(
                 context,
-                screen: const Settings2(),
+                screen: Settings2(
+                  docId: show != null ? show[0] : "",
+                  isPrivate: show != null ? show[1].private : false,
+                ),
                 settings: const RouteSettings(name: Settings2.routeName),
                 withNavBar: true,
                 pageTransitionAnimation: PageTransitionAnimation.cupertino,

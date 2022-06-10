@@ -104,9 +104,6 @@ class Firestore {
         }
       ])
     });
-    createFollowers(uid);
-    createFollowing(uid);
-    createRequests(uid);
   }
 
   Future<void> updateUser(
@@ -137,8 +134,16 @@ class Firestore {
             }).toList());
     return show;
   }
+
+  Future<void> changePrivacy(docId, privacy) async {
+    await users
+        .doc(docId)
+        .update({"private": privacy})
+        .then((_) => print("success"))
+        .catchError((error) => print('Failed: $error'));
+  }
+
   //needs to be implemented
-  //change profile picture
   //update privacy
   //delete user
 
@@ -400,6 +405,9 @@ class Firestore {
     return;
   }
 
+////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+  //        Comments
+  ////////////////////////////////////////////////////////////////////////////////////////////////////////////////
   Future<void> addComment(
       {required postid, required uid, required comment}) async {
     myData =

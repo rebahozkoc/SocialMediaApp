@@ -139,12 +139,14 @@ class _UserProfileView extends State<UserProfileView>
                           ),
                           Padding(
                             padding: Dimen.regularParentPaddingLR,
-                            child: profileMainButtonRow(context),
+                            child: (widget.isPrivate && !widget.isFollowed)
+                                ? profileMainButtonRowPrivate(context)
+                                : profileMainButtonRow(context),
                           ),
                         ]),
                       ),
                     ]),
-                body: (widget.isPrivate)
+                body: (widget.isPrivate && !widget.isFollowed)
                     ? const Icon(
                         IconData(0xe3ae, fontFamily: 'MaterialIcons'),
                         size: 200,
@@ -436,6 +438,22 @@ class _UserProfileView extends State<UserProfileView>
                 },
                 child: ProfileCount("Following",
                     followings != null ? followings.followings.length : 0)))
+      ],
+    );
+  }
+
+  Row profileMainButtonRowPrivate(BuildContext context) {
+    return Row(
+      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+      children: [
+        Expanded(
+            child: ProfileCount("Moments", posts != null ? posts.length : 0)),
+        Expanded(
+            child: ProfileCount("Followers",
+                followers != null ? followers.followers.length : 0)),
+        Expanded(
+            child: ProfileCount("Following",
+                followings != null ? followings.followings.length : 0))
       ],
     );
   }
