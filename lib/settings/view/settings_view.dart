@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:sabanci_talks/firestore_classes/firestore_main/firestore.dart';
 import 'package:sabanci_talks/navigation/navigation_constants.dart';
 import 'package:sabanci_talks/navigation/navigation_service.dart';
 import 'package:sabanci_talks/util/authentication/auth.dart';
@@ -10,8 +11,10 @@ import 'package:flutter_switch/flutter_switch.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 class Settings2 extends StatefulWidget {
-  const Settings2({Key? key}) : super(key: key);
-
+  const Settings2({Key? key, required this.docId, required this.isPrivate})
+      : super(key: key);
+  final String docId;
+  final bool isPrivate;
   static const String routeName = '/settings';
 
   @override
@@ -35,10 +38,16 @@ class _Settings2State extends State<Settings2> {
   SingleChildScrollView _body() => SingleChildScrollView(
         child: Column(
           children: [
-            const ListItemWithSwitch(
-                "Private Account", "People will seek permission to follow you"),
-            const ListItemWithSwitch(
-                "Allow Saving", "People can save your posts to their profile"),
+            ListItemWithSwitch(
+                "Private Account",
+                "People will seek permission to follow you",
+                widget.isPrivate,
+                widget.docId),
+            ListItemWithSwitch(
+                "Allow Saving",
+                "People can save your posts to their profile",
+                widget.isPrivate,
+                widget.docId),
             listItemWithoutSwitch("Block List", Icons.chevron_right, () {}),
             listItemWithoutSwitch("Sign Out", Icons.logout_outlined, () {
               signOut(context);
@@ -53,16 +62,14 @@ class _Settings2State extends State<Settings2> {
   InkWell listItemWithoutSwitch(String text, IconData iconData, onPressFunc) {
     return InkWell(
       onTap: onPressFunc,
-      child:
-          Padding(
-            padding: Dimen.regularParentPadding ,
-            child: Row(
-              children: [
-                Text(text, style: kHeader4TextStyle), 
-                const Spacer(),
-                Icon(iconData)
-                ]),
-          ),
+      child: Padding(
+        padding: Dimen.regularParentPadding,
+        child: Row(children: [
+          Text(text, style: kHeader4TextStyle),
+          const Spacer(),
+          Icon(iconData)
+        ]),
+      ),
     );
   }
 
@@ -85,14 +92,17 @@ class _Settings2State extends State<Settings2> {
 class ListItemWithSwitch extends StatefulWidget {
   final String text;
   final String subText;
-  const ListItemWithSwitch(this.text, this.subText, {Key? key}) : super(key: key);
+  bool? state;
+  final String docId;
+  ListItemWithSwitch(this.text, this.subText, this.state, this.docId,
+      {Key? key})
+      : super(key: key);
 
   @override
   State<ListItemWithSwitch> createState() => _ListItemWithSwitchState();
 }
 
 class _ListItemWithSwitchState extends State<ListItemWithSwitch> {
-  bool state = true;
   @override
   Widget build(BuildContext context) {
     return Padding(
@@ -108,7 +118,7 @@ class _ListItemWithSwitchState extends State<ListItemWithSwitch> {
             ],
           ),
           FlutterSwitch(
-              activeColor: state
+              activeColor: widget.state == true
                   ? Colors.white.withOpacity(1)
                   : Colors.white.withOpacity(0.6),
               toggleColor: AppColors.primary,
@@ -116,14 +126,19 @@ class _ListItemWithSwitchState extends State<ListItemWithSwitch> {
               height: 30.0,
               valueFontSize: 25.0,
               toggleSize: 25.0,
-              value: state,
+              value: widget.state == true,
               borderRadius: 30.0,
               padding: 5.0,
               switchBorder: Border.all(color: AppColors.primary),
-              onToggle: (val) {
-                setState(() {
-                  state = !state;
-                });
+              onToggle: (val) async {
+                if (widget.text == "Private Account") {
+                  Firestore f = Firestore();
+                  debugPrint("State is ${widget.state == true}");
+                  f.changePrivacy(widget.docId, !(widget.state == true));
+                  setState(() {
+                    widget.state = !(widget.state == true);
+                  });
+                }
               })
         ],
       ),

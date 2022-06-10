@@ -40,6 +40,9 @@ class _SignUpState extends State<SignUp> {
     } else if (element is User) {
       Firestore f = Firestore();
       await f.addUser(element.uid, userName);
+      await f.createFollowers(element.uid);
+      await f.createFollowing(element.uid);
+      await f.createRequests(element.uid);
       prefs = await SharedPreferences.getInstance();
       prefs.setString("user", element.uid);
     } else {
