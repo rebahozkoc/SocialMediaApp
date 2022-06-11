@@ -1,7 +1,10 @@
 import 'package:flutter/material.dart';
+import 'package:persistent_bottom_nav_bar/persistent-tab-view.dart';
 import 'package:sabanci_talks/firestore_classes/firestore_main/firestore.dart';
 import 'package:sabanci_talks/navigation/navigation_constants.dart';
 import 'package:sabanci_talks/navigation/navigation_service.dart';
+import 'package:sabanci_talks/sign_in/view/reset_password_view.dart';
+import 'package:sabanci_talks/sign_in/view/verification.dart';
 import 'package:sabanci_talks/util/authentication/auth.dart';
 import 'package:sabanci_talks/util/colors.dart';
 import 'package:sabanci_talks/util/dimensions.dart';
@@ -48,7 +51,12 @@ class _Settings2State extends State<Settings2> {
                 "People can save your posts to their profile",
                 widget.isPrivate,
                 widget.docId),
-            listItemWithoutSwitch("Block List", Icons.chevron_right, () {}),
+            listItemWithoutSwitch("Change Password", Icons.chevron_right, () {
+              Navigator.push(
+                context,
+                MaterialPageRoute(builder: (context) => const Verify()),
+              );
+            }),
             listItemWithoutSwitch("Sign Out", Icons.logout_outlined, () {
               signOut(context);
             }),

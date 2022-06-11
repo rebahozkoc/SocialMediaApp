@@ -2,6 +2,7 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:google_sign_in/google_sign_in.dart';
 import 'package:sabanci_talks/firestore_classes/firestore_main/firestore.dart';
+import 'package:sabanci_talks/sign_in/view/verification.dart';
 import "package:shared_preferences/shared_preferences.dart";
 
 class Authentication {
@@ -58,6 +59,15 @@ class Authentication {
     prefs = await SharedPreferences.getInstance();
     prefs.setString("user", "");
     await _auth.signOut();
+  }
+
+  // Future<void> resetPass() async {
+  //   prefs = await SharedPreferences.getInstance();
+  //   dynamic uid = prefs.get("uid");
+  //   _auth.sendPasswordResetEmail(email: )
+  // }
+  Future<void> verify(email) async {
+    _auth.sendPasswordResetEmail(email: email);
   }
 
   Future<User?> signInWithGoogle() async {

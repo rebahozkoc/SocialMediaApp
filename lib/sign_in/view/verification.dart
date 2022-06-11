@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:sabanci_talks/navigation/navigation_constants.dart';
 import 'package:sabanci_talks/navigation/navigation_service.dart';
+import 'package:sabanci_talks/sign_in/view/reset_password_view.dart';
+import 'package:sabanci_talks/util/authentication/auth.dart';
 import 'dart:io' show Platform;
 import "package:sabanci_talks/util/styles.dart";
 import "package:sabanci_talks/util/colors.dart";
@@ -8,22 +10,21 @@ import "package:sabanci_talks/util/dimensions.dart";
 import "package:sabanci_talks/util/screen_sizes.dart";
 import 'package:flutter/cupertino.dart';
 
-class ResetPass extends StatefulWidget {
-  const ResetPass({Key? key}) : super(key: key);
+class Verify extends StatefulWidget {
+  const Verify({Key? key}) : super(key: key);
 
   @override
-  State<ResetPass> createState() => _ResetPassState();
+  State<Verify> createState() => _VerifyState();
 
   static const String routeName = '/signup';
 }
 
-class _ResetPassState extends State<ResetPass> {
+class _VerifyState extends State<Verify> {
   final _formKey = GlobalKey<FormState>();
-  String email = '';
-  String pass = '';
-  String confirmPass = '';
-  late String s;
+  String code = '';
 
+  late String s;
+  final Authentication _auth = Authentication();
   Future<void> _showDialog(String title, String message) async {
     bool isAndroid = Platform.isAndroid;
     return showDialog(
@@ -138,97 +139,7 @@ class _ResetPassState extends State<ResetPass> {
                                 }
                               },
                               onSaved: (value) {
-                                email = value ?? '';
-                              },
-                            ),
-                          ),
-                          Container(
-                            padding: const EdgeInsets.all(16),
-                            width: screenWidth(context, dividedBy: 1.1),
-                            child: TextFormField(
-                              keyboardType: TextInputType.text,
-                              obscureText: true,
-                              enableSuggestions: false,
-                              autocorrect: false,
-                              decoration: InputDecoration(
-                                label: Container(
-                                  width: 150,
-                                  child: Row(
-                                    children: [
-                                      const Icon(Icons.password),
-                                      const SizedBox(width: 4),
-                                      Text('New Password',
-                                          style: inputTextStyle),
-                                    ],
-                                  ),
-                                ),
-                                //fillColor: AppColors.textFieldFillColor,
-                                //filled: true,
-                                labelStyle: kBoldLabelStyle,
-                                border: OutlineInputBorder(
-                                  borderSide: BorderSide(
-                                    color: AppColors.primary,
-                                  ),
-                                  borderRadius: BorderRadius.circular(10),
-                                ),
-                              ),
-                              validator: (value) {
-                                if (value != null) {
-                                  if (value.isEmpty) {
-                                    return 'Cannot leave password empty';
-                                  }
-                                  if (value.length < 6) {
-                                    return 'Password too short';
-                                  }
-                                }
-                              },
-                              onSaved: (value) {
-                                pass = value ?? '';
-                              },
-                            ),
-                          ),
-                          Container(
-                            padding: const EdgeInsets.all(16),
-                            width: screenWidth(context, dividedBy: 1.1),
-                            child: TextFormField(
-                              keyboardType: TextInputType.text,
-                              obscureText: true,
-                              enableSuggestions: false,
-                              autocorrect: false,
-                              decoration: InputDecoration(
-                                label: Container(
-                                  width: 150,
-                                  child: Row(
-                                    children: [
-                                      const Icon(Icons.password),
-                                      const SizedBox(width: 4),
-                                      Text('Confirm Password',
-                                          style: inputTextStyle),
-                                    ],
-                                  ),
-                                ),
-                                //fillColor: AppColors.textFieldFillColor,
-                                //filled: true,
-                                labelStyle: kBoldLabelStyle,
-                                border: OutlineInputBorder(
-                                  borderSide: BorderSide(
-                                    color: AppColors.primary,
-                                  ),
-                                  borderRadius: BorderRadius.circular(10),
-                                ),
-                              ),
-                              validator: (value) {
-                                if (value != null) {
-                                  if (value.isEmpty) {
-                                    return 'Cannot leave password empty';
-                                  }
-                                  if (value.length < 6) {
-                                    return 'Password too short';
-                                  }
-                                }
-                              },
-                              onSaved: (value) {
-                                confirmPass = value ?? '';
+                                code = value ?? '';
                               },
                             ),
                           ),
@@ -238,16 +149,10 @@ class _ResetPassState extends State<ResetPass> {
                               onPressed: () {
                                 if (_formKey.currentState!.validate()) {
                                   _formKey.currentState!.save();
-                                  if (confirmPass == pass) {
-                                    //  NavigationService.instance
-                                    //     .navigateToPageClear(
-                                    //         path:
-                                    //             NavigationConstants.BOTTOM_BAR);
-                                  } else {
-                                    _showDialog('Password Error',
-                                        'Your password does not match');
-                                    debugPrint("here we are");
-                                  }
+                                  _auth.verify(code);
+                                  NavigationService.instance
+                                      .navigateToPageClear(
+                                          path: NavigationConstants.BOTTOM_BAR);
                                 } else {
                                   _showDialog(
                                       'Form Error', 'Your form is invalid');

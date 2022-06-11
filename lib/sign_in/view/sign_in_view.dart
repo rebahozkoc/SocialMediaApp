@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:sabanci_talks/navigation/navigation_constants.dart';
 import 'package:sabanci_talks/navigation/navigation_service.dart';
+import 'package:sabanci_talks/sign_in/view/verification.dart';
 import 'package:sabanci_talks/util/analytics.dart';
 import 'package:sabanci_talks/util/authentication/auth.dart';
 import 'dart:io' show Platform;
@@ -277,8 +278,10 @@ class _SignInState extends State<SignIn> {
               ),
               TextButton(
                 onPressed: () {
-                  NavigationService.instance
-                      .navigateToPage(path: NavigationConstants.FORGET_PASS);
+                  Navigator.push(
+                    context,
+                    MaterialPageRoute(builder: (context) => const Verify()),
+                  );
                 },
                 child: const Padding(
                   padding: EdgeInsets.symmetric(vertical: 15.0),
