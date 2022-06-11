@@ -61,14 +61,24 @@ class _PostViewState extends State<PostView> {
       if (likeArrCopy.contains(uid)) {
         // user liked the picture before
         likeArrCopy.remove(uid);
-        await f.updatePost(widget.postModel.postId, myPost?.uid, myPost?.createdAt,
-            myPost?.postText, myPost?.pictureUrlArr, likeArrCopy);
+        await f.updatePost(
+          docId: widget.postModel.postId, 
+          uid: myPost?.uid, 
+          createdAt: myPost?.createdAt,
+          postText:  myPost?.postText, 
+          pictureUrlArr: myPost?.pictureUrlArr, 
+          likeArr: likeArrCopy);
         widget.postModel.isLiked = false;
       } else {
         // user did not like the picture before
         likeArrCopy.add(uid);
-        await f.updatePost(widget.postModel.postId, myPost?.uid, myPost?.createdAt,
-            myPost?.postText, myPost?.pictureUrlArr, likeArrCopy);
+        await f.updatePost(
+          docId: widget.postModel.postId, 
+          uid: myPost?.uid, 
+          createdAt: myPost?.createdAt,
+          postText: myPost?.postText, 
+          pictureUrlArr: myPost?.pictureUrlArr, 
+          likeArr: likeArrCopy);
         widget.postModel.isLiked = true;
       }
     }

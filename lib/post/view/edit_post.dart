@@ -9,7 +9,6 @@ import 'package:sabanci_talks/navigation/navigation_service.dart';
 import 'package:sabanci_talks/new_post/view/add_image_view.dart';
 import 'package:sabanci_talks/new_post/view/added_image_view.dart';
 import 'package:sabanci_talks/post/model/post_model.dart';
-import 'package:sabanci_talks/post/view/post_view.dart';
 import 'package:sabanci_talks/firestore_classes/post/my_posts.dart';
 import 'package:sabanci_talks/util/analytics.dart';
 import 'package:sabanci_talks/util/dimensions.dart';
@@ -93,6 +92,10 @@ class _EditPostState extends State<EditPost> {
       List<String> fileNames = [];
       try {
         for (var image in images) {
+          // If the image is the url of the old images don't upload it again
+          if (image.runtimeType == String){
+            fileNames.add(image);
+          }else{
           String fileName = basename(image.path);
           Reference firebaseStorageRef =
               FirebaseStorage.instance.ref().child('uploads/$fileName');
@@ -104,17 +107,19 @@ class _EditPostState extends State<EditPost> {
             debugPrint(fileURL);
             fileNames.add(fileURL);
           });
+          }
+          
         }
         debugPrint(description);
         debugPrint(fileNames.toString());
-        DateTime now = DateTime.now();
-        String formattedDate = DateFormat('yyyy-MM-dd-kk:mm').format(now);
 
-        await f.addPost(
-            uid: uid,
-            createdAt: formattedDate,
-            urlArr: fileNames,
-            postText: description);
+        f.updatePost(
+          docId: widget.docId, 
+          uid: uid, 
+          createdAt: post?.createdAt,
+          postText: description, 
+          pictureUrlArr: fileNames, 
+          likeArr: post != null ?  post!.likeArr: []);
         NavigationService.instance
             .navigateToPageClear(path: NavigationConstants.BOTTOM_BAR);
         debugPrint("Upload complete");
@@ -146,6 +151,7 @@ class _EditPostState extends State<EditPost> {
   Widget build(BuildContext context) {
     MyAnalytics.setCurrentScreen("Edit Post Page");
     imgViewList = [];
+    description = widget.oldDescription;
     for (var i = 0; i < imgList.length; i++) {
       imgViewList.add(InkWell(
           onTap: () => setState(() {

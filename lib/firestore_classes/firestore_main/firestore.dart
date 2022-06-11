@@ -513,8 +513,8 @@ class Firestore {
   }
 
 
-    Future<void> updatePost(
-      docId, uid, createdAt, postText, pictureUrlArr, likeArr) async {
+    Future<void> updatePost({required
+      docId, required uid, required createdAt, required postText, required pictureUrlArr, required likeArr}) async {
     await posts
         .doc(docId)
         .update({
