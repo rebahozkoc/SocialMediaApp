@@ -6,6 +6,7 @@ import 'package:sabanci_talks/navigation/navigation_service.dart';
 import 'package:sabanci_talks/post/functions/post_functions.dart';
 import 'package:sabanci_talks/post/model/post_model.dart';
 import 'package:sabanci_talks/util/colors.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 class PostHeroModel {
   int? likeCount;
@@ -36,11 +37,22 @@ class PostView extends StatefulWidget {
 class _PostViewState extends State<PostView> {
   bool isSaved = false;
 
-  changeLike() {
+  changeLike() async {
+    var prefs = await SharedPreferences.getInstance();
+    String uid = prefs.getString("uid") ?? "";
+    
+    if (uid != "") {
+      // TODO: Change Like In Firestore (uid, widget.postModel.postId)
+      if (widget.postModel.isLiked ?? false) {
+        widget.postModel.likeArray!.remove(uid);
+      } else {
+        widget.postModel.likeArray!.add(uid);
+      }
+    }
     setState(() {
       widget.postModel.isLiked = !widget.postModel.isLiked!;
-      // If I liked the post before, remove my uid from the likeArr else add my uid to the likeArr
-      if (widget.postModel.isLiked!) {}
+      widget.postModel.likeCount =
+          widget.postModel.likeCount! + (widget.postModel.isLiked! ? 1 : -1);
     });
   }
 
@@ -182,8 +194,9 @@ class _PostViewState extends State<PostView> {
               icon: const Icon(CupertinoIcons.bubble_left),
               color: AppColors.darkGrey,
               iconSize: 18,
-              onPressed: () => NavigationService.instance
-                  .navigateToPage(path: NavigationConstants.COMMENTS, data: widget.postModel.postId),
+              onPressed: () => NavigationService.instance.navigateToPage(
+                  path: NavigationConstants.COMMENTS,
+                  data: widget.postModel.postId),
             ),
             _integrationCount(convertCount(widget.postModel.commentCount!))
           ],
