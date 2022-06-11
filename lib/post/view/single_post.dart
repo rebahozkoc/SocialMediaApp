@@ -74,7 +74,7 @@ class _SinglePostState extends State<SinglePost> {
   }
 
   AppBar _appBar() => AppBar(
-        title: const Text("Sabanci Talks"),
+        title: const Text("Post Details"),
         centerTitle: false,
         actions: <Widget>[
           IconButton(
