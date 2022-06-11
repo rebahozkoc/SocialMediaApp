@@ -39,8 +39,8 @@ class _PostViewState extends State<PostView> {
 
   changeLike() async {
     var prefs = await SharedPreferences.getInstance();
-    String uid = prefs.getString("uid") ?? "";
-    
+    String uid = prefs.getString("user") ?? "";
+
     if (uid != "") {
       // TODO: Change Like In Firestore (uid, widget.postModel.postId)
       if (widget.postModel.isLiked ?? false) {
