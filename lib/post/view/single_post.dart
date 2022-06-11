@@ -1,5 +1,8 @@
 import 'package:flutter/material.dart';
+import 'package:fluttertoast/fluttertoast.dart';
 import 'package:sabanci_talks/firestore_classes/firestore_main/firestore.dart';
+import 'package:sabanci_talks/navigation/navigation_constants.dart';
+import 'package:sabanci_talks/navigation/navigation_service.dart';
 import 'package:sabanci_talks/post/model/post_model.dart';
 import 'package:sabanci_talks/post/view/edit_post.dart';
 import 'package:sabanci_talks/post/view/post_view.dart';
@@ -27,10 +30,13 @@ class SinglePost extends StatefulWidget {
 class _SinglePostState extends State<SinglePost> {
   MyPost? post;
   List<Content> contents = [];
+  bool isButtonActive = true;
+  bool isNotDeleted = true;
 
   Future<void> getMyPost() async {
     Firestore f = Firestore();
-    post = await f.getSpecificPost(widget.docId);
+    post = isNotDeleted ? await f.getSpecificPost(widget.docId) : MyPost(uid: "uid");
+
     contents = [];
     for (String url in post!.pictureUrlArr) {
       contents.add(Content(
@@ -39,6 +45,20 @@ class _SinglePostState extends State<SinglePost> {
         source: url,
       ));
     }
+  }
+
+  Future deletePost() async{
+    setState(() {
+      isNotDeleted = false;
+      isButtonActive = false;
+    });
+
+    Firestore f = Firestore();
+    NavigationService.instance
+            .navigateToPageClear(path: NavigationConstants.BOTTOM_BAR);
+    
+    await f.deletePost(widget.docId);
+    
   }
 
   @override
@@ -64,10 +84,10 @@ class _SinglePostState extends State<SinglePost> {
                 context,
                 MaterialPageRoute(
                  builder: (context) => EditPost(
-                  proUrl: "show[1].profilePicture",
-                  docId: "miniPostList[index][0]",
-                  name:" show[1].fullName",
-                  date: "miniPostList[index][1].createdAt")),
+                  proUrl: widget.proUrl,
+                  docId: widget.docId,
+                  name: widget.name,
+                  date: widget.date)),
               );
 
 
@@ -75,7 +95,19 @@ class _SinglePostState extends State<SinglePost> {
           ),
           IconButton(
             icon: const Icon(Icons.delete, color: Colors.white),
-            onPressed: () {},
+            onPressed: isButtonActive
+              ? () {
+                deletePost();
+              }: (){
+                Fluttertoast.showToast(
+                      msg: "Please wait until the post is deleting",
+                      toastLength: Toast.LENGTH_SHORT,
+                      gravity: ToastGravity.BOTTOM,
+                      timeInSecForIosWeb: 1,
+                      backgroundColor: Colors.red,
+                      textColor: Colors.white,
+                      fontSize: 16.0);
+              }
           ),
         ],
       );

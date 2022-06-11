@@ -443,6 +443,7 @@ class Firestore {
       // get the followings list of uids
       if (followings != null) {
         List<dynamic> followingsUids = followings.followings;
+        followingsUids.add(myUid);
         if (followingsUids.isNotEmpty) {
           // get the posts of the followings
           debugPrint("followings $followings");
@@ -526,6 +527,14 @@ class Firestore {
         .then((_) => print("success"))
         .catchError((error) => print('Failed: $error'));
   }
+
+  Future<void> deletePost(docId) async {
+    await posts.doc(docId).delete().then(
+      (doc) => print("Post deleted"),
+      onError: (e) => print("Error deleting post $e"),
+    );
+  }
+
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////
   //        Comments
