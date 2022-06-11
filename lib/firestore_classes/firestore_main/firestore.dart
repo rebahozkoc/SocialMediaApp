@@ -135,6 +135,44 @@ class Firestore {
     return show;
   }
 
+  Future<List<dynamic>?> searchUser(search) async {
+    dynamic show;
+    String searchLowercase = search.toLowerCase();
+    List<String> searchList = [];
+    myData = await users.get().then((value) => show = value.docs.map((doc) {
+          MyUser temp = MyUser.fromJson(doc.data() as Map<String, dynamic>);
+          String lowercaseName = temp.fullName.toLowerCase();
+
+          if (lowercaseName.contains(searchLowercase)) {
+            debugPrint("name of user is ${temp.fullName}");
+            searchList.add(temp.uid);
+          }
+        }).toList());
+    debugPrint("size of list is ${show.length}");
+    return searchList;
+  }
+
+  Future<List<dynamic>> explorePage() async {
+    dynamic show;
+    dynamic temp;
+    List<String> userList = [];
+    myData = await users.get().then((value) => show = value.docs.map((doc) {
+          MyUser temp = MyUser.fromJson(doc.data() as Map<String, dynamic>);
+          if (!temp.private) {
+            userList.add(temp.uid);
+          }
+        }).toList());
+    List<dynamic> postList = [];
+
+    temp = await posts.get().then((value) => show = value.docs.map((e) {
+          MyPost post = MyPost.fromJson(e.data() as Map<String, dynamic>);
+          if (userList.contains(post.uid) && post.pictureUrlArr.isNotEmpty) {
+            postList.add([e.id, post]);
+          }
+        }).toList());
+    return postList;
+  }
+
   Future<void> changePrivacy(docId, privacy) async {
     await users
         .doc(docId)
@@ -401,32 +439,29 @@ class Firestore {
       dynamic followings = await getFollowings(myUid);
       // get the followings list of uids
       if (followings != null) {
-        
         List<dynamic> followingsUids = followings.followings;
         if (followingsUids.isNotEmpty) {
           // get the posts of the followings
-        debugPrint("followings $followings");
-        myData = await posts
-            .where("uid", whereIn: followingsUids)
-            .orderBy("createdAt", descending: true)
-            .limit(limit)
-            .get()
-            .then((value) {
-          postsJSON = value.docs.map((doc) {
-            return [
-              doc.id,
-              MyPost.fromJson(doc.data() as Map<String, dynamic>)
-            ];
-          }).toList();
-        });
-        //debugPrint("Post is ${posts2.toString()}");
-        return postsJSON;
-        }else{
-        List<dynamic> emptyList = [];
-        return emptyList;
-
+          debugPrint("followings $followings");
+          myData = await posts
+              .where("uid", whereIn: followingsUids)
+              .orderBy("createdAt", descending: true)
+              .limit(limit)
+              .get()
+              .then((value) {
+            postsJSON = value.docs.map((doc) {
+              return [
+                doc.id,
+                MyPost.fromJson(doc.data() as Map<String, dynamic>)
+              ];
+            }).toList();
+          });
+          //debugPrint("Post is ${posts2.toString()}");
+          return postsJSON;
+        } else {
+          List<dynamic> emptyList = [];
+          return emptyList;
         }
-
       } else {
         List<dynamic> emptyList = [];
         return emptyList;
