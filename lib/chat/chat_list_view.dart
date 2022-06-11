@@ -43,9 +43,13 @@ class _ChatListState extends State<ChatList> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(
-        title: const Text('Chats'),
-      ),
+      appBar: AppBar(title: const Text('Chat List'), actions: [
+        IconButton(
+          icon: const Icon(Icons.edit),
+          onPressed: () => NavigationService.instance
+              .navigateToPage(path: NavigationConstants.NEW_CHAT),
+        ),
+      ]),
       body: _body(),
     );
   }
@@ -79,15 +83,17 @@ class ChatListItem extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return InkWell(
-      onTap: () => NavigationService.instance
-          .navigateToPage(path: NavigationConstants.CHAT, data: model.docId),
+      onTap: () {
+        NavigationService.instance
+            .navigateToPage(path: NavigationConstants.CHAT, data: model.docId);
+      },
       child: ListTile(
         leading: ClipRRect(
-          borderRadius: BorderRadius.circular(32),
+          borderRadius: BorderRadius.circular(30),
           child: Image.network(
             model.user.profilePicture,
-            width: 64,
-            height: 64,
+            width: 60,
+            height: 60,
             fit: BoxFit.cover,
           ),
         ),

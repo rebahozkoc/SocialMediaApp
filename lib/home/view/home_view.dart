@@ -19,6 +19,8 @@ class HomeView extends StatefulWidget {
 class _HomeViewState extends State<HomeView> {
   List<PostView> posts = [];
   List<dynamic> postsJSONs = [];
+
+  
   Future<void> getMyPost() async {
     Firestore f = Firestore();
     postsJSONs = await f.getFeedPostsByLimit(15, onlyFollowed: true);
@@ -41,7 +43,7 @@ class _HomeViewState extends State<HomeView> {
           contentCount: post[1].pictureUrlArr.length,
           postText: post[1].postText,
           isLiked: post[1].likeArr.contains(myUid),
-        
+          postId: post[0],
            contents: post[1].pictureUrlArr.map<Content>((url) {
             return Content(
               type: "image",
