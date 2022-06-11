@@ -249,6 +249,7 @@ class _ProfileViewState extends State<ProfileView>
                                                   docId: miniPostList[index][0],
                                                   name: show[1].fullName,
                                                   date: miniPostList[index][1]
+                                                  
                                                       .createdAt)),
                                         )
                                       });

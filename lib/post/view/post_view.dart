@@ -1,6 +1,8 @@
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:sabanci_talks/firestore_classes/firestore_main/firestore.dart';
+import 'package:sabanci_talks/firestore_classes/post/my_posts.dart';
 import 'package:sabanci_talks/navigation/navigation_constants.dart';
 import 'package:sabanci_talks/navigation/navigation_service.dart';
 import 'package:sabanci_talks/post/functions/post_functions.dart';
@@ -36,23 +38,43 @@ class PostView extends StatefulWidget {
 
 class _PostViewState extends State<PostView> {
   bool isSaved = false;
+  MyPost? myPost;
+  List<String> likeArrCopy = [];
 
   changeLike() async {
     var prefs = await SharedPreferences.getInstance();
     String uid = prefs.getString("user") ?? "";
+    Firestore f = Firestore();
+    myPost = await f.getSpecificPost(widget.postModel.postId);
+    likeArrCopy = [];
 
+    if (myPost != null ? myPost!.likeArr.isNotEmpty : false) {
+      for (String user in myPost!.likeArr) {
+        likeArrCopy.add(user);
+      }
+    }
+    debugPrint("mypost $myPost");
+
+    // If uid is in the likeArr remove it and set isLiked false
+    // else add uid to the likeArr and set isLiked true
     if (uid != "") {
-      // TODO: Change Like In Firestore (uid, widget.postModel.postId)
-      if (widget.postModel.isLiked ?? false) {
-        widget.postModel.likeArray!.remove(uid);
+      if (likeArrCopy.contains(uid)) {
+        // user liked the picture before
+        likeArrCopy.remove(uid);
+        await f.updatePost(widget.postModel.postId, myPost?.uid, myPost?.createdAt,
+            myPost?.postText, myPost?.pictureUrlArr, likeArrCopy);
+        widget.postModel.isLiked = false;
       } else {
-        widget.postModel.likeArray!.add(uid);
+        // user did not like the picture before
+        likeArrCopy.add(uid);
+        await f.updatePost(widget.postModel.postId, myPost?.uid, myPost?.createdAt,
+            myPost?.postText, myPost?.pictureUrlArr, likeArrCopy);
+        widget.postModel.isLiked = true;
       }
     }
     setState(() {
-      widget.postModel.isLiked = !widget.postModel.isLiked!;
-      widget.postModel.likeCount =
-          widget.postModel.likeCount! + (widget.postModel.isLiked! ? 1 : -1);
+      //widget.postModel.isLiked = widget.postModel.isLiked!;
+      widget.postModel.likeCount =  likeArrCopy.length;
     });
   }
 
@@ -198,7 +220,6 @@ class _PostViewState extends State<PostView> {
                   path: NavigationConstants.COMMENTS,
                   data: widget.postModel.postId),
             ),
-            _integrationCount(convertCount(widget.postModel.commentCount!))
           ],
         ),
       ]),

@@ -1,12 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:sabanci_talks/firestore_classes/firestore_main/firestore.dart';
 import 'package:sabanci_talks/post/model/post_model.dart';
-import 'package:sabanci_talks/post/view/edit_post.dart';
 import 'package:sabanci_talks/post/view/post_view.dart';
 import 'package:sabanci_talks/firestore_classes/post/my_posts.dart';
 
-class SinglePost extends StatefulWidget {
-  const SinglePost(
+class EditPost extends StatefulWidget {
+  const EditPost(
       {Key? key,
       required this.docId,
       required this.proUrl,
@@ -19,12 +18,12 @@ class SinglePost extends StatefulWidget {
   final String date;
 
   @override
-  State<SinglePost> createState() => _SinglePostState();
+  State<EditPost> createState() => _EditPostState();
 
   static const String routeName = '/singlePost';
 }
 
-class _SinglePostState extends State<SinglePost> {
+class _EditPostState extends State<EditPost> {
   MyPost? post;
   List<Content> contents = [];
 
@@ -59,19 +58,7 @@ class _SinglePostState extends State<SinglePost> {
         actions: <Widget>[
           IconButton(
             icon: const Icon(Icons.edit, color: Colors.white),
-            onPressed: () {
-              Navigator.push(
-                context,
-                MaterialPageRoute(
-                 builder: (context) => EditPost(
-                  proUrl: "show[1].profilePicture",
-                  docId: "miniPostList[index][0]",
-                  name:" show[1].fullName",
-                  date: "miniPostList[index][1].createdAt")),
-              );
-
-
-            },
+            onPressed: () {},
           ),
           IconButton(
             icon: const Icon(Icons.delete, color: Colors.white),

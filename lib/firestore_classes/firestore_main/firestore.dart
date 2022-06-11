@@ -511,6 +511,22 @@ class Firestore {
     return;
   }
 
+
+    Future<void> updatePost(
+      docId, uid, createdAt, postText, pictureUrlArr, likeArr) async {
+    await posts
+        .doc(docId)
+        .update({
+          "uid": uid, 
+          "createdAt": createdAt,
+          "postText": postText,
+          "pictureUrlArr": pictureUrlArr,
+          "likeArr": likeArr,
+        })
+        .then((_) => print("success"))
+        .catchError((error) => print('Failed: $error'));
+  }
+
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////
   //        Comments
   ////////////////////////////////////////////////////////////////////////////////////////////////////////////////

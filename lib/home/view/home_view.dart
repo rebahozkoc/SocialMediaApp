@@ -27,7 +27,7 @@ class _HomeViewState extends State<HomeView> {
     debugPrint("postsJSONs: ${postsJSONs}");
     // Get my uid to decide if I liked the posts before or not
     String myUid = await f.decideUser() ?? "";
-
+    posts = [];
     for (dynamic post in postsJSONs) {
       // Get the post owner information by uid
       final userJSON = await f.getUser(post[1].uid);
