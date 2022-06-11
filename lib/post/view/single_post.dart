@@ -87,7 +87,8 @@ class _SinglePostState extends State<SinglePost> {
                   proUrl: widget.proUrl,
                   docId: widget.docId,
                   name: widget.name,
-                  date: widget.date)),
+                  oldDescription: post != null ? post!.postText: "",
+                  )),
               );
 
 

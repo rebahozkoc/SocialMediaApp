@@ -1,14 +1,17 @@
 import 'package:firebase_storage/firebase_storage.dart';
 import 'package:flutter/material.dart';
+import 'package:fluttertoast/fluttertoast.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:intl/intl.dart';
 import 'package:sabanci_talks/firestore_classes/firestore_main/firestore.dart';
 import 'package:sabanci_talks/navigation/navigation_constants.dart';
 import 'package:sabanci_talks/navigation/navigation_service.dart';
 import 'package:sabanci_talks/new_post/view/add_image_view.dart';
+import 'package:sabanci_talks/new_post/view/added_image_view.dart';
 import 'package:sabanci_talks/post/model/post_model.dart';
 import 'package:sabanci_talks/post/view/post_view.dart';
 import 'package:sabanci_talks/firestore_classes/post/my_posts.dart';
+import 'package:sabanci_talks/util/analytics.dart';
 import 'package:sabanci_talks/util/dimensions.dart';
 import 'package:sabanci_talks/util/screen_sizes.dart';
 import 'package:sabanci_talks/util/styles.dart';
@@ -16,17 +19,17 @@ import 'dart:io';
 import 'package:path/path.dart';
 
 class EditPost extends StatefulWidget {
-  const EditPost(
-      {Key? key,
-      required this.docId,
-      required this.proUrl,
-      required this.name,
-      required this.date})
-      : super(key: key);
+  const EditPost({
+    Key? key,
+    required this.docId,
+    required this.proUrl,
+    required this.name,
+    required this.oldDescription
+  }) : super(key: key);
   final String docId;
   final String proUrl;
   final String name;
-  final String date;
+  final String oldDescription;
 
   @override
   State<EditPost> createState() => _EditPostState();
@@ -38,7 +41,10 @@ class _EditPostState extends State<EditPost> {
   MyPost? post;
   List<Content> contents = [];
   final _formKey = GlobalKey<FormState>();
-  final List<XFile> imgList = [];
+  List imgList = [];
+
+  List<Widget> imgViewList = [];
+
   final ImagePicker _picker = ImagePicker();
   String description = "";
   bool isButtonActive = true;
@@ -65,7 +71,13 @@ class _EditPostState extends State<EditPost> {
     });
   }
 
-  Future updatePostOnFirebase(BuildContext context, List<XFile> images) async {
+  @override
+  void initState() {
+    super.initState();
+    getMyPost();
+  }
+
+  Future updatePostOnFirebase(BuildContext context, List images) async {
     // Check the form for errors
     debugPrint("BUTTOON CLICKEEEEEDD");
     setState(() {
@@ -121,70 +133,29 @@ class _EditPostState extends State<EditPost> {
   Future<void> getMyPost() async {
     Firestore f = Firestore();
     post = await f.getSpecificPost(widget.docId);
-    contents = [];
+    imgList = [];
     for (String url in post!.pictureUrlArr) {
-      contents.add(Content(
-        type: "image",
-        contentId: url,
-        source: url,
-      ));
+      imgList.add(url);
     }
+    setState(() {
+      description = post!.postText;
+    });
   }
 
   @override
   Widget build(BuildContext context) {
-    return FutureBuilder(
-        future: getMyPost(),
-        builder: (context, snapshot) {
-          return Scaffold(
-            appBar: _appBar(),
-            body: _body(context),
-          );
-        });
-  }
-
-  AppBar _appBar() => AppBar(
-        title: const Text("Edit Post"),
-        centerTitle: false,
-      );
-
-  SizedBox _body(BuildContext context) {
-    debugPrint("contents $contents");
-    return SizedBox(
-      width: double.infinity,
-      child: ListView(
-        primary: true,
-        shrinkWrap: true,
-        children: [
-          PostView(
-            postModel: PostModel(
-              name: widget.name,
-              date: widget.date,
-              profileImg: widget.proUrl,
-              likeCount: post != null ? post!.likeArr.length : 0,
-              commentCount: 58,
-              contentCount: contents.length,
-              postText: post != null ? post!.postText : "",
-              contents: contents,
-              postId: widget.docId,
-            ),
-          ),
-          const SizedBox(
-            height: 12,
-          ),
-          Row(
-            mainAxisAlignment: MainAxisAlignment.center,
-            children: [
-              Wrap(children: [_addImageButton(context)]),
-            ],
-          )
-        ],
-      ),
-    );
-  }
-
-  Widget _addImageButton(BuildContext context) {
-    return InkWell(
+    MyAnalytics.setCurrentScreen("Edit Post Page");
+    imgViewList = [];
+    for (var i = 0; i < imgList.length; i++) {
+      imgViewList.add(InkWell(
+          onTap: () => setState(() {
+                imgList.removeAt(i);
+              }),
+          child: imgList[i].runtimeType == String
+              ? AddedImageView(imgList[i], isNetworkImg: true)
+              : AddedImageView(imgList[i].path, isNetworkImg: false)));
+    }
+    imgViewList.add(InkWell(
       onTap: () {
         showGeneralDialog(
           barrierLabel: "Label",
@@ -242,7 +213,101 @@ class _EditPostState extends State<EditPost> {
           },
         );
       },
-      child: const AddImageView(true),
+      child: const AddImageView(false),
+    ));
+    return FutureBuilder(
+        builder: (context, snapshot) {
+          switch (snapshot.connectionState) {
+            case ConnectionState.waiting:
+              return Scaffold(
+                  body: Container(
+                      alignment: Alignment.center,
+                      child: const Text("The post is loading...")));
+            default:
+              return Scaffold(
+                appBar: _appBar(context),
+                body: SingleChildScrollView(
+                  child: Padding(
+                    padding: Dimen.regularParentPadding,
+                    child: Column(
+                      children: [
+                        postForm(context),
+                        SingleChildScrollView(
+                            scrollDirection: Axis.horizontal,
+                            child: Row(children: imgViewList)),
+                      ],
+                    ),
+                  ),
+                ),
+              );
+          }
+        });
+  }
+
+  AppBar _appBar(BuildContext context) {
+    return AppBar(
+      title: const Text('Edit Post'),
+      centerTitle: false,
+      actions: [
+        TextButton(
+          onPressed: isButtonActive
+              ? () {
+                  debugPrint("Next");
+                  updatePostOnFirebase(context, imgList);
+                }
+              : () {
+                  Fluttertoast.showToast(
+                      msg: "Please wait until the post is updated",
+                      toastLength: Toast.LENGTH_SHORT,
+                      gravity: ToastGravity.BOTTOM,
+                      timeInSecForIosWeb: 1,
+                      backgroundColor: Colors.red,
+                      textColor: Colors.white,
+                      fontSize: 16.0);
+                },
+          child: const Text("Update",
+              style: TextStyle(
+                color: Colors.white,
+                fontSize: 15,
+                fontWeight: FontWeight.w500,
+              )),
+        )
+      ],
+    );
+  }
+
+  
+
+  Widget postForm(BuildContext context) {
+    // Build a Form widget using the _formKey created above.
+    return Form(
+      key: _formKey,
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          TextFormField(
+            keyboardType: TextInputType.multiline,
+            maxLines: null,
+            initialValue: widget.oldDescription,
+            decoration: const InputDecoration(
+              border: InputBorder.none,
+              hintText: 'What is going on?',
+            ),
+            validator: (value) {
+              if (value == null || value.isEmpty) {
+                return 'Please enter some text';
+              }
+              return null;
+            },
+            onSaved: (value) {
+              description = value ?? '';
+            },
+          ),
+          Padding(
+              padding: const EdgeInsets.symmetric(vertical: 16.0),
+              child: Container()),
+        ],
+      ),
     );
   }
 }
