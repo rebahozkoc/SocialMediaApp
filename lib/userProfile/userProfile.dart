@@ -73,7 +73,7 @@ class _UserProfileView extends State<UserProfileView>
 
     isFollowed = await f.isFollowed(personalUid, widget.uid);
     isPrivate = await f.isPrivate(widget.uid);
-    isWaiting = await f.isRequested(personalUid, widget.uid);
+    isWaiting = await f.isRequested(widget.uid, personalUid);
     posts = await f.getPost(widget.uid);
     followers = await f.getFollowers(widget.uid);
     followings = await f.getFollowings(widget.uid);
@@ -110,7 +110,7 @@ class _UserProfileView extends State<UserProfileView>
         isFollowed = false;
       });
     } else {
-      if (widget.isPrivate == true && !isWaiting) {
+      if (widget.isPrivate == true) {
         await f.addRequest(widget.uid, personalUid);
         await f.addNotification(
             uid: widget.uid,
