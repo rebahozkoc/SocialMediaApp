@@ -86,7 +86,6 @@ class _CommentsState extends State<Comments> {
         crossAxisAlignment: CrossAxisAlignment.center,
         mainAxisSize: MainAxisSize.max,
         children: [
-          _image(),
           const SizedBox(width: 16),
           _commentInput(),
           const SizedBox(width: 4),
@@ -96,17 +95,6 @@ class _CommentsState extends State<Comments> {
     );
   }
 
-  ClipRRect _image() {
-    return ClipRRect(
-      borderRadius: BorderRadius.circular(24),
-      child: Image.network(
-        'https://pbs.twimg.com/profile_images/1276567411240681472/8KdXHFdK_400x400.jpg',
-        width: 48,
-        height: 48,
-        fit: BoxFit.cover,
-      ),
-    );
-  }
 
   IconButton _sendCommentIcon() {
     return IconButton(
@@ -120,7 +108,12 @@ class _CommentsState extends State<Comments> {
           if (uid == null) {
             return;
           }
-
+          Firestore f = Firestore();
+          f.addComment(commentText: controller.text, postid: widget.postId, uid: uid);
+          setState(() {
+            
+          });
+          debugPrint("comment ${controller.text}");
           // TODO: send comment to firestore
           // TODO: update commentsJSON
           controller.text = "";
