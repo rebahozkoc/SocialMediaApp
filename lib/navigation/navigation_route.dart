@@ -46,8 +46,13 @@ class NavigationRoute {
       case NavigationConstants.LIKES:
         return cupertinoNavigate(const Likes(), NavigationConstants.LIKES);
       case NavigationConstants.COMMENTS:
+        List<String?> temp = args.arguments as List<String?>;
         return cupertinoNavigate(
-            Comments(postId: args.arguments as String), NavigationConstants.COMMENTS);
+            Comments(
+              postId: temp[0] != null ? temp[0]! : "",
+              postOwnerId: temp[1] != null ? temp[1]! : "argerror",
+            ),
+            NavigationConstants.COMMENTS);
       case NavigationConstants.CHAT:
         return cupertinoNavigate(ChatView(chatId: args.arguments as String),
             NavigationConstants.CHAT);
@@ -59,8 +64,7 @@ class NavigationRoute {
             NavigationConstants.SINGLE_POST);
       case NavigationConstants.NEW_CHAT:
         return cupertinoNavigate(
-            const NewChatView(),
-            NavigationConstants.NEW_CHAT);
+            const NewChatView(), NavigationConstants.NEW_CHAT);
       default:
         return defaultNavigate(
             const BottomBarView(), NavigationConstants.DEFAULT);

@@ -93,6 +93,9 @@ class _PersonHeaderWidgetState extends State<PersonHeaderWidget> {
                         uid: widget.element,
                         isPrivate: isPriv == true,
                         isFollowed: isFollowing == true,
+                        refresher: () {
+                          setState(() {});
+                        },
                       ),
                       settings: RouteSettings(name: UserProfileView.routeName),
                       withNavBar: true,
@@ -111,6 +114,9 @@ class _PersonHeaderWidgetState extends State<PersonHeaderWidget> {
                       uid: widget.element,
                       isPrivate: isPriv == true,
                       isFollowed: isFollowing == true,
+                      refresher: () {
+                        setState(() {});
+                      },
                     ),
                     settings: RouteSettings(name: UserProfileView.routeName),
                     withNavBar: true,

@@ -7,7 +7,9 @@ import 'package:shared_preferences/shared_preferences.dart';
 
 class Comments extends StatefulWidget {
   final String postId;
-  const Comments({Key? key, required this.postId}) : super(key: key);
+  final String postOwnerId;
+  const Comments({Key? key, required this.postId, required this.postOwnerId})
+      : super(key: key);
 
   static const String routeName = '/comments';
 
@@ -95,7 +97,6 @@ class _CommentsState extends State<Comments> {
     );
   }
 
-
   IconButton _sendCommentIcon() {
     return IconButton(
         icon: const Icon(
@@ -109,13 +110,17 @@ class _CommentsState extends State<Comments> {
             return;
           }
           Firestore f = Firestore();
-          f.addComment(commentText: controller.text, postid: widget.postId, uid: uid);
-          setState(() {
-            
-          });
+          await f.addComment(
+              commentText: controller.text, postid: widget.postId, uid: uid);
+          await f.addNotification(
+              uid: widget.postOwnerId,
+              notification_type: "comment",
+              uid_sub: uid,
+              isPost: true,
+              postId: widget.postId);
+          setState(() {});
           debugPrint("comment ${controller.text}");
-          // TODO: send comment to firestore
-          // TODO: update commentsJSON
+
           controller.text = "";
         });
   }

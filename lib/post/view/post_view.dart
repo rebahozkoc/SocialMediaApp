@@ -1,8 +1,10 @@
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:persistent_bottom_nav_bar/persistent-tab-view.dart';
 import 'package:sabanci_talks/firestore_classes/firestore_main/firestore.dart';
 import 'package:sabanci_talks/firestore_classes/post/my_posts.dart';
+import 'package:sabanci_talks/home/view/comment_view.dart';
 import 'package:sabanci_talks/navigation/navigation_constants.dart';
 import 'package:sabanci_talks/navigation/navigation_service.dart';
 import 'package:sabanci_talks/post/functions/post_functions.dart';
@@ -232,9 +234,21 @@ class _PostViewState extends State<PostView> {
               icon: const Icon(CupertinoIcons.bubble_left),
               color: AppColors.darkGrey,
               iconSize: 18,
-              onPressed: () => NavigationService.instance.navigateToPage(
-                  path: NavigationConstants.COMMENTS,
-                  data: widget.postModel.postId),
+              onPressed: () async {
+                debugPrint("uid is ${widget.postModel.uid}");
+                if (widget.postModel.postId != null &&
+                    widget.postModel.uid != null) {
+                  pushNewScreenWithRouteSettings(
+                    context,
+                    screen: Comments(
+                        postId: widget.postModel.postId!,
+                        postOwnerId: widget.postModel.uid!),
+                    settings: const RouteSettings(name: Comments.routeName),
+                    withNavBar: true,
+                    pageTransitionAnimation: PageTransitionAnimation.cupertino,
+                  );
+                }
+              },
             ),
           ],
         ),

@@ -172,6 +172,9 @@ class _NotificationState extends State<NotificationWidget>
                     uid: widget.notification.uid_sub,
                     isPrivate: isPriv == true,
                     isFollowed: isFollowing == true,
+                    refresher: () {
+                      setState(() {});
+                    },
                   ),
                   settings: RouteSettings(name: UserProfileView.routeName),
                   withNavBar: true,
@@ -193,6 +196,9 @@ class _NotificationState extends State<NotificationWidget>
                       uid: widget.notification.uid_sub,
                       isPrivate: isPriv == true,
                       isFollowed: isFollowing == true,
+                      refresher: () {
+                        setState(() {});
+                      },
                     ),
                     settings: RouteSettings(name: UserProfileView.routeName),
                     withNavBar: true,
@@ -245,6 +251,9 @@ class _NotificationState extends State<NotificationWidget>
                       uid: widget.notification.uid_sub,
                       isPrivate: isPriv == true,
                       isFollowed: isFollowing == true,
+                      refresher: () {
+                        setState(() {});
+                      },
                     ),
                     settings: RouteSettings(name: UserProfileView.routeName),
                     withNavBar: true,
@@ -266,6 +275,9 @@ class _NotificationState extends State<NotificationWidget>
                         uid: widget.notification.uid_sub,
                         isPrivate: isPriv == true,
                         isFollowed: isFollowing == true,
+                        refresher: () {
+                          setState(() {});
+                        },
                       ),
                       settings: RouteSettings(name: UserProfileView.routeName),
                       withNavBar: true,

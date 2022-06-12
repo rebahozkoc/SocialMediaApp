@@ -77,7 +77,8 @@ class Firestore {
 
     if (!((data.docs.first.data() as Map)["chatList"]
         .map((e) => e["uid"])
-        .toList().contains(otherUid))) {
+        .toList()
+        .contains(otherUid))) {
       DocumentReference chatDoc = await chat.add({
         "messages": [],
       });
@@ -231,7 +232,7 @@ class Firestore {
     return isPrivate;
   }
 
-  //Is uid followed by followuid?
+  //Is uid followed  followuid?
   Future<bool> isFollowed(uid, followUid) async {
     dynamic result = false;
     dynamic followingList = await getFollowings(uid).then((value) => {
@@ -512,13 +513,17 @@ class Firestore {
     return;
   }
 
-
-    Future<void> updatePost({required
-      docId, required uid, required createdAt, required postText, required pictureUrlArr, required likeArr}) async {
+  Future<void> updatePost(
+      {required docId,
+      required uid,
+      required createdAt,
+      required postText,
+      required pictureUrlArr,
+      required likeArr}) async {
     await posts
         .doc(docId)
         .update({
-          "uid": uid, 
+          "uid": uid,
           "createdAt": createdAt,
           "postText": postText,
           "pictureUrlArr": pictureUrlArr,
@@ -530,19 +535,18 @@ class Firestore {
 
   Future<void> deletePost(docId) async {
     await posts.doc(docId).delete().then(
-      (doc) => print("Post deleted"),
-      onError: (e) => print("Error deleting post $e"),
-    );
+          (doc) => print("Post deleted"),
+          onError: (e) => print("Error deleting post $e"),
+        );
   }
-
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////
   //        Comments
   ////////////////////////////////////////////////////////////////////////////////////////////////////////////////
   Future<void> addComment(
       {required postid, required uid, required commentText}) async {
-    myData =
-        await comment.add({"postid": postid, "uid": uid, "comment": commentText});
+    myData = await comment
+        .add({"postid": postid, "uid": uid, "comment": commentText});
     return;
   }
 
@@ -556,12 +560,11 @@ class Firestore {
       }).toList();
     });
     //debugPrint("Post is ${posts2.toString()}");
-    if (result !=null){
+    if (result != null) {
       return result;
-    }else{
+    } else {
       List<dynamic> emptyList = [];
       return emptyList;
     }
-
   }
 }

@@ -27,15 +27,18 @@ import '../../post/view/post_view.dart';
 import "package:sabanci_talks/firestore_classes/firestore_main/firestore.dart";
 
 class UserProfileView extends StatefulWidget {
-  const UserProfileView(
+  UserProfileView(
       {Key? key,
       required this.uid,
       required this.isPrivate,
-      required this.isFollowed})
+      required this.isFollowed,
+      required this.refresher})
       : super(key: key);
   final String uid;
   final bool isPrivate;
-  final bool isFollowed;
+  bool isFollowed;
+
+  VoidCallback refresher;
   @override
   State<UserProfileView> createState() => _UserProfileView();
   static String routeName = '/UserProfileView';
@@ -59,13 +62,18 @@ class _UserProfileView extends State<UserProfileView>
   List<MyPost> miniTextListJustPost = [];
   dynamic personalUid;
   dynamic isWaiting;
+  bool isFollowed = true;
+  bool isPrivate = true;
   Future<void> getUser() async {
     idx = -1;
     miniPostListJustPost = [];
     miniTextListJustPost = [];
-    personalUid = f.decideUser();
+    personalUid = await f.decideUser();
     show = await f.getUser(widget.uid);
-    isWaiting = await f.isRequested(widget.uid, personalUid);
+
+    isFollowed = await f.isFollowed(personalUid, widget.uid);
+    isPrivate = await f.isPrivate(widget.uid);
+    isWaiting = await f.isRequested(personalUid, widget.uid);
     posts = await f.getPost(widget.uid);
     followers = await f.getFollowers(widget.uid);
     followings = await f.getFollowings(widget.uid);
@@ -92,13 +100,17 @@ class _UserProfileView extends State<UserProfileView>
     _controller = TabController(length: 2, vsync: this);
   }
 
-  changeFollowing() async {
-    if (widget.isFollowed == true) {
-      debugPrint("helllooooooo is ${widget.isFollowed}");
+  Future<void> changeFollowing() async {
+    if (isFollowed == true) {
       await f.unFollow(widget.uid, personalUid);
+
       await f.deleteFollowing(personalUid, widget.uid);
+      debugPrint("helllooooooo is ${isFollowed}");
+      setState(() {
+        isFollowed = false;
+      });
     } else {
-      if (widget.isPrivate == true) {
+      if (widget.isPrivate == true && !isWaiting) {
         await f.addRequest(widget.uid, personalUid);
         await f.addNotification(
             uid: widget.uid,
@@ -106,6 +118,9 @@ class _UserProfileView extends State<UserProfileView>
             uid_sub: personalUid,
             isPost: false,
             postId: "");
+        setState(() {
+          isWaiting = true;
+        });
       } else {
         await f.addFollow(widget.uid, personalUid);
         await f.addFollowing(personalUid, widget.uid);
@@ -115,9 +130,11 @@ class _UserProfileView extends State<UserProfileView>
             uid_sub: personalUid,
             isPost: false,
             postId: "");
+        setState(() {
+          isFollowed = true;
+        });
       }
     }
-    setState(() {});
   }
 
   @override
@@ -183,7 +200,7 @@ class _UserProfileView extends State<UserProfileView>
                           ),
                           Padding(
                             padding: Dimen.regularParentPaddingLR,
-                            child: (widget.isPrivate && !widget.isFollowed)
+                            child: (widget.isPrivate && !isFollowed)
                                 ? profileMainButtonRowPrivate(context)
                                 : profileMainButtonRow(context),
                           ),
@@ -192,6 +209,7 @@ class _UserProfileView extends State<UserProfileView>
                             child: InkWell(
                               onTap: () async {
                                 await changeFollowing();
+                                setState(() {});
                               },
                               child: Container(
                                 width: 128,
@@ -199,13 +217,13 @@ class _UserProfileView extends State<UserProfileView>
                                 alignment: Alignment.center,
                                 decoration: BoxDecoration(
                                   borderRadius: BorderRadius.circular(4),
-                                  color: widget.isFollowed == true
+                                  color: isFollowed == true
                                       ? AppColors.textColor
                                       : isWaiting == true
                                           ? AppColors.textColor
                                           : Colors.transparent,
                                   border: Border.all(
-                                    color: widget.isFollowed == true
+                                    color: isFollowed == true
                                         ? Colors.transparent
                                         : isWaiting == true
                                             ? Colors.transparent
@@ -214,13 +232,13 @@ class _UserProfileView extends State<UserProfileView>
                                   ),
                                 ),
                                 child: Text(
-                                    widget.isFollowed == true
+                                    isFollowed == true
                                         ? 'Following'
                                         : isWaiting == true
                                             ? "Request Sent"
                                             : 'Follow',
                                     style: TextStyle(
-                                        color: widget.isFollowed == true
+                                        color: isFollowed == true
                                             ? Colors.white
                                             : isWaiting == true
                                                 ? Colors.white
@@ -232,7 +250,7 @@ class _UserProfileView extends State<UserProfileView>
                         ]),
                       ),
                     ]),
-                body: (widget.isPrivate && !widget.isFollowed)
+                body: (isPrivate && !isFollowed)
                     ? const Icon(
                         IconData(0xe3ae, fontFamily: 'MaterialIcons'),
                         size: 200,
