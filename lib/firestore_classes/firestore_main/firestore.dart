@@ -540,9 +540,9 @@ class Firestore {
   //        Comments
   ////////////////////////////////////////////////////////////////////////////////////////////////////////////////
   Future<void> addComment(
-      {required postid, required uid, required comment}) async {
+      {required postid, required uid, required commentText}) async {
     myData =
-        await comment.add({"postid": postid, "uid": uid, "comment": comment});
+        await comment.add({"postid": postid, "uid": uid, "comment": commentText});
     return;
   }
 

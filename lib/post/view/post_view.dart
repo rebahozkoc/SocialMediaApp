@@ -210,8 +210,7 @@ class _PostViewState extends State<PostView> {
               onPressed: () => changeLike(),
             ),
             InkWell(
-                onTap: () => NavigationService.instance
-                    .navigateToPage(path: NavigationConstants.LIKES),
+                onTap: () => {},
                 child: Container(
                   child: _integrationCount(
                       convertCount(widget.postModel.likeCount!)),
