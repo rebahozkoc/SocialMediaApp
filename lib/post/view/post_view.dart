@@ -53,6 +53,7 @@ class _PostViewState extends State<PostView> {
         likeArrCopy.add(user);
       }
     }
+
     debugPrint("mypost $myPost");
 
     // If uid is in the likeArr remove it and set isLiked false
@@ -62,29 +63,35 @@ class _PostViewState extends State<PostView> {
         // user liked the picture before
         likeArrCopy.remove(uid);
         await f.updatePost(
-          docId: widget.postModel.postId, 
-          uid: myPost?.uid, 
-          createdAt: myPost?.createdAt,
-          postText:  myPost?.postText, 
-          pictureUrlArr: myPost?.pictureUrlArr, 
-          likeArr: likeArrCopy);
+            docId: widget.postModel.postId,
+            uid: myPost?.uid,
+            createdAt: myPost?.createdAt,
+            postText: myPost?.postText,
+            pictureUrlArr: myPost?.pictureUrlArr,
+            likeArr: likeArrCopy);
         widget.postModel.isLiked = false;
       } else {
         // user did not like the picture before
         likeArrCopy.add(uid);
         await f.updatePost(
-          docId: widget.postModel.postId, 
-          uid: myPost?.uid, 
-          createdAt: myPost?.createdAt,
-          postText: myPost?.postText, 
-          pictureUrlArr: myPost?.pictureUrlArr, 
-          likeArr: likeArrCopy);
+            docId: widget.postModel.postId,
+            uid: myPost?.uid,
+            createdAt: myPost?.createdAt,
+            postText: myPost?.postText,
+            pictureUrlArr: myPost?.pictureUrlArr,
+            likeArr: likeArrCopy);
         widget.postModel.isLiked = true;
+        await f.addNotification(
+            uid: myPost?.uid,
+            notification_type: "like",
+            uid_sub: uid,
+            isPost: true,
+            postId: widget.postModel.postId);
       }
     }
     setState(() {
       //widget.postModel.isLiked = widget.postModel.isLiked!;
-      widget.postModel.likeCount =  likeArrCopy.length;
+      widget.postModel.likeCount = likeArrCopy.length;
     });
   }
 
