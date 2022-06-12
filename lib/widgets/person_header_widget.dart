@@ -67,7 +67,7 @@ class _PersonHeaderWidgetState extends State<PersonHeaderWidget> {
         }
       }
     });
-    refresher;
+    refresher();
     userList();
   }
 

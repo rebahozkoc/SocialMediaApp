@@ -32,6 +32,7 @@ class _NotificationViewState extends State<NotificationView> {
               itemBuilder: (context, index) => NotificationWidget(
                     notification: notificationList[index],
                     refreshFunction: () {
+                      debugPrint("helloooo from deneme");
                       setState(() {});
                     },
                   ),
@@ -65,7 +66,28 @@ class _NotificationViewState extends State<NotificationView> {
                 ),
               ],
             ),
-            body: SafeArea(child: _body()),
+            body: SafeArea(
+                child: SizedBox(
+              width: double.infinity,
+              child: SingleChildScrollView(
+                child: ListView.separated(
+                    shrinkWrap: true,
+                    physics: const NeverScrollableScrollPhysics(),
+                    padding: const EdgeInsets.symmetric(vertical: 12),
+                    itemBuilder: (context, index) => NotificationWidget(
+                          notification: notificationList[index],
+                          refreshFunction: () {
+                            debugPrint("helloooo from deneme");
+                            setState(() {});
+                          },
+                        ),
+                    separatorBuilder: (context, index) => const SizedBox(
+                          height: 12,
+                        ),
+                    itemCount:
+                        notificationList != null ? notificationList.length : 0),
+              ),
+            )),
           );
         });
   }
